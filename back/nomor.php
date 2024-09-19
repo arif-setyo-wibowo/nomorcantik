@@ -99,6 +99,7 @@ include '../koneksi.php';
                                 <th>Kategori</th>
                                 <th>Sub Kategori</th>
                                 <th>Nomor</th>
+                                <th>Harga</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -108,6 +109,7 @@ include '../koneksi.php';
                                 <td>Prabayar</td>
                                 <td>Telkomsel</td>
                                 <td>081278833</td>
+                                <td>700</td>
                                 <td>
                                     <a href="nomor-edit.php?id=1" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
@@ -144,6 +146,10 @@ include '../koneksi.php';
                         <div class="form-floating form-floating-outline mb-4">
                             <input type="text" class="form-control" id="basic-default-fullname" name="nomor" placeholder="Nomor" required />
                             <label for="basic-default-fullname">Nomor</label>
+                        </div>
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="number" class="form-control" id="basic-default-fullname" name="nomor" placeholder="Nomor" required />
+                            <label for="basic-default-fullname">Harga</label>
                         </div>
                         <input type="hidden" name="action" value="insert">
                         <button type="submit" class="btn btn-primary">Tambah</button>
