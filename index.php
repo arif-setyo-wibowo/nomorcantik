@@ -1,11 +1,19 @@
 <?php
 include './koneksi.php';
 
+$idOperator = isset($_GET['ByOperator']) ? intval($_GET['ByOperator']) : null;
+$nomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
+$cek = 0;
 
-if (isset($_GET['ByOperator'])) {
-    $idOperator = intval($_GET['ByOperator']);
-    $stmt = $koneksi->prepare("SELECT * FROM operator WHERE id_operator = ?");
-    $stmt->bind_param("i", $idOperator);
+if ($idOperator && !$nomor) {
+    $stmt = $koneksi->prepare('SELECT * FROM operator WHERE id_operator = ?');
+    $stmt->bind_param('i', $idOperator);
+    $stmt->execute();
+    $sql = $stmt->get_result();
+    $stmt->close();
+} elseif ($idOperator && $nomor && $idOperator != 'all') {
+    $stmt = $koneksi->prepare('SELECT * FROM operator WHERE id_operator = ?');
+    $stmt->bind_param('i', $idOperator);
     $stmt->execute();
     $sql = $stmt->get_result();
     $stmt->close();
@@ -13,18 +21,11 @@ if (isset($_GET['ByOperator'])) {
     $sql = mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1');
 }
 $data = mysqli_fetch_all($sql, MYSQLI_ASSOC);
-
-$dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1');
-$operatorData = mysqli_fetch_all($dataOperator, MYSQLI_ASSOC);
+$operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1'), MYSQLI_ASSOC);
 
 function formatHarga($nilai)
 {
-    if ($nilai >= 1000) {
-        $nilai = $nilai / 1000;
-        return number_format($nilai, 0, ',', '.') . ' Jt';
-    } elseif ($nilai < 1000) {
-        return number_format($nilai, 0, ',', '.');
-    }
+    return $nilai >= 1000 ? number_format($nilai / 1000, 0, ',', '.') . ' Jt' : number_format($nilai, 0, ',', '.');
 }
 ?>
 
@@ -116,8 +117,7 @@ function formatHarga($nilai)
                     <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">cantik</span>
                 </a>
             </div>
-            <div class="col-lg-4 col-6 text-left">
-            </div>
+            <div class="col-lg-4 col-6 text-left"></div>
             <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Customer Service</p>
                 <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=&amp;text=Hallo Mau pesan nomer"><img
@@ -150,16 +150,19 @@ function formatHarga($nilai)
                 </nav>
             </div>
             <div class="col-6 ">
-                <nav class="breadcrumb bg-light mb-0 d-block">
+                <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
                     <form method="GET">
                         <div class="input-group">
                             <select class="custom-select" id="search-category" style="max-width: 200px;"
                                 name="ByOperator">
-                                <option value="all" <?= (!isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all') ? 'selected' : '' ?>>Semua Operator</option>
+                                <option value="all"
+                                    <?= !isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all' ? 'selected' : '' ?>>
+                                    Semua Operator</option>
                                 <?php foreach ($operatorData as $operator): ?>
-                                    <option value="<?= $operator['id_operator'] ?>" <?= (isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($operator['nama_operator']) ?>
-                                    </option>
+                                <option value="<?= $operator['id_operator'] ?>"
+                                    <?= isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($operator['nama_operator']) ?>
+                                </option>
                                 <?php endforeach; ?>
                             </select>
                             <input type="number" name="nomor" class="form-control"
@@ -186,11 +189,14 @@ function formatHarga($nilai)
                         <div class="input-group">
                             <select class="custom-select" id="search-category" style="max-width: 150px;"
                                 name="byOperator">
-                                <option value="all" <?= (!isset($_GET['byOperator']) || $_GET['byOperator'] === 'all') ? 'selected' : '' ?>>Semua Operator</option>
+                                <option value="all"
+                                    <?= !isset($_GET['byOperator']) || $_GET['byOperator'] === 'all' ? 'selected' : '' ?>>
+                                    Semua Operator</option>
                                 <?php foreach ($operatorData as $operator): ?>
-                                    <option value="<?= $operator['id_operator'] ?>" <?= (isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($operator['nama_operator']) ?>
-                                    </option>
+                                <option value="<?= $operator['id_operator'] ?>"
+                                    <?= isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($operator['nama_operator']) ?>
+                                </option>
                                 <?php endforeach; ?>
                             </select>
                             <input type="number" name="nomor" class="form-control"
@@ -217,40 +223,59 @@ function formatHarga($nilai)
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
                         dari harga</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form id="byPrice" method="GET" action="">
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
+                            <input type="checkbox" class="custom-control-input" id="price-all" name="ByPrice"
+                                value="all"
+                                <?= !isset($_GET['ByPrice']) || $_GET['ByPrice'] === 'all' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-all">All Price</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
+                            <input type="checkbox" class="custom-control-input" id="price-1" name="ByPrice"
+                                value="0-500"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '0-500' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-1">0 - 500</label>
                             <span class="badge border font-weight-normal">150</span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
+                            <input type="checkbox" class="custom-control-input" id="price-2" name="ByPrice"
+                                value="500-1000"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '500-1000' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-2">500 - 1 Jt</label>
                             <span class="badge border font-weight-normal">295</span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
+                            <input type="checkbox" class="custom-control-input" id="price-3" name="ByPrice"
+                                value="1000-20000"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '1000-20000' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-3">1 Jt - 20 Jt</label>
                             <span class="badge border font-weight-normal">246</span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
+                            <input type="checkbox" class="custom-control-input" id="price-4" name="ByPrice"
+                                value="20000-100000"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '20000-100000' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-4">20 Jt - 100 Jt</label>
                             <span class="badge border font-weight-normal">145</span>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
+                        <div
+                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="price-5" name="ByPrice"
+                                value="100000"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '100000' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-5">100 Jt++</label>
                             <span class="badge border font-weight-normal">168</span>
                         </div>
                     </form>
@@ -264,10 +289,12 @@ function formatHarga($nilai)
                     <form id="byOperator" method="GET" action="">
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" <?= !isset($_GET['ByOperator']) ? 'checked' : '' ?> id="color-all" onclick="checkAll(this)">
+                            <input type="checkbox" class="custom-control-input"
+                                <?= !isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all' ? 'checked' : '' ?>
+                                id="color-all" onclick="checkAll(this)">
                             <label class="custom-control-label" for="color-all">Semua Operator</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor');
                             if (!$dataNomor) {
                                 die('Query Error: ' . mysqli_error($koneksi));
                             }
@@ -276,23 +303,24 @@ function formatHarga($nilai)
                             <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
                         </div>
                         <?php foreach ($operatorData as $index => $operator): ?>
-                            <div
-                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input type="checkbox" class="custom-control-input" id="color-<?= $index ?>"
-                                    <?= (isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator']) ? 'checked' : '' ?> onclick="handleCheckboxClick(this)" name="ByOperator"
-                                    value="<?= $operator['id_operator'] ?>">
-                                <label class="custom-control-label"
-                                    for="color-<?= $index ?>"><?= $operator['nama_operator'] ?></label>
-                                <?php
-                                $id = $operator['id_operator'];
-                                $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id'");
-                                if (!$dataNomor) {
-                                    die('Query Error: ' . mysqli_error($koneksi));
-                                }
-                                $totalNomor = mysqli_num_rows($dataNomor);
-                                ?>
-                                <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
-                            </div>
+                        <div
+                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="color-<?= $index ?>"
+                                <?= isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator'] ? 'checked' : '' ?>
+                                onclick="handleCheckboxClick(this)" name="ByOperator"
+                                value="<?= $operator['id_operator'] ?>">
+                            <label class="custom-control-label"
+                                for="color-<?= $index ?>"><?= $operator['nama_operator'] ?></label>
+                            <?php
+                            $id = $operator['id_operator'];
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id'");
+                            if (!$dataNomor) {
+                                die('Query Error: ' . mysqli_error($koneksi));
+                            }
+                            $totalNomor = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
+                        </div>
                         <?php endforeach ?>
                     </form>
                 </div>
@@ -313,47 +341,87 @@ function formatHarga($nilai)
                     </div>
 
                     <?php foreach ($data as $operator): ?>
-                        <?php
-                        $id = $operator['id_operator'];
+                    <?php
+                    $id = $operator['id_operator'];
+                    $searchNomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
+                    $byOperator = isset($_GET['ByOperator']);
+                    $byPrice = isset($_GET['ByPrice']) ? mysqli_real_escape_string($koneksi, $_GET['ByPrice']) : null;
+                    
+                    $query = "SELECT * FROM nomor WHERE id_operator = '$id'";
 
-                        $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id' LIMIT 10");
-                        $nomorData = mysqli_fetch_all($dataNomor, MYSQLI_ASSOC);
-                        if (empty($nomorData) && !isset($_GET['ByOperator'])) {
-                            continue;
-                        } else if (empty($nomorData) && isset($_GET['ByOperator'])) {
-                            echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
-                            continue;
+                    if($byPrice && $byPrice != 'all'){
+                        $rangeParts = explode("-", $byPrice);
+
+                        if ($byPrice != 100000) {
+                            $min = $rangeParts[0];
+                            $max = $rangeParts[1];
+                            $query .= " AND harga BETWEEN '$min' AND '$max'";
+                        }else{
+                            $query .= " AND harga > '$byPrice'";
                         }
+                    }
+                    
+                    if ($searchNomor) {
+                        $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE REPLACE(nomor, ' ', '') LIKE '%" . intval($searchNomor) . "%' AND id_operator = '$id'");
+                    } else {
+                        if ($idOperator && !$nomor) {
+                            $dataNomor = mysqli_query($koneksi, $query);
+                        } else {
+                            $dataNomor = mysqli_query($koneksi, $query .= ' LIMIT 10');
+                        }
+                    }
+                    
+                    $nomorData = mysqli_fetch_all($dataNomor, MYSQLI_ASSOC);
+                    if (empty($nomorData) && !$byOperator) {
+                        continue;
+                    } elseif (empty($nomorData) && $byOperator && !$searchNomor) {
+                        echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
+                        continue;
+                    } elseif (empty($nomorData) && $byOperator && $searchNomor) {
+                        $cek += 1;
+                        if ($cek == count($data)) {
+                            echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
+                        }
+                        continue;
+                    }
 
-                        $no = 1;
-                        ?>
-                        <div class="col-md-6 col-sm-6 pb-1 bg-light">
-                            <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
-                                style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
-                                <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                            </div>
+                    
+                    $nomorChunks = array_chunk($nomorData, 10);
+                    $no = 1;
+                    ?>
+                    <?php foreach ($nomorChunks as $chunk): ?>
+                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                        <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
+                            style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
+                            <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
 
-                            <div class="product-item bg-light mb-4">
-                                <div class="table">
-                                    <?php foreach ($nomorData as $nomor): ?>
-                                        <div class="row">
-                                            <div class="cell"><?= $no++ ?></div>
-                                            <div class="cell">
-                                                <h4 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h4>
-                                            </div>
-                                            <div class="cell">
-                                                <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
-                                            </div>
-                                            <div class="cell"><a
-                                                    href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
-                                                    target="_blank"><img src="assets/img/wa.png" alt="WhatsApp" width="50"></a>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
+                        <div class="product-item bg-light mb-4">
+                            <div class="table">
+                                <?php
+                                        $no = 1;
+                                        foreach ($chunk as $nomor): ?>
+                                <div class="row">
+                                    <div class="cell"><?= $no++ ?></div>
+                                    <div class="cell">
+                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                    </div>
+                                    <div class="cell">
+                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
+                                    </div>
+                                    <div class="cell">
+                                        <a href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+                                            target="_blank">
+                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
+                                        </a>
+                                    </div>
                                 </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
+                    </div>
+                    <?php endforeach; ?>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -388,7 +456,8 @@ function formatHarga($nilai)
                     <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
                     <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
                         dolor. Rebum tempor no vero est magna amet no</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
+                    </p>
                     <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i><a
                             href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=www.nomorcantik.com"><img
@@ -444,6 +513,17 @@ function formatHarga($nilai)
                     });
                 }
                 document.getElementById('byOperator').submit();
+            }
+
+            function submitPriceForm(checkbox) {
+                var form = document.getElementById('byPrice');
+                var checkboxes = document.querySelectorAll('#byPrice input[type="checkbox"]');
+
+                checkboxes.forEach(function(cb) {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+
+                form.submit();
             }
         </script>
 </body>

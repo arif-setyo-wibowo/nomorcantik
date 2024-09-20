@@ -4,7 +4,7 @@ $title = 'NOMORCANTIK Admin | Operator';
 
 // Cek apakah pengguna sudah login
 // if (!isset($_SESSION['admin'])) {
-//     header('Location: ../back_login.php'); 
+//     header('Location: ../back_login.php');
 //     exit();
 // }
 
@@ -20,11 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $sql = "SELECT logo FROM operator WHERE id_operator = $id_operator";
         $result = mysqli_fetch_assoc(mysqli_query($koneksi, $sql))['logo'];
-        
+
         $stmt = $koneksi->prepare('DELETE FROM operator WHERE id_operator = ?');
         $stmt->bind_param('i', $id_operator);
         if ($stmt->execute()) {
-            unlink("../assets/uploads/" . $result);
+            unlink('../assets/uploads/' . $result);
             $_SESSION['msg'] = 'Operator berhasil dihapus!';
         } else {
             $_SESSION['error'] = 'Operator gagal dihapus!';
@@ -33,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
     } elseif ($action == 'insert') {
         $nama_operator = $koneksi->real_escape_string($_POST['nama_operator']);
-        $file_extension = pathinfo($_FILES["logo"]["name"], PATHINFO_EXTENSION);
-        $new_file_name = uniqid() . "." . strtolower($file_extension);
-        $target_file = "../assets/uploads/" . $new_file_name;
+        $file_extension = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
+        $new_file_name = uniqid() . '.' . strtolower($file_extension);
+        $target_file = '../assets/uploads/' . $new_file_name;
 
-        if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
+        if (move_uploaded_file($_FILES['logo']['tmp_name'], $target_file)) {
             $logo = $new_file_name;
         }
 
@@ -144,32 +144,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-                        <?php while($d = mysqli_fetch_array($data)) : ?>
+                            <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $d['nama_operator'] ?></td>
-                                <td><img src="../assets/uploads/<?= $d['logo'] ?>" alt="<?= $d['nama_operator'] ?>" width="100" height="50"></td>
+                                <td><img src="../assets/uploads/<?= $d['logo'] ?>" alt="<?= $d['nama_operator'] ?>"
+                                        width="100" height="50"></td>
                                 <td>
                                     <div class="form-check form-switch mb-2">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault-<?= $d['id_operator'] ?>" 
-                                            style="width:27%" data-id-operator="<?= $d['id_operator'] ?>" <?= $d['status'] == 1 ? 'checked' : '' ?>>
-                                        <label class="form-check-label" for="flexSwitchCheckDefault-<?= $d['id_operator'] ?>">Tampil</label>
+                                        <input class="form-check-input" type="checkbox"
+                                            id="flexSwitchCheckDefault-<?= $d['id_operator'] ?>" style="width:27%"
+                                            data-id-operator="<?= $d['id_operator'] ?>"
+                                            <?= $d['status'] == 1 ? 'checked' : '' ?>>
+                                        <label class="form-check-label"
+                                            for="flexSwitchCheckDefault-<?= $d['id_operator'] ?>">Tampil</label>
                                     </div>
                                 </td>
                                 <td>
                                     <a href="operator-edit.php?id=<?= $d['id_operator'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <form action="operator.php" method="POST" id="delete-form-<?= $d['id_operator'] ?>" style="display: inline;">
+                                    <form action="operator.php" method="POST" id="delete-form-<?= $d['id_operator'] ?>"
+                                        style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id_operator" value="<?= $d['id_operator'] ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_operator'] ?>">
+                                        <button type="button" class="btn btn-danger btn-sm confirm-text"
+                                            data-form-id="<?= $d['id_operator'] ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                            <?php endwhile; ?>
 
                         </tbody>
                     </table>
@@ -203,17 +209,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             var status = $(this).is(':checked') ? 1 : 0;
 
             $.ajax({
-                url: 'update-status.php', // URL ke script PHP yang akan memproses perubahan status
+                url: 'update-status.php',
                 method: 'POST',
                 data: {
                     id_operator: id_operator,
                     status: status
                 },
                 success: function(response) {
-                    console.log(response); // Untuk debugging
+                    var data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        console.log('Session msg set successfully.');
+                        window.location.href =
+                        'operator.php';
+                    } else {
+                        console.log('Error occurred.');
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.log('Error:', error); // Untuk debugging error
+                    console.log('Error:', error);
                 }
             });
         });
