@@ -96,6 +96,18 @@
                             <div>Nomor</div>
                         </a>
                     </li>
+                    <li class="menu-item <?php echo ($current_page == 'promo.php') ? 'active' : ''; ?>">
+                        <a href="promo.php" class="menu-link">
+                            <i class="menu-icon tf-icons mdi  mdi-sale"></i>
+                            <div>Promo</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?php echo ($current_page == 'wa-rek.php') ? 'active' : ''; ?>">
+                        <a href="wa-rek.php" class="menu-link">
+                            <i class="menu-icon tf-icons mdi  mdi-credit-card"></i>
+                            <div>Wa dan Rekening</div>
+                        </a>
+                    </li>
                     <li class="menu-item <?php echo ($current_page == 'user-admin.php') ? 'active' : ''; ?>">
                         <a href="user-admin.php" class="menu-link ">
                             <i class="menu-icon tf-icons mdi mdi-clipboard-account" ></i>

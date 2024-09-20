@@ -4,7 +4,7 @@ $title = 'NOMORCANTIK Admin | Operator';
 
 // Cek apakah pengguna sudah login
 // if (!isset($_SESSION['admin'])) {
-//     header('Location: ../login_admin.php'); 
+//     header('Location: ../back_login.php'); 
 //     exit();
 // }
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SMART PPA /</span> Operator</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">NOMORCANTIK /</span> Operator</h4>
 
     <div class="card mb-4">
         <div class="card-header p-0">
@@ -139,32 +139,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <th>No</th>
                                 <th>Nama Operator</th>
                                 <th>Logo</th>
+                                <th>Tampilan</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while($d = mysqli_fetch_array($data)) : ?>
+                        <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $d['nama_operator'] ?></td>
                                 <td><img src="../assets/uploads/<?= $d['logo'] ?>" alt="<?= $d['nama_operator'] ?>" width="100" height="50"></td>
                                 <td>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault-<?= $d['id_operator'] ?>" 
+                                            style="width:27%" data-id-operator="<?= $d['id_operator'] ?>" <?= $d['status'] == 1 ? 'checked' : '' ?>>
+                                        <label class="form-check-label" for="flexSwitchCheckDefault-<?= $d['id_operator'] ?>">Tampil</label>
+                                    </div>
+                                </td>
+                                <td>
                                     <a href="operator-edit.php?id=<?= $d['id_operator'] ?>" class="btn btn-info btn-sm">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Edit
+                                        <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <form action="operator.php" method="POST" id="delete-form-<?= $d['id_operator'] ?>"
-                                        style="display: inline;">
+                                    <form action="operator.php" method="POST" id="delete-form-<?= $d['id_operator'] ?>" style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id_operator" value="<?= $d['id_operator'] ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text"
-                                            data-form-id="<?= $d['id_operator'] ?>">
+                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_operator'] ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-                            <?php endwhile; ?>
+                        <?php endwhile; ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -189,7 +195,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </div>
 
 <!-- / Content -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $('.form-check-input').on('change', function() {
+            var id_operator = $(this).data('id-operator');
+            var status = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: 'update-status.php', // URL ke script PHP yang akan memproses perubahan status
+                method: 'POST',
+                data: {
+                    id_operator: id_operator,
+                    status: status
+                },
+                success: function(response) {
+                    console.log(response); // Untuk debugging
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error); // Untuk debugging error
+                }
+            });
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {

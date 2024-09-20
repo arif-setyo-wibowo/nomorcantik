@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id_admin` int NOT NULL,
-  `nama` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `username` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `password` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
+  `nama` varchar(255)  NOT NULL,
+  `username` varchar(255)  NOT NULL,
+  `password` text  NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -43,9 +43,9 @@ CREATE TABLE `admin` (
 CREATE TABLE `nomor` (
   `id_nomor` int NOT NULL,
   `id_operator` int DEFAULT NULL,
-  `nomor` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nomor` varchar(255) NOT NULL,
   `harga` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `nomor`
@@ -209,7 +209,7 @@ CREATE TABLE `operator` (
   `id_operator` int NOT NULL,
   `nama_operator` varchar(255) NOT NULL,
   `logo` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `operator`
