@@ -1,42 +1,282 @@
-/*
- Navicat Premium Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Generation Time: Sep 20, 2024 at 11:17 AM
+-- Server version: 8.0.35
+-- PHP Version: 8.3.8
 
- Source Server         : mysql.xampp
- Source Server Type    : MySQL
- Source Server Version : 100425 (10.4.25-MariaDB)
- Source Host           : localhost:3306
- Source Schema         : nomorcantik
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
- Target Server Type    : MySQL
- Target Server Version : 100425 (10.4.25-MariaDB)
- File Encoding         : 65001
 
- Date: 20/09/2024 00:23:29
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+--
+-- Database: `nomorcantik`
+--
 
--- ----------------------------
--- Table structure for kategori
--- ----------------------------
-DROP TABLE IF EXISTS `kategori`;
-CREATE TABLE `kategori`  (
-  `id_kategori` int NOT NULL,
-  `nama_kategori` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`id_kategori`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
-  `id_admin` int NOT NULL AUTO_INCREMENT,
-  `nama` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`id_admin`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+--
+-- Table structure for table `admin`
+--
 
-SET FOREIGN_KEY_CHECKS = 1;
+CREATE TABLE `admin` (
+  `id_admin` int NOT NULL,
+  `nama` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `password` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nomor`
+--
+
+CREATE TABLE `nomor` (
+  `id_nomor` int NOT NULL,
+  `id_operator` int DEFAULT NULL,
+  `nomor` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `harga` bigint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `nomor`
+--
+
+INSERT INTO `nomor` (`id_nomor`, `id_operator`, `nomor`, `harga`) VALUES
+(1, 14, '0896 778 89910', 5000),
+(2, 14, '089 678 678 678', 15000),
+(3, 14, '0896 89189189', 5000),
+(4, 14, '089 689 689 689', 15000),
+(5, 14, '0896 99999999', 500000),
+(6, 14, '089 88000 838', 500),
+(7, 14, '0898 8888808', 15000),
+(8, 14, '089 88888828', 10000),
+(9, 14, '089 88888838', 10000),
+(10, 14, '089 88888848', 10000),
+(11, 14, '089 88888858', 10000),
+(12, 14, '089 88888878', 10000),
+(13, 14, '089 8889 8886', 1000),
+(14, 14, '0898 8899918', 1500),
+(15, 14, '0898 8899958', 1500),
+(16, 7, '0811 1234567', 50000),
+(17, 7, '0811 1234568', 45000),
+(18, 7, '0811 1234569', 60000),
+(19, 7, '0811 1234570', 55000),
+(20, 7, '0811 1234571', 70000),
+(21, 7, '0812 1234567', 48000),
+(22, 7, '0812 1234568', 52000),
+(23, 7, '0812 1234569', 58000),
+(24, 7, '0812 1234570', 62000),
+(25, 7, '0812 1234571', 50000),
+(26, 7, '0813 1234567', 40000),
+(27, 7, '0813 1234568', 42000),
+(28, 7, '0813 1234569', 38000),
+(29, 7, '0813 1234570', 41000),
+(30, 7, '0813 1234571', 46000),
+(31, 7, '0821 1234567', 47000),
+(32, 7, '0821 1234568', 53000),
+(33, 7, '0821 1234569', 49000),
+(34, 7, '0821 1234570', 54000),
+(35, 7, '0821 1234571', 51000),
+(36, 7, '0822 1234567', 50000),
+(37, 7, '0822 1234568', 47000),
+(38, 7, '0822 1234569', 46000),
+(39, 7, '0822 1234570', 52000),
+(40, 7, '0822 1234571', 55000),
+(41, 7, '0823 1234567', 60000),
+(42, 7, '0823 1234568', 61000),
+(43, 7, '0823 1234569', 57000),
+(44, 7, '0823 1234570', 63000),
+(45, 7, '0823 1234571', 65000),
+(46, NULL, '0851 1234567', 46000),
+(47, NULL, '0851 1234568', 47000),
+(48, NULL, '0851 1234569', 49000),
+(49, NULL, '0851 1234570', 52000),
+(50, NULL, '0851 1234571', 55000),
+(51, 7, '0852 1234567', 48000),
+(52, 7, '0852 1234568', 53000),
+(53, 7, '0852 1234569', 50000),
+(54, 7, '0852 1234570', 54000),
+(55, 7, '0852 1234571', 51000),
+(56, 7, '0853 1234567', 62000),
+(57, 7, '0853 1234568', 60000),
+(58, 7, '0853 1234569', 58000),
+(59, 7, '0853 1234570', 61000),
+(60, 7, '0853 1234571', 55000),
+(61, NULL, '0814 1234567', 47000),
+(62, NULL, '0814 1234568', 44000),
+(63, NULL, '0814 1234569', 43000),
+(64, NULL, '0814 1234570', 46000),
+(65, NULL, '0814 1234571', 45000),
+(66, NULL, '0815 1234567', 42000),
+(67, NULL, '0815 1234568', 46000),
+(68, NULL, '0815 1234569', 50000),
+(69, NULL, '0815 1234570', 53000),
+(70, NULL, '0815 1234571', 51000),
+(71, NULL, '0816 1234567', 47000),
+(72, NULL, '0816 1234568', 48000),
+(73, NULL, '0816 1234569', 50000),
+(74, NULL, '0816 1234570', 52000),
+(75, NULL, '0816 1234571', 54000),
+(76, NULL, '0855 1234567', 46000),
+(77, NULL, '0855 1234568', 49000),
+(78, NULL, '0855 1234569', 53000),
+(79, NULL, '0855 1234570', 57000),
+(80, NULL, '0855 1234571', 60000),
+(81, NULL, '0856 1234567', 62000),
+(82, NULL, '0856 1234568', 65000),
+(83, NULL, '0856 1234569', 58000),
+(84, NULL, '0856 1234570', 61000),
+(85, NULL, '0856 1234571', 64000),
+(86, NULL, '0857 1234567', 42000),
+(87, NULL, '0857 1234568', 47000),
+(88, NULL, '0857 1234569', 50000),
+(89, NULL, '0857 1234570', 52000),
+(90, NULL, '0857 1234571', 54000),
+(91, NULL, '0858 1234567', 46000),
+(92, NULL, '0858 1234568', 48000),
+(93, NULL, '0858 1234569', 50000),
+(94, NULL, '0858 1234570', 52000),
+(95, NULL, '0858 1234571', 54000),
+(96, 14, '0895 1234567', 47000),
+(97, 14, '0895 1234568', 44000),
+(98, 14, '0895 1234569', 43000),
+(99, 14, '0895 1234570', 46000),
+(100, 14, '0895 1234571', 45000),
+(101, 14, '0896 1234567', 42000),
+(102, 14, '0896 1234568', 46000),
+(103, 14, '0896 1234569', 50000),
+(104, 14, '0896 1234570', 53000),
+(105, 14, '0896 1234571', 51000),
+(106, 14, '0897 1234567', 47000),
+(107, 14, '0897 1234568', 48000),
+(108, 14, '0897 1234569', 50000),
+(109, 14, '0897 1234570', 52000),
+(110, 14, '0897 1234571', 54000),
+(111, 14, '0898 1234567', 46000),
+(112, 14, '0898 1234568', 49000),
+(113, 14, '0898 1234569', 53000),
+(114, 14, '0898 1234570', 57000),
+(115, 14, '0898 1234571', 60000),
+(116, 14, '0899 1234567', 62000),
+(117, 14, '0899 1234568', 65000),
+(118, 14, '0899 1234569', 58000),
+(119, 14, '0899 1234570', 61000),
+(120, 14, '0899 1234571', 64000),
+(121, NULL, '0817 1234567', 42000),
+(122, NULL, '0817 1234568', 47000),
+(123, NULL, '0817 1234569', 50000),
+(124, NULL, '0817 1234570', 52000),
+(125, NULL, '0817 1234571', 54000),
+(126, NULL, '0818 1234567', 56000),
+(127, NULL, '0818 1234568', 59000),
+(128, NULL, '0818 1234569', 60000),
+(129, NULL, '0818 1234570', 62000),
+(130, NULL, '0818 1234571', 65000),
+(131, NULL, '0819 1234567', 46000),
+(132, NULL, '0819 1234568', 49000),
+(133, NULL, '0819 1234569', 53000),
+(134, NULL, '0819 1234570', 57000),
+(135, NULL, '0819 1234571', 60000),
+(136, NULL, '0859 1234567', 42000),
+(137, NULL, '0859 1234568', 47000),
+(138, NULL, '0859 1234569', 50000),
+(139, NULL, '0859 1234570', 52000),
+(140, NULL, '0859 1234571', 54000),
+(141, NULL, '0877 1234567', 46000),
+(142, NULL, '0877 1234568', 49000),
+(143, NULL, '0877 1234569', 53000),
+(144, NULL, '0877 1234570', 57000),
+(145, NULL, '0877 1234571', 60000),
+(146, 13, '0811111111111', 1111111);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operator`
+--
+
+CREATE TABLE `operator` (
+  `id_operator` int NOT NULL,
+  `nama_operator` varchar(255) NOT NULL,
+  `logo` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `operator`
+--
+
+INSERT INTO `operator` (`id_operator`, `nama_operator`, `logo`) VALUES
+(7, 'Telkomsel', '66ed18cdcbee4.png'),
+(12, 'Axis', '66ed1e7cdb0ea.png'),
+(13, 'Telkomsel By U', '66ed445f65437.svg'),
+(14, 'Three', '66ed5291c436d.png');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`) USING BTREE;
+
+--
+-- Indexes for table `nomor`
+--
+ALTER TABLE `nomor`
+  ADD PRIMARY KEY (`id_nomor`),
+  ADD KEY `idoperator_to_operator` (`id_operator`);
+
+--
+-- Indexes for table `operator`
+--
+ALTER TABLE `operator`
+  ADD PRIMARY KEY (`id_operator`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id_admin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `nomor`
+--
+ALTER TABLE `nomor`
+  MODIFY `id_nomor` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+
+--
+-- AUTO_INCREMENT for table `operator`
+--
+ALTER TABLE `operator`
+  MODIFY `id_operator` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `nomor`
+--
+ALTER TABLE `nomor`
+  ADD CONSTRAINT `idoperator_to_operator` FOREIGN KEY (`id_operator`) REFERENCES `operator` (`id_operator`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
