@@ -1,3 +1,33 @@
+<?php
+include './koneksi.php';
+
+
+if (isset($_GET['ByOperator'])) {
+    $idOperator = intval($_GET['ByOperator']);
+    $stmt = $koneksi->prepare("SELECT * FROM operator WHERE id_operator = ?");
+    $stmt->bind_param("i", $idOperator);
+    $stmt->execute();
+    $sql = $stmt->get_result();
+    $stmt->close();
+} else {
+    $sql = mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1');
+}
+$data = mysqli_fetch_all($sql, MYSQLI_ASSOC);
+
+$dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1');
+$operatorData = mysqli_fetch_all($dataOperator, MYSQLI_ASSOC);
+
+function formatHarga($nilai)
+{
+    if ($nilai >= 1000) {
+        $nilai = $nilai / 1000;
+        return number_format($nilai, 0, ',', '.') . ' Jt';
+    } elseif ($nilai < 1000) {
+        return number_format($nilai, 0, ',', '.');
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -121,21 +151,24 @@
             </div>
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0 d-block">
-                <form action="">
+                    <form method="GET">
                         <div class="input-group">
-                            <select class="custom-select" id="search-category" style="max-width: 200px;">
-                                <option value="all" selected>Operator</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="fashion">Fashion</option>
-                                <option value="books">Books</option>
-                                <option value="furniture">Furniture</option>
-                                <!-- Add more categories as needed -->
+                            <select class="custom-select" id="search-category" style="max-width: 200px;"
+                                name="ByOperator">
+                                <option value="all" <?= (!isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all') ? 'selected' : '' ?>>Semua Operator</option>
+                                <?php foreach ($operatorData as $operator): ?>
+                                    <option value="<?= $operator['id_operator'] ?>" <?= (isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($operator['nama_operator']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
-                            <input type="text" class="form-control" placeholder="Masukan nomor cantik yang anda cari">
+                            <input type="number" name="nomor" class="form-control"
+                                placeholder="Masukan nomor cantik yang anda cari"
+                                value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
-                                <span class="input-group-text bg-transparent text-primary">
-                                    <i class="fa fa-search"></i>
-                                </span>
+                                <button class="input-group-text bg-transparent text-primary" type="submit">
+                                    <span><i class="fa fa-search"></i></span>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -149,21 +182,24 @@
         <div class="container-fluid">
             <div class="row mx-xl-5">
                 <div class="col-12 p-4">
-                    <form action="">
+                    <form method="GET">
                         <div class="input-group">
-                            <select class="custom-select" id="search-category" style="max-width: 150px;">
-                                <option value="all" selected>Operator</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="fashion">Fashion</option>
-                                <option value="books">Books</option>
-                                <option value="furniture">Furniture</option>
-                                <!-- Add more categories as needed -->
+                            <select class="custom-select" id="search-category" style="max-width: 150px;"
+                                name="byOperator">
+                                <option value="all" <?= (!isset($_GET['byOperator']) || $_GET['byOperator'] === 'all') ? 'selected' : '' ?>>Semua Operator</option>
+                                <?php foreach ($operatorData as $operator): ?>
+                                    <option value="<?= $operator['id_operator'] ?>" <?= (isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($operator['nama_operator']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
-                            <input type="text" class="form-control" placeholder="Search for products">
+                            <input type="number" name="nomor" class="form-control"
+                                placeholder="Masukan nomor cantik yang anda cari"
+                                value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
-                                <span class="input-group-text bg-transparent text-primary">
-                                    <i class="fa fa-search"></i>
-                                </span>
+                                <button class="input-group-text bg-transparent text-primary" type="submit">
+                                    <span><i class="fa fa-search"></i></span>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -225,42 +261,39 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
                         dari operator</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form id="byOperator" method="GET" action="">
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="color-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox" class="custom-control-input" <?= !isset($_GET['ByOperator']) ? 'checked' : '' ?> id="color-all" onclick="checkAll(this)">
+                            <label class="custom-control-label" for="color-all">Semua Operator</label>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor");
+                            if (!$dataNomor) {
+                                die('Query Error: ' . mysqli_error($koneksi));
+                            }
+                            $totalNomor = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
                         </div>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        <?php foreach ($operatorData as $index => $operator): ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" class="custom-control-input" id="color-<?= $index ?>"
+                                    <?= (isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator']) ? 'checked' : '' ?> onclick="handleCheckboxClick(this)" name="ByOperator"
+                                    value="<?= $operator['id_operator'] ?>">
+                                <label class="custom-control-label"
+                                    for="color-<?= $index ?>"><?= $operator['nama_operator'] ?></label>
+                                <?php
+                                $id = $operator['id_operator'];
+                                $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id'");
+                                if (!$dataNomor) {
+                                    die('Query Error: ' . mysqli_error($koneksi));
+                                }
+                                $totalNomor = mysqli_num_rows($dataNomor);
+                                ?>
+                                <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
+                            </div>
+                        <?php endforeach ?>
                     </form>
                 </div>
                 <!-- Color End -->
@@ -270,7 +303,7 @@
 
 
             <!-- Shop Product Start -->
-            <div class="col-lg-6 col-md-8">
+            <div class="col-lg-6 col-md-8 bg-light mt-2">
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -279,65 +312,49 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-6 pb-1 bg-light">
-                        <img class="img-fluid m-5 text-center" src="assets/img/coba.png" alt="">
-                        <div class="product-item bg-light mb-4">
+                    <?php foreach ($data as $operator): ?>
+                        <?php
+                        $id = $operator['id_operator'];
 
+                        $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id' LIMIT 10");
+                        $nomorData = mysqli_fetch_all($dataNomor, MYSQLI_ASSOC);
+                        if (empty($nomorData) && !isset($_GET['ByOperator'])) {
+                            continue;
+                        } else if (empty($nomorData) && isset($_GET['ByOperator'])) {
+                            echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
+                            continue;
+                        }
 
-                            <div class="table">
-                                <div class="row">
-                                    <div class="cell">1</div>
-                                    <div class="cell">
-                                        <h3 class="text-danger m-0">01289312319</h3>
-                                    </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0">7jt</h5>
-                                    </div>
-                                    <div class="cell"><a href=""><img src="assets/img/wa.png" alt="WhatsApp"></a></div>
-                                </div>
-                                <div class="row">
-                                    <div class="cell">2</div>
-                                    <div class="cell">
-                                        <h3 class="text-danger m-0">081810540412</h3>
-                                    </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0">7jt</h5>
-                                    </div>
-                                    <div class="cell"><a href=""><img src="assets/img/wa.png" alt="WhatsApp"></a></div>
+                        $no = 1;
+                        ?>
+                        <div class="col-md-6 col-sm-6 pb-1 bg-light">
+                            <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
+                                style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
+                                <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
+
+                            <div class="product-item bg-light mb-4">
+                                <div class="table">
+                                    <?php foreach ($nomorData as $nomor): ?>
+                                        <div class="row">
+                                            <div class="cell"><?= $no++ ?></div>
+                                            <div class="cell">
+                                                <h4 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h4>
+                                            </div>
+                                            <div class="cell">
+                                                <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
+                                            </div>
+                                            <div class="cell"><a
+                                                    href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+                                                    target="_blank"><img src="assets/img/wa.png" alt="WhatsApp" width="50"></a>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div class="col-md-6 col-sm-6 pb-1 bg-light">
-                        <img class="img-fluid m-5 text-center" src="assets/img/coba.png" alt="">
-                        <div class="product-item bg-light mb-4">
-                            <div class="table">
-                                <div class="row">
-                                    <div class="cell">1</div>
-                                    <div class="cell">
-                                        <h3 class="text-danger m-0">01289312319</h3>
-                                    </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0">7jt</h5>
-                                    </div>
-                                    <div class="cell"><a href=""><img src="assets/img/wa.png" alt="WhatsApp"></a></div>
-                                </div>
-                                <div class="row">
-                                    <div class="cell">2</div>
-                                    <div class="cell">
-                                        <h3 class="text-danger m-0">081810540412</h3>
-                                    </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0">7jt</h5>
-                                    </div>
-                                    <div class="cell"><a href=""><img src="assets/img/wa.png" alt="WhatsApp"></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </div>
             <!-- Shop Product End -->
@@ -405,6 +422,30 @@
 
         <!-- Template Javascript -->
         <script src="assets/js/main.js"></script>
+
+        <script>
+            function handleCheckboxClick(checkbox) {
+                const checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    if (cb !== checkbox && cb.checked) {
+                        cb.checked = false;
+                    }
+                });
+                document.getElementById('byOperator').submit();
+            }
+
+            function checkAll(checkbox) {
+                if (checkbox.checked) {
+                    const checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        if (cb !== checkbox) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+                document.getElementById('byOperator').submit();
+            }
+        </script>
 </body>
 
 </html>
