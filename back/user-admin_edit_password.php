@@ -1,13 +1,13 @@
 <?php
 session_start();
 include '../koneksi.php';
-$title = 'SMARTPPA Admin | Ubah Password Admin';
+$title = 'NOMORCANTIK Admin | Ubah Password Admin';
 
 // Cek apakah pengguna sudah login
-if (!isset($_SESSION['admin'])) {
-    header('Location: ../login_admin.php'); 
-    exit();
-}
+// if (!isset($_SESSION['admin'])) {
+//     header('Location: ../login_admin.php'); 
+//     exit();
+// }
 
 
 if (!isset($_GET['id_admin']) || empty($_GET['id_admin'])) {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'SMARTPPA Admin | Data Tim Admin';
+$title = 'NOMORCANTIK Admin | Data Tim Admin';
 
 // Cek apakah pengguna sudah login
 // if (!isset($_SESSION['admin'])) {
