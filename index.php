@@ -55,6 +55,18 @@
             width: 50px; /* Adjust image width for smaller screens */
         }
     }
+
+      /* By default, hide the search form */
+      .search-mobile {
+        display: none;
+    }
+
+    /* Show the search form only on screens smaller than 768px */
+    @media (max-width: 767px) {
+        .search-mobile {
+            display: block;
+        }
+    }
 </style>
 <body>
      <!-- Topbar Start -->
@@ -62,8 +74,8 @@
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-primary bg-dark px-2">Multi</span>
-                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+                    <span class="h1 text-uppercase text-primary bg-light px-2">Nomor</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">cantik</span>
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
@@ -96,22 +108,46 @@
     <!-- Topbar End -->
 
     <!-- Navbar Start -->
-    <div class="container-fluid bg-dark mb-30">
+    <div class="container-fluid bg-light mb-15">
         <div class="row px-xl-5">
-            <div class="col-lg-9">
-                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Nomor</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Cantik</span>
                     </a>
                 </nav>
             </div>
         </div>
     </div>
-    <!-- Navbar End -->
-    <br>
+    <div class="row search-mobile mt-0 mb-1">
+        <div class="container-fluid">
+            <div class="row px-xl-5">
+                <div class="col-12 p-4">
+                    <form action="">
+                        <div class="input-group">
+                            <select class="custom-select" id="search-category" style="max-width: 150px;">
+                                <option value="all" selected>Operator</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="books">Books</option>
+                                <option value="furniture">Furniture</option>
+                                <!-- Add more categories as needed -->
+                            </select>
+                            <input type="text" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent text-primary">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Breadcrumb Start -->
-    <div class="container-fluid">
+    <div class="container-fluid mt-4">
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">

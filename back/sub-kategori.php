@@ -100,6 +100,7 @@ include '../koneksi.php';
                                 <th>Kategori</th>
                                 <th>Operator</th>
                                 <th>Nomor</th>
+                                <th>Logo</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -109,6 +110,7 @@ include '../koneksi.php';
                                 <td>Prabayar</td>
                                 <td>Telkomsel</td>
                                 <td>0813, 0821, 0822, 0823, 0852, 0853</td>
+                                <td>logo</td>
                                 <td>
                                     <a href="sub-kategori-edit.php?id=1" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i>
@@ -140,7 +142,10 @@ include '../koneksi.php';
                             <input type="text" class="form-control" id="nama_operator" name="nama_operator" placeholder="Nama Operator" required />
                             <label for="nama_operator">Nama Operator</label>
                         </div>
-
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="file" class="form-control" name="foto" required />
+                            <label for="foto">Logo</label>
+                        </div>
                         <div id="kode-nomor-section">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input type="text" class="form-control" id="kode-nomor-1" name="kode_nomor[]" placeholder="Kode Nomor 1" required />

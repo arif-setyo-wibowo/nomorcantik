@@ -84,6 +84,12 @@ include '../koneksi.php';
                             Tambah Data
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link waves-effect" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-top-csv" aria-controls="navs-top-csv" aria-selected="true">
+                            Tambah dari CSV
+                        </button>
+                    </li>
                     <span class="tab-slider" style="left: 91.1528px; width: 107.111px; bottom: 0px;"></span>
                 </ul>
             </div>
@@ -154,9 +160,9 @@ include '../koneksi.php';
                         <input type="hidden" name="action" value="insert">
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </form>
+                </div>
 
-                    <!-- CSV Upload Form -->
-                    <hr>
+                <div class="tab-pane fade" id="navs-top-csv" role="tabpanel">
                     <form action="upload_csv.php" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="csvFile" class="form-label">Tambah Data dari CSV</label>
@@ -165,6 +171,7 @@ include '../koneksi.php';
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
                 </div>
+
             </div>
         </div>
 
