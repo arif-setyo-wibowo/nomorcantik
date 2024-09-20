@@ -9,6 +9,42 @@ $title = 'NOMORCANTIK Admin | Nomor';
 // }
 
 include '../koneksi.php';
+$no = 1;
+$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
+$dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $action = $_POST['action'];
+
+    if ($action == 'delete') {
+        $id_nomor = intval($_POST['id_nomor']);
+        
+        $stmt = $koneksi->prepare('DELETE FROM nomor WHERE id_nomor = ?');
+        $stmt->bind_param('i', $id_nomor);
+        if ($stmt->execute()) {
+            unlink("../assets/uploads/" . $result);
+            $_SESSION['msg'] = 'Nomor berhasil dihapus!';
+        } else {
+            $_SESSION['error'] = 'Nomor gagal dihapus!';
+        }
+
+        $stmt->close();
+    } elseif ($action == 'insert') {
+        $id_operator = intval($_POST['id_operator']);
+        $nomor = $_POST['nomor'];
+        $harga = intval($_POST['harga']);
+
+        $sql = "INSERT INTO nomor (id_operator, nomor, harga) VALUES ('$id_operator', '$nomor', '$harga')";
+        if ($koneksi->query($sql) === true) {
+            $_SESSION['msg'] = 'Berhasil Menambahkan Nomor!';
+        } else {
+            $_SESSION['error'] = 'Gagal Menambahkan Nomor!';
+        }
+    }
+
+    header('Location:nomor.php');
+    exit();
+}
 
 ?>
 <?php include 'header.php'; ?>
@@ -87,7 +123,7 @@ include '../koneksi.php';
                     <li class="nav-item" role="presentation">
                         <button type="button" class="nav-link waves-effect" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-csv" aria-controls="navs-top-csv" aria-selected="true">
-                            Tambah dari CSV
+                            Import dari CSV
                         </button>
                     </li>
                     <span class="tab-slider" style="left: 91.1528px; width: 107.111px; bottom: 0px;"></span>
@@ -102,33 +138,33 @@ include '../koneksi.php';
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori</th>
-                                <th>Sub Kategori</th>
+                                <th>Operator</th>
                                 <th>Nomor</th>
                                 <th>Harga</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                        <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
-                                <td>1</td>
-                                <td>Prabayar</td>
-                                <td>Telkomsel</td>
-                                <td>081278833</td>
-                                <td>700</td>
+                                <td><?= $no++ ?></td>
+                                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
+                                <td><?= $d['nomor'] ?></td>
+                                <td><?= $d['harga'] ?> </td>
                                 <td>
-                                    <a href="nomor-edit.php?id=1" class="btn btn-info btn-sm">
+                                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <form action="kategori.php" method="POST" id="delete-form-1" style="display: inline;">
+                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id_kategori" value="1">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="1">
+                                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
+                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>
                             </tr>
+                            <?php endwhile;?>
                         </tbody>
                     </table>
                 </div>
@@ -136,17 +172,14 @@ include '../koneksi.php';
                 <!-- Tab for inserting data manually or via CSV -->
                 <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
                     <!-- Manual Form -->
-                    <form action="insert.php" method="POST">
+                    <form action="" method="POST">
                         <div class="form-floating form-floating-outline mb-4">
-                            <label>Kategori</label>
-                            <select class="selectpicker w-100" data-style="btn-default" name="id_kategori" data-live-search="true" required>
-                                <option selected disabled value="">Pilih Kategori</option>
-                            </select>
-                        </div>
-                        <div class="form-floating form-floating-outline mb-4">
-                            <label>Sub Kategori</label>
-                            <select class="selectpicker w-100" data-style="btn-default" name="id_subkategori" data-live-search="true" required>
-                                <option selected disabled value="">Pilih Sub Kategori</option>
+                            <label>Nama Operator</label>
+                            <select class="selectpicker w-100" data-style="btn-default" name="id_operator" data-live-search="true" required>
+                                <option selected disabled value="">Pilih Operator</option>
+                                <?php while($d = mysqli_fetch_array($dataOperator)) : ?>
+                                    <option value="<?= $d['id_operator'] ?>"><?= $d['nama_operator'] ?></option>
+                                <?php endwhile;?>
                             </select>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
@@ -154,7 +187,7 @@ include '../koneksi.php';
                             <label for="basic-default-fullname">Nomor</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="number" class="form-control" id="basic-default-fullname" name="nomor" placeholder="Nomor" required />
+                            <input type="number" class="form-control" id="basic-default-fullname" name="harga" placeholder="Nomor" required />
                             <label for="basic-default-fullname">Harga</label>
                         </div>
                         <input type="hidden" name="action" value="insert">
@@ -163,10 +196,10 @@ include '../koneksi.php';
                 </div>
 
                 <div class="tab-pane fade" id="navs-top-csv" role="tabpanel">
-                    <form action="upload_csv.php" method="POST" enctype="multipart/form-data">
+                    <form action="import-nomor-csv.php" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="csvFile" class="form-label">Tambah Data dari CSV</label>
-                            <input type="file" class="form-control" id="csvFile" name="csv_file" accept=".csv" required />
+                            <input type="file" class="form-control" id="csvFile" name="csv" accept=".csv" required />
                         </div>
                         <button type="submit" class="btn btn-success">Upload CSV</button>
                     </form>
@@ -190,7 +223,6 @@ include '../koneksi.php';
 
                 Swal.fire({
                     title: 'Apakah Yakin ingin menghapus data?',
-                    text: "Data yang dihapus akan hilang!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, hapus!',

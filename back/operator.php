@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'NOMORCANTIK Admin | Kategori';
+$title = 'NOMORCANTIK Admin | Operator';
 
 // Cek apakah pengguna sudah login
 // if (!isset($_SESSION['admin'])) {
@@ -10,41 +10,52 @@ $title = 'NOMORCANTIK Admin | Kategori';
 
 include '../koneksi.php';
 $no = 1;
-$data = mysqli_query($koneksi, 'SELECT * FROM kategori');
+$data = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
 
     if ($action == 'delete') {
-        $id_kategori = intval($_POST['id_kategori']);
+        $id_operator = intval($_POST['id_operator']);
 
-        $stmt = $koneksi->prepare('DELETE FROM kategori WHERE id_kategori = ?');
-        $stmt->bind_param('i', $id_kategori);
-
+        $sql = "SELECT logo FROM operator WHERE id_operator = $id_operator";
+        $result = mysqli_fetch_assoc(mysqli_query($koneksi, $sql))['logo'];
+        
+        $stmt = $koneksi->prepare('DELETE FROM operator WHERE id_operator = ?');
+        $stmt->bind_param('i', $id_operator);
         if ($stmt->execute()) {
-            $_SESSION['msg'] = 'Kategori berhasil dihapus!';
+            unlink("../assets/uploads/" . $result);
+            $_SESSION['msg'] = 'Operator berhasil dihapus!';
         } else {
-            $_SESSION['error'] = 'Kategori gagal dihapus!';
+            $_SESSION['error'] = 'Operator gagal dihapus!';
         }
 
         $stmt->close();
     } elseif ($action == 'insert') {
-        $nama_kategori = $koneksi->real_escape_string($_POST['nama_kategori']);
-        $sql = "INSERT INTO kategori (nama_kategori) VALUES ('$nama_kategori')";
+        $nama_operator = $koneksi->real_escape_string($_POST['nama_operator']);
+        $file_extension = pathinfo($_FILES["logo"]["name"], PATHINFO_EXTENSION);
+        $new_file_name = uniqid() . "." . strtolower($file_extension);
+        $target_file = "../assets/uploads/" . $new_file_name;
+
+        if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
+            $logo = $new_file_name;
+        }
+
+        $sql = "INSERT INTO operator (nama_operator, logo) VALUES ('$nama_operator', '$logo')";
         if ($koneksi->query($sql) === true) {
-            $_SESSION['msg'] = 'Kategori berhasil ditambahkan!';
+            $_SESSION['msg'] = 'Operator berhasil ditambahkan!';
         } else {
-            $_SESSION['error'] = 'Kategori gagal ditambahkan!';
+            $_SESSION['error'] = 'Operator gagal ditambahkan!';
         }
     }
 
-    header('Location:kategori.php');
+    header('Location:operator.php');
     exit();
 }
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SMART PPA /</span> Kategori</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SMART PPA /</span> Operator</h4>
 
     <div class="card mb-4">
         <div class="card-header p-0">
@@ -106,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="false"
                             tabindex="-1">
-                            Kategori
+                            Operator
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -126,7 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori</th>
+                                <th>Nama Operator</th>
+                                <th>Logo</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -134,18 +146,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= $d['nama_kategori'] ?></td>
+                                <td><?= $d['nama_operator'] ?></td>
+                                <td><img src="../assets/uploads/<?= $d['logo'] ?>" alt="<?= $d['nama_operator'] ?>" width="100" height="50"></td>
                                 <td>
-                                    <a href="kategori-edit.php?id=<?= $d['id_kategori'] ?>" class="btn btn-info btn-sm">
+                                    <a href="operator-edit.php?id=<?= $d['id_operator'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i>
                                         Edit
                                     </a>
-                                    <form action="kategori.php" method="POST" id="delete-form-<?= $d['id_kategori'] ?>"
+                                    <form action="operator.php" method="POST" id="delete-form-<?= $d['id_operator'] ?>"
                                         style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id_kategori" value="<?= $d['id_kategori'] ?>">
+                                        <input type="hidden" name="id_operator" value="<?= $d['id_operator'] ?>">
                                         <button type="button" class="btn btn-danger btn-sm confirm-text"
-                                            data-form-id="<?= $d['id_kategori'] ?>">
+                                            data-form-id="<?= $d['id_operator'] ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
@@ -156,11 +169,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </table>
                 </div>
                 <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
-                    <form action="" method="POST">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" class="form-control" id="basic-default-fullname" name="nama_kategori"
-                                placeholder="Kategori" required />
-                            <label for="basic-default-fullname">Kategori</label>
+                            <input type="text" class="form-control" id="basic-default-fullname" name="nama_operator"
+                                placeholder="Nama Operator" required />
+                            <label for="basic-default-fullname">Nama Operator</label>
+                        </div>
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="file" class="form-control" name="logo" required />
+                            <label for="logo">Logo</label>
                         </div>
                         <input type="hidden" name="action" value="insert">
                         <button type="submit" class="btn btn-primary">Tambah</button>
@@ -183,7 +200,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 Swal.fire({
                     title: 'Apakah Yakin ingin menghapus data?',
-                    text: "Data yang dihapus akan hilang!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, hapus!',

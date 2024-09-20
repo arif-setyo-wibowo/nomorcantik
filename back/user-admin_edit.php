@@ -27,7 +27,6 @@ $stmt->close();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nama = trim($_POST['nama']);
     $username = trim($_POST['username']);
-    $foto_new_name = $admin['foto']; // Keep old photo if no new photo uploaded
 
     $errors = [];
 
@@ -39,23 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = 'Username tidak boleh kosong.';
     }
 
-    // Handle file upload
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
-        $foto_name = $_FILES['foto']['name'];
-        $foto_tmp_name = $_FILES['foto']['tmp_name'];
-        $foto_ext = pathinfo($foto_name, PATHINFO_EXTENSION);
-        $foto_new_name = uniqid('foto_', true) . '.' . $foto_ext;
-        $foto_upload_path = '../uploads/' . $foto_new_name;
-
-        if (!move_uploaded_file($foto_tmp_name, $foto_upload_path)) {
-            $errors[] = 'Gagal mengunggah foto.';
-        }
-    }
-
     // If no errors, proceed to update
     if (empty($errors)) {
-        $stmt = $koneksi->prepare('UPDATE admin SET nama = ?, username = ?, foto = ? WHERE id_admin = ?');
-        $stmt->bind_param('sssi', $nama, $username, $foto_new_name, $id_admin);
+        $stmt = $koneksi->prepare('UPDATE admin SET nama = ?, username = ? WHERE id_admin = ?');
+        $stmt->bind_param('ssi', $nama, $username, $id_admin);
 
         if ($stmt->execute()) {
             $_SESSION['msg'] = 'Data berhasil diubah!';
@@ -100,10 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-floating form-floating-outline mb-4">
                             <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php echo htmlspecialchars($admin['username']); ?>" required />
                             <label for="username">Username</label>
-                        </div>
-                        <div class="form-floating form-floating-outline mb-4">
-                            <input type="file" class="form-control" id="foto" name="foto" />
-                            <label for="foto">Foto</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Ubah</button>
                         <a href="user-admin.php" class="btn btn-danger">Batal</a>

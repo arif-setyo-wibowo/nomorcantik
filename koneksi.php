@@ -1,5 +1,4 @@
 <?php 
 
-$koneksi = mysqli_connect("localhost", "root", "", "smartapp", 3306);
+$koneksi = mysqli_connect("localhost", "root", "root", "nomorcantik", 8889);
 
-?>

@@ -76,7 +76,7 @@
                     <li class="menu-item <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">
                         <a href="index.php" class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
-                            <div>Dashboards</div>
+                            <div>Dashboard</div>
                             
                         </a>
                     </li>
@@ -84,16 +84,10 @@
                         <span class="menu-header-text">Form Action</span>
                     </li>
                     
-                    <li class="menu-item <?php echo ($current_page == 'kategori.php') ? 'active' : ''; ?>">
-                        <a href="kategori.php " class="menu-link">
+                    <li class="menu-item <?php echo ($current_page == 'operator.php') ? 'active' : ''; ?>">
+                        <a href="operator.php " class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-shape"></i>
-                            <div>Kategori</div>
-                        </a>
-                    </li>
-                    <li class="menu-item <?php echo ($current_page == 'sub-kategori.php') ? 'active' : ''; ?>">
-                        <a href="sub-kategori.php" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-shape-plus-outline"></i>
-                            <div>Sub Kategori</div>
+                            <div>Operator</div>
                         </a>
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'nomor.php') ? 'active' : ''; ?>">

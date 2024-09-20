@@ -46,29 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($count > 0) {
             $_SESSION['error'] = 'Username sudah terdaftar!';
         } else {
-            // Handle file upload
-            if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
-                $foto = basename($_FILES['foto']['name']);
-                $targetDir = "../uploads/";
-                $targetFile = $targetDir . $foto;
+            $stmt = $koneksi->prepare("INSERT INTO admin (nama, username, password) VALUES (?, ?, ?)");
+            $stmt->bind_param('sss', $nama, $username, $password);
 
-                if (move_uploaded_file($_FILES['foto']['tmp_name'], $targetFile)) {
-                    $stmt = $koneksi->prepare("INSERT INTO admin (nama, username, password, foto) VALUES (?, ?, ?, ?)");
-                    $stmt->bind_param('ssss', $nama, $username, $password, $foto);
-
-                    if ($stmt->execute()) {
-                        $_SESSION['msg'] = 'Admin berhasil ditambahkan!';
-                    } else {
-                        $_SESSION['error'] = 'Admin gagal ditambahkan!';
-                    }
-
-                    $stmt->close();
-                } else {
-                    $_SESSION['error'] = 'Gagal mengupload foto!';
-                }
+            if ($stmt->execute()) {
+                $_SESSION['msg'] = 'Admin berhasil ditambahkan!';
             } else {
-                $_SESSION['error'] = 'Foto wajib diupload!';
+                $_SESSION['error'] = 'Admin gagal ditambahkan!';
             }
+
+            $stmt->close();
         }
     }
 
@@ -87,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Success Alert -->
             <?php if (isset($_SESSION['msg'])): ?>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         Swal.fire({
                             title: 'Success!',
                             text: '<?php echo $_SESSION['msg']; ?>',
@@ -99,12 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         });
                     });
                 </script>
-            <?php unset($_SESSION['msg']); endif; ?>
+                <?php unset($_SESSION['msg']); endif; ?>
 
             <!-- Error Alert -->
             <?php if (isset($_SESSION['error'])): ?>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         Swal.fire({
                             title: 'Error!',
                             text: '<?php echo $_SESSION['error']; ?>',
@@ -116,12 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         });
                     });
                 </script>
-            <?php unset($_SESSION['error']); endif; ?>
+                <?php unset($_SESSION['error']); endif; ?>
 
             <!-- Validation Errors Alert -->
             <?php if (!empty($errors)): ?>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         Swal.fire({
                             title: 'Error!',
                             html: '<?php echo implode('<br>', $errors); ?>',
@@ -139,16 +126,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="nav-align-top">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="false" tabindex="-1">
+                        <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="false"
+                            tabindex="-1">
                             Admin
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link waves-effect" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="true">
+                        <button type="button" class="nav-link waves-effect" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="true">
                             Tambah Data
                         </button>
                     </li>
-                <span class="tab-slider" style="left: 91.1528px; width: 107.111px; bottom: 0px;"></span></ul>
+                    <span class="tab-slider" style="left: 91.1528px; width: 107.111px; bottom: 0px;"></span>
+                </ul>
             </div>
         </div>
         <div class="card-body">
@@ -165,29 +156,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </thead>
                         <tbody>
                             <?php while ($d = mysqli_fetch_array($data)): ?>
-                            <tr>
-                                <td><?php echo $no++; ?></td>
-                                <td><?php echo $d['nama']; ?></td>
-                                <td><?php echo $d['username']; ?></td>
+                                <tr>
+                                    <td><?php echo $no++; ?></td>
+                                    <td><?php echo $d['nama']; ?></td>
+                                    <td><?php echo $d['username']; ?></td>
 
-                                <td>
-                                    <a href="user-admin_edit.php?id_admin=<?php echo $d['id_admin']; ;  ?>" class="btn btn-info btn-sm">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Edit
-                                    </a>
-                                    <a href="user-admin_edit_password.php?id_admin=<?php echo $d['id_admin']; ?>" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Ganti Password
-                                    </a>
-                                    <form action="" method="POST" style="display: inline;" id="delete-form-<?php echo $d['id_admin']; ?>">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id_admin" value="<?php echo $d['id_admin']; ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?php echo $d['id_admin']; ?>">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                                    <td>
+                                        <a href="user-admin_edit.php?id_admin=<?php echo $d['id_admin'];
+                                        ; ?>" class="btn btn-info btn-sm">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit
+                                        </a>
+                                        <a href="user-admin_edit_password.php?id_admin=<?php echo $d['id_admin']; ?>"
+                                            class="btn btn-warning btn-sm">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Ganti Password
+                                        </a>
+                                        <form action="" method="POST" style="display: inline;"
+                                            id="delete-form-<?php echo $d['id_admin']; ?>">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id_admin" value="<?php echo $d['id_admin']; ?>">
+                                            <button type="button" class="btn btn-danger btn-sm confirm-text"
+                                                data-form-id="<?php echo $d['id_admin']; ?>">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
                             <?php endwhile; ?>
                         </tbody>
                     </table>
@@ -205,16 +200,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-password-toggle mb-4">
                             <div class="input-group input-group-merge">
                                 <div class="form-floating form-floating-outline">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        class="form-control"
+                                    <input type="password" name="password" class="form-control"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        minlength="6"
-                                        required />
+                                        minlength="6" required />
                                     <label for="password">Password</label>
                                 </div>
-                                <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
+                                <span class="input-group-text cursor-pointer"><i
+                                        class="mdi mdi-eye-off-outline"></i></span>
                             </div>
                         </div>
                         <input type="hidden" name="action" value="insert">
@@ -228,8 +220,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- / Content -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.addEventListener('click', function(event) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('click', function (event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
                 event.preventDefault();
 
@@ -238,7 +230,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 Swal.fire({
                     title: 'Apakah Yakin ingin menghapus data?',
-                    text: "Data yang dihapus akan hilang!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, hapus!',
@@ -248,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         cancelButton: 'btn btn-outline-secondary waves-effect'
                     },
                     buttonsStyling: false
-                }).then(function(result) {
+                }).then(function (result) {
                     if (result.isConfirmed) {
                         form.submit();
                     }

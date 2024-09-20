@@ -132,8 +132,8 @@ $(document).ready(function() {
             ]
         }],
         dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-        displayLength: 7,
-        lengthMenu: [7, 10, 25, 50, 75, 100]
+        displayLength: 20,
+        lengthMenu: [20, 50, 75, 100]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     setTimeout(() => {
