@@ -232,7 +232,6 @@ $(document).ready(function() {
             });
         });
     });
-});
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
