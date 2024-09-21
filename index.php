@@ -1,11 +1,12 @@
 <?php
 include './koneksi.php';
 
-$idOperator = isset($_GET['ByOperator']) ? intval($_GET['ByOperator']) : null;
+$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]" . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/';
+$idOperator = isset($_GET['ByOperator']) ? mysqli_real_escape_string($koneksi, $_GET['ByOperator']) : null;
 $nomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
 $cek = 0;
 
-if ($idOperator && !$nomor) {
+if ($idOperator && str_contains($idOperator, '-digit') == false && !$nomor) {
     $stmt = $koneksi->prepare('SELECT * FROM operator WHERE id_operator = ?');
     $stmt->bind_param('i', $idOperator);
     $stmt->execute();
@@ -145,7 +146,7 @@ function formatHarga($nilai)
         <div class="row mx-xl-5 bg-light">
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0">
-                    <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="index.php">
+                    <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
                         <button class="btn btn-secondary">Halaman Utama</button></a>
                 </nav>
             </div>
@@ -228,7 +229,7 @@ function formatHarga($nilai)
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-all" name="ByPrice"
                                 value="all"
-                                <?= !isset($_GET['ByPrice']) || $_GET['ByPrice'] === 'all' ? 'checked' : '' ?>
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === 'all' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-all">All Price</label>
                             <span class="badge border font-weight-normal">1000</span>
@@ -289,15 +290,12 @@ function formatHarga($nilai)
                     <form id="byOperator" method="GET" action="">
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input"
-                                <?= !isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all' ? 'checked' : '' ?>
-                                id="color-all" onclick="checkAll(this)">
-                            <label class="custom-control-label" for="color-all">Semua Operator</label>
+                            <input type="checkbox" class="custom-control-input" name="ByOperator" value="10-digit"
+                                <?= isset($_GET['ByOperator']) && $_GET['ByOperator'] === '10-digit' ? 'checked' : '' ?>
+                                id="color-all" onclick="handleCheckboxClick(this)">
+                            <label class="custom-control-label" for="color-all">10 Digit</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor');
-                            if (!$dataNomor) {
-                                die('Query Error: ' . mysqli_error($koneksi));
-                            }
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE LENGTH(REPLACE(nomor, ' ', '')) = 10");
                             $totalNomor = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
@@ -314,9 +312,6 @@ function formatHarga($nilai)
                             <?php
                             $id = $operator['id_operator'];
                             $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE id_operator = '$id'");
-                            if (!$dataNomor) {
-                                die('Query Error: ' . mysqli_error($koneksi));
-                            }
                             $totalNomor = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomor ?></span>
@@ -344,19 +339,19 @@ function formatHarga($nilai)
                     <?php
                     $id = $operator['id_operator'];
                     $searchNomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
-                    $byOperator = isset($_GET['ByOperator']);
+                    $byOperator = isset($_GET['ByOperator']) ? $_GET['ByOperator'] : null;
                     $byPrice = isset($_GET['ByPrice']) ? mysqli_real_escape_string($koneksi, $_GET['ByPrice']) : null;
                     
                     $query = "SELECT * FROM nomor WHERE id_operator = '$id'";
-
-                    if($byPrice && $byPrice != 'all'){
-                        $rangeParts = explode("-", $byPrice);
-
+                    
+                    if ($byPrice && $byPrice != 'all') {
+                        $rangeParts = explode('-', $byPrice);
+                    
                         if ($byPrice != 100000) {
                             $min = $rangeParts[0];
                             $max = $rangeParts[1];
                             $query .= " AND harga BETWEEN '$min' AND '$max'";
-                        }else{
+                        } else {
                             $query .= " AND harga > '$byPrice'";
                         }
                     }
@@ -365,7 +360,13 @@ function formatHarga($nilai)
                         $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor WHERE REPLACE(nomor, ' ', '') LIKE '%" . intval($searchNomor) . "%' AND id_operator = '$id'");
                     } else {
                         if ($idOperator && !$nomor) {
-                            $dataNomor = mysqli_query($koneksi, $query);
+                            if (str_contains($byOperator, '-digit') == false) {
+                                $dataNomor = mysqli_query($koneksi, $query);
+                            } else {
+                                $parts = explode('-digit', $byOperator);
+                                $angkaDepan = $parts[0];
+                                $dataNomor = mysqli_query($koneksi, $query .= " AND LENGTH(REPLACE(nomor, ' ', '')) = $angkaDepan");
+                            }
                         } else {
                             $dataNomor = mysqli_query($koneksi, $query .= ' LIMIT 10');
                         }
@@ -375,8 +376,16 @@ function formatHarga($nilai)
                     if (empty($nomorData) && !$byOperator) {
                         continue;
                     } elseif (empty($nomorData) && $byOperator && !$searchNomor) {
-                        echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
-                        continue;
+                        if (str_contains($byOperator, '-digit') == false) {
+                            echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
+                            continue;
+                        } else {
+                            $cek += 1;
+                            if ($cek == count($data)) {
+                                echo "<h5 class='text-center mx-4'>Maaf, nomor yang anda cari tidak ditemukan, silahkan cari nomor yang lain.</h5>";
+                            }
+                            continue;
+                        }
                     } elseif (empty($nomorData) && $byOperator && $searchNomor) {
                         $cek += 1;
                         if ($cek == count($data)) {
@@ -384,7 +393,6 @@ function formatHarga($nilai)
                         }
                         continue;
                     }
-
                     
                     $nomorChunks = array_chunk($nomorData, 10);
                     $no = 1;
@@ -493,39 +501,41 @@ function formatHarga($nilai)
         <script src="assets/js/main.js"></script>
 
         <script>
-            function handleCheckboxClick(checkbox) {
-                const checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    if (cb !== checkbox && cb.checked) {
-                        cb.checked = false;
-                    }
-                });
-                document.getElementById('byOperator').submit();
-            }
+    function submitPriceForm(checkbox) {
+        var checkboxes = document.querySelectorAll('#byPrice input[type="checkbox"]');
+        checkboxes.forEach(function(cb) {
+            if (cb !== checkbox) cb.checked = false;
+        });
+        var operatorForm = document.getElementById('byOperator');
+        var operatorFormData = new URLSearchParams(new FormData(operatorForm)).toString();
+        var actionUrl = window.location.pathname + '?';
+        if (operatorFormData) {
+            actionUrl += operatorFormData + '&';
+        }
+        var priceForm = document.getElementById('byPrice');
+        var priceFormData = new FormData(priceForm);
+        actionUrl += new URLSearchParams(priceFormData).toString();
+        window.location.href = actionUrl;
+    }
 
-            function checkAll(checkbox) {
-                if (checkbox.checked) {
-                    const checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
-                    checkboxes.forEach(cb => {
-                        if (cb !== checkbox) {
-                            cb.checked = false;
-                        }
-                    });
-                }
-                document.getElementById('byOperator').submit();
-            }
+    function handleCheckboxClick(checkbox) {
+        var checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
+        checkboxes.forEach(function(cb) {
+            if (cb !== checkbox) cb.checked = false;
+        });
+        var priceForm = document.getElementById('byPrice');
+        var priceFormData = new URLSearchParams(new FormData(priceForm)).toString();
+        var actionUrl = window.location.pathname + '?';
+        if (priceFormData) {
+            actionUrl += priceFormData + '&';
+        }
+        var operatorForm = document.getElementById('byOperator');
+        var operatorFormData = new FormData(operatorForm);
+        actionUrl += new URLSearchParams(operatorFormData).toString();
+        window.location.href = actionUrl;
+    }
+</script>
 
-            function submitPriceForm(checkbox) {
-                var form = document.getElementById('byPrice');
-                var checkboxes = document.querySelectorAll('#byPrice input[type="checkbox"]');
-
-                checkboxes.forEach(function(cb) {
-                    if (cb !== checkbox) cb.checked = false;
-                });
-
-                form.submit();
-            }
-        </script>
 </body>
 
 </html>
