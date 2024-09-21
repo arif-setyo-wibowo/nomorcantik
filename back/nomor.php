@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nomor = $_POST['nomor'];
         $harga = intval($_POST['harga']);
 
-        $sql = "INSERT INTO nomor (id_operator, nomor, harga) VALUES ('$id_operator', '$nomor', '$harga')";
+        $sql = "INSERT INTO nomor (id_operator, nomor, harga, tipe) VALUES ('$id_operator', '$nomor', '$harga','$tipe')";
         if ($koneksi->query($sql) === true) {
             $_SESSION['msg'] = 'Berhasil Menambahkan Nomor!';
         } else {
@@ -141,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <th>Operator</th>
                                 <th>Nomor</th>
                                 <th>Harga</th>
+                                <th>Tipe</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -151,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
                                 <td><?= $d['nomor'] ?></td>
                                 <td><?= $d['harga'] ?> </td>
+                                <td><?= $d['tipe'] ?> </td>
                                 <td>
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
@@ -189,6 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-floating form-floating-outline mb-4">
                             <input type="number" class="form-control" id="basic-default-fullname" name="harga" placeholder="Nomor" required />
                             <label for="basic-default-fullname">Harga</label>
+                        </div>
+                        <div class="form-floating form-floating-outline mb-4">
+                            <label>Tipe</label>
+                            <select class="selectpicker w-100" data-style="btn-default" name="tipe" data-live-search="true" required>
+                                <option selected disabled value="">Pilih Tipe</option>
+                                <option value="reseller">Reseller</option>
+                                <option value="supplier">Supplier</option>
+                            </select>
                         </div>
                         <input type="hidden" name="action" value="insert">
                         <button type="submit" class="btn btn-primary">Tambah</button>

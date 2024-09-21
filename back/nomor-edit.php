@@ -15,8 +15,9 @@ if (isset($_GET['id'])) {
         $id_operator = intval($_POST['id_operator']);
         $nomor = $_POST['nomor'];
         $harga = intval($_POST['harga']);
+        $tipe = $_POST['tipe'];
 
-        $sql = "UPDATE nomor SET id_operator='$id_operator', nomor='$nomor', harga='$harga' WHERE id_nomor=$id_nomor";
+        $sql = "UPDATE nomor SET id_operator='$id_operator', nomor='$nomor', harga='$harga', tipe='$tipe' WHERE id_nomor=$id_nomor";
         
         if ($koneksi->query($sql) === true) {
             $_SESSION['msg'] = 'Nomor berhasil diperbarui!';
@@ -143,6 +144,14 @@ if (isset($_GET['id'])) {
                             <input type="number" class="form-control" id="basic-default-fullname" name="harga"
                                 placeholder="Nomor" value="<?= $nomor['harga'] ?>" required />
                             <label for="basic-default-fullname">Harga</label>
+                        </div>
+                        <div class="form-floating form-floating-outline mb-4">
+                            <label>Tipe</label>
+                            <select class="selectpicker w-100" data-style="btn-default" name="tipe" data-live-search="true" required>
+                                <option selected disabled value="">Pilih Tipe</option>
+                                <option value="reseller"  <?= $nomor['tipe'] == "reseller" ? 'selected' : '' ?>>Reseller</option>
+                                <option value="supplier"  <?= $nomor['tipe'] == "supplier"  ? 'selected' : '' ?>>Supplier</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Ubah</button>
                         <a href="nomor.php"><button type="button" class="btn btn-danger">Batal</button></a>

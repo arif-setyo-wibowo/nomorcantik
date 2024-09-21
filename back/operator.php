@@ -197,28 +197,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- / Content -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.form-check-input').on('change', function() {
-            var id_operator = $(this).data('id-operator');
-            var status = $(this).is(':checked') ? 1 : 0;
 
-            $.ajax({
-                url: 'update-status.php', // URL ke script PHP yang akan memproses perubahan status
-                method: 'POST',
-                data: {
-                    id_operator: id_operator,
-                    status: status
-                },
-                success: function(response) {
-                    console.log(response); // Untuk debugging
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error); // Untuk debugging error
+$(document).ready(function() {
+     $('.form-check-input').on('change', function() {
+        var id_operator = $(this).data('id-operator');
+        var status = $(this).is(':checked') ? 1 : 0;
+
+        $.ajax({
+            url: 'update-status.php',
+            method: 'POST',
+            data: {
+                id_operator: id_operator,
+                status: status
+            },
+            success: function(response) {
+                var res = JSON.parse(response);
+                if (res.status == 'success') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: res.message,
+                        icon: 'success',
+                        customClass: {
+                            confirmButton: 'btn btn-primary waves-effect waves-light'
+                        },
+                        buttonsStyling: false
+                    }).then(function() {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: res.message,
+                        icon: 'error',
+                        customClass: {
+                            confirmButton: 'btn btn-danger waves-effect waves-light'
+                        },
+                        buttonsStyling: false
+                    });
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error); // Debugging error
+            }
         });
     });
-
+});
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
