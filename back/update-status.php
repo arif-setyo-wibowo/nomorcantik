@@ -1,9 +1,7 @@
 <?php
-
-include('../koneksi.php'); 
-session_start(); 
-
-$response = array();
+session_start();
+// Koneksi ke database
+include('../koneksi.php'); // Sesuaikan dengan file koneksi Anda
 
 if (isset($_POST['id_operator']) && isset($_POST['status'])) {
     $id_operator = $_POST['id_operator'];
@@ -11,14 +9,13 @@ if (isset($_POST['id_operator']) && isset($_POST['status'])) {
 
     $query = "UPDATE operator SET status = '$status' WHERE id_operator = '$id_operator'";
     if (mysqli_query($koneksi, $query)) {
-        $response['status'] = 'success';
-        $response['message'] = 'Status berhasil diupdate!';
+        $_SESSION['msg'] = 'Status berhasil diupdate!';
+        echo json_encode(['status' => 'success']);
     } else {
-        $response['status'] = 'error';
-        $response['message'] = 'Status gagal diupdate!';
+        $_SESSION['error'] = 'Status gagal diupdate!';
+        echo json_encode(['status' => 'error']);
     }
 
-    echo json_encode($response);
-    exit(); 
 }
+
 ?>
