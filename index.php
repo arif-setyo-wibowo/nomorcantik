@@ -2,11 +2,14 @@
 include './koneksi.php';
 $waQuery = mysqli_query($koneksi, 'SELECT * FROM wa');
 $wa = mysqli_fetch_assoc($waQuery);
-$rekening= mysqli_query($koneksi, 'SELECT * FROM rekening');
+$rekening = mysqli_query($koneksi, 'SELECT * FROM rekening');
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]" . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/';
 $idOperator = isset($_GET['ByOperator']) ? mysqli_real_escape_string($koneksi, $_GET['ByOperator']) : null;
 $nomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
 $cek = 0;
+$searchNomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
+$byOperator = isset($_GET['ByOperator']) ? $_GET['ByOperator'] : null;
+$byPrice = isset($_GET['ByPrice']) ? mysqli_real_escape_string($koneksi, $_GET['ByPrice']) : null;
 
 if ($idOperator && str_contains($idOperator, '-digit') == false && !$nomor) {
     $stmt = $koneksi->prepare('SELECT * FROM operator WHERE id_operator = ?');
@@ -123,7 +126,8 @@ function formatHarga($nilai)
             <div class="col-lg-4 col-6 text-left"></div>
             <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Customer Service</p>
-                <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
+                <h5 class="m-0"><a
+                        href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
                             src="assets/img/wa-button.png" style=" max-width: 20%;"></a></h5>
             </div>
         </div>
@@ -234,7 +238,11 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === 'all' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-all">Semua Harga</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -243,7 +251,11 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '0-500' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-1">0 - 500</label>
-                            <span class="badge border font-weight-normal">150</span>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 0 AND 500");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -252,7 +264,11 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '500-1000' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-2">500 - 1 Jt</label>
-                            <span class="badge border font-weight-normal">295</span>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 500 AND 1000");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -261,7 +277,11 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '1000-20000' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-3">1 Jt - 20 Jt</label>
-                            <span class="badge border font-weight-normal">246</span>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 1000 AND 20000");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -270,7 +290,11 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '20000-100000' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-4">20 Jt - 100 Jt</label>
-                            <span class="badge border font-weight-normal">145</span>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 20000 AND 100000");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -279,16 +303,24 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '100000' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-5">100 Jt++</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div> 
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga > 100000");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
+                        </div>
                         <div
                             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-5" name="ByPrice"
-                                value="100000"
-                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '100000' ? 'checked' : '' ?>
+                            <input type="checkbox" class="custom-control-input" id="price-6" name="ByPrice"
+                                value="promo"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === 'promo' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
-                            <label class="custom-control-label" for="price-5">Promo</label>
-                            <span class="badge border font-weight-normal">168</span>
+                            <label class="custom-control-label" for="price-6">Promo</label>
+                            <?php
+                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM promo INNER JOIN nomor ON promo.id_nomor = nomor.id_nomor INNER JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND promo.status = 1");
+                            $totalNomorHarga = mysqli_num_rows($dataNomor);
+                            ?>
+                            <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
                         </div>
                     </form>
                 </div>
@@ -336,7 +368,7 @@ function formatHarga($nilai)
             <!-- Shop Sidebar End -->
 
 
-            
+
             <!-- Shop Product Start -->
             <div class="col-lg-6 col-md-8 bg-light mt-2">
                 <div class="row pb-3">
@@ -346,35 +378,55 @@ function formatHarga($nilai)
                             </div>
                         </div>
                     </div>
+                    <?php if(!$byOperator && !$byPrice && !$searchNomor): ?>
                     <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
                         <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
                             style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
                             <img class="img-fluid" src="./images/promo.png"
                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
-
+                        <?php
+                        $query = "SELECT * FROM promo JOIN nomor ON promo.id_nomor = nomor.id_nomor JOIN operator ON nomor.id_operator = operator.id_operator WHERE operator.status = 1 AND promo.status = 1 LIMIT 10";
+                        $dataPromo = mysqli_query($koneksi, $query);
+                        $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC);?>
                         <div class="product-item bg-light mb-4">
                             <div class="table">
-                               
+                            <?php $no = 1; foreach ($promoData as $nomor): ?>
+                                <div class="row">
+                                    <div class="cell"><?= $no++ ?></div>
+                                    <div class="cell">
+                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                    </div>
+                                    <div class="cell">
+                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
+                                    </div>
+                                    <div class="cell">
+
+                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+                                            target="_blank">
+                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
                             </div>
                         </div>
                     </div>
+                    <?php endif;?>
                     <?php foreach ($data as $operator): ?>
                     <?php
                     $id = $operator['id_operator'];
-                    $searchNomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
-                    $byOperator = isset($_GET['ByOperator']) ? $_GET['ByOperator'] : null;
-                    $byPrice = isset($_GET['ByPrice']) ? mysqli_real_escape_string($koneksi, $_GET['ByPrice']) : null;
-                    
                     $query = "SELECT * FROM nomor WHERE id_operator = '$id'";
                     
                     if ($byPrice && $byPrice != 'all') {
                         $rangeParts = explode('-', $byPrice);
                     
-                        if ($byPrice != 100000) {
+                        if ($byPrice != 100000 && $byPrice != "promo") {
                             $min = $rangeParts[0];
                             $max = $rangeParts[1];
                             $query .= " AND harga BETWEEN '$min' AND '$max'";
+                        } elseif ($byPrice == "promo") {
+                            $query = "SELECT * FROM promo INNER JOIN nomor ON promo.id_nomor = nomor.id_nomor WHERE nomor.id_operator = '$id' AND promo.status = 1";
                         } else {
                             $query .= " AND harga > '$byPrice'";
                         }
@@ -391,7 +443,9 @@ function formatHarga($nilai)
                                 $angkaDepan = $parts[0];
                                 $dataNomor = mysqli_query($koneksi, $query .= " AND LENGTH(REPLACE(nomor, ' ', '')) = $angkaDepan");
                             }
-                        } else {
+                        } elseif ($byPrice) {
+                            $dataNomor = mysqli_query($koneksi, $query);
+                        } elseif ($byPrice != "promo") {
                             $dataNomor = mysqli_query($koneksi, $query .= ' LIMIT 10');
                         }
                     }
@@ -440,7 +494,7 @@ function formatHarga($nilai)
                                         <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                     </div>
                                     <div class="cell">
-                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
+                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo'] ?? $nomor['harga'] ) ?></h5>
                                     </div>
                                     <div class="cell">
 
@@ -465,39 +519,44 @@ function formatHarga($nilai)
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
                         class="bg-secondary pr-3">Informasi</span></h5>
                 <div class="bg-light p-4 mb-30 text-center">
-                    <h6 class="text-center">Disini Kami Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator Silahkan KLIK Sesuai Nama Operator Dan Jenisnya Yang Tertera Di Sebelah KIRI Atau LOGO OPERATOR Yang Berada Di Tengah Halaman Website</h6>
+                    <h6 class="text-center">Disini Kami Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator
+                        Silahkan KLIK Sesuai Nama Operator Dan Jenisnya Yang Tertera Di Sebelah KIRI Atau LOGO OPERATOR
+                        Yang Berada Di Tengah Halaman Website</h6>
                     <br>
                     <p>Bisa Hubungi Nomor Dibawah Ini</p>
                     <p>WA : <?= htmlspecialchars($wa['wa']) ?></p>
-                    <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
-                    src="assets/img/wa-button.png" style=" max-width:50%;"></a></h5>
+                    <h5 class="m-0"><a
+                            href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
+                                src="assets/img/wa-button.png" style=" max-width:50%;"></a></h5>
                 </div>
                 <!-- Price End -->
 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cara Pembayaran</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cara
+                        Pembayaran</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <?php if (mysqli_num_rows($rekening) > 0): ?>
-                        <ul class="list-unstyled">
-                            <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
-                                <li class="mb-2 text-center">
-                                    <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
-                                    Nomor Rekening: <?= htmlspecialchars($row['nomor_rekening']) ?><br>
-                                    <?php if (!empty($row['logo_rekening'])): ?>
-                                        <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo" style="max-width: 100px;"/>
-                                    <?php endif; ?>
-                                </li>
-                            <?php endwhile; ?>
-                        </ul>
+                    <ul class="list-unstyled">
+                        <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
+                        <li class="mb-2 text-center">
+                            <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
+                            Nomor Rekening: <?= htmlspecialchars($row['nomor_rekening']) ?><br>
+                            <?php if (!empty($row['logo_rekening'])): ?>
+                            <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo"
+                                style="max-width: 100px;" class="my-3" />
+                            <?php endif; ?>
+                        </li>
+                        <?php endwhile; ?>
+                    </ul>
                     <?php else: ?>
-                        <p>Tidak ada informasi rekening tersedia.</p>
+                    <p>Tidak ada informasi rekening tersedia.</p>
                     <?php endif; ?>
                 </div>
                 <!-- Color End -->
             </div>
         </div>
         <!-- Shop End -->
-                    
+
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
@@ -508,7 +567,7 @@ function formatHarga($nilai)
                     <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
                     </p>
                     <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p> -->
-                    <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i><a
+                    <p class="mb-0"><a
                             href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text="><img
                                 src="assets/img/wa-button.png" style=" max-width: 20%;"></a></p>
                 </div>
@@ -516,7 +575,7 @@ function formatHarga($nilai)
             <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
                 <div class="col-md-6 px-xl-0">
                     <p class="mb-md-0 text-center text-md-left text-secondary">
-                        &copy; <a class="text-primary" href="#">ITBOY</a>. All Rights Reserved.
+                        &copy; <a class="text-primary" href="https://itboy.my.id/">ITBOY</a>. All Rights Reserved.
                     </p>
                 </div>
             </div>
@@ -542,40 +601,40 @@ function formatHarga($nilai)
         <script src="assets/js/main.js"></script>
 
         <script>
-    function submitPriceForm(checkbox) {
-        var checkboxes = document.querySelectorAll('#byPrice input[type="checkbox"]');
-        checkboxes.forEach(function(cb) {
-            if (cb !== checkbox) cb.checked = false;
-        });
-        var operatorForm = document.getElementById('byOperator');
-        var operatorFormData = new URLSearchParams(new FormData(operatorForm)).toString();
-        var actionUrl = window.location.pathname + '?';
-        if (operatorFormData) {
-            actionUrl += operatorFormData + '&';
-        }
-        var priceForm = document.getElementById('byPrice');
-        var priceFormData = new FormData(priceForm);
-        actionUrl += new URLSearchParams(priceFormData).toString();
-        window.location.href = actionUrl;
-    }
+            function submitPriceForm(checkbox) {
+                var checkboxes = document.querySelectorAll('#byPrice input[type="checkbox"]');
+                checkboxes.forEach(function(cb) {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+                var operatorForm = document.getElementById('byOperator');
+                var operatorFormData = new URLSearchParams(new FormData(operatorForm)).toString();
+                var actionUrl = window.location.pathname + '?';
+                if (operatorFormData) {
+                    actionUrl += operatorFormData + '&';
+                }
+                var priceForm = document.getElementById('byPrice');
+                var priceFormData = new FormData(priceForm);
+                actionUrl += new URLSearchParams(priceFormData).toString();
+                window.location.href = actionUrl;
+            }
 
-    function handleCheckboxClick(checkbox) {
-        var checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
-        checkboxes.forEach(function(cb) {
-            if (cb !== checkbox) cb.checked = false;
-        });
-        var priceForm = document.getElementById('byPrice');
-        var priceFormData = new URLSearchParams(new FormData(priceForm)).toString();
-        var actionUrl = window.location.pathname + '?';
-        if (priceFormData) {
-            actionUrl += priceFormData + '&';
-        }
-        var operatorForm = document.getElementById('byOperator');
-        var operatorFormData = new FormData(operatorForm);
-        actionUrl += new URLSearchParams(operatorFormData).toString();
-        window.location.href = actionUrl;
-    }
-</script>
+            function handleCheckboxClick(checkbox) {
+                var checkboxes = document.querySelectorAll('#byOperator input[type="checkbox"]');
+                checkboxes.forEach(function(cb) {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+                var priceForm = document.getElementById('byPrice');
+                var priceFormData = new URLSearchParams(new FormData(priceForm)).toString();
+                var actionUrl = window.location.pathname + '?';
+                if (priceFormData) {
+                    actionUrl += priceFormData + '&';
+                }
+                var operatorForm = document.getElementById('byOperator');
+                var operatorFormData = new FormData(operatorForm);
+                actionUrl += new URLSearchParams(operatorFormData).toString();
+                window.location.href = actionUrl;
+            }
+        </script>
 
 </body>
 

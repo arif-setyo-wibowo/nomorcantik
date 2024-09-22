@@ -71,7 +71,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="" class="app-brand-link">
-                        <span class="app-brand-text demo menu-text fw-bold ms-2 mt-2">NOMORCANTIK</span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2 mt-2">Pedagang Nomor</span>
                     </a>
                 </div>
 
@@ -81,18 +81,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                 ?>
 
                 <ul class="menu-inner py-1">
-                    <!-- Dashboards -->
-                    <li class="menu-item <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">
-                        <a href="index.php" class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
-                            <div>Dashboard</div>
-                            
-                        </a>
-                    </li>
-                    <li class="menu-header fw-medium mt-4">
-                        <span class="menu-header-text">Form Action</span>
-                    </li>
-                    
                     <li class="menu-item <?php echo ($current_page == 'operator.php') ? 'active' : ''; ?>">
                         <a href="operator.php " class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-shape"></i>

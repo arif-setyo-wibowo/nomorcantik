@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'NOMORCANTIK Admin | Promo';
+$title = 'Pedagang Nomor Admin | Promo';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
@@ -10,7 +10,9 @@ if (!isset($_SESSION['admin'])) {
 
 include '../koneksi.php';
 $no = 1;
-$data = mysqli_query($koneksi, 'SELECT promo.*,
+$data = mysqli_query(
+    $koneksi,
+    'SELECT promo.*,
                                     promo.id_promo, 
                                     promo.harga_promo, 
                                     nomor.nomor, 
@@ -21,7 +23,8 @@ $data = mysqli_query($koneksi, 'SELECT promo.*,
                                     nomor ON promo.id_nomor = nomor.id_nomor
                                 JOIN 
                                     operator ON nomor.id_operator = operator.id_operator;
-                                ');
+                                ',
+);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
@@ -43,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif ($action == 'insert') {
         $harga_promo = intval($_POST['harga_promo']);
         $id_nomor = intval($_POST['id_nomor']);
-    
+
         $sql_promo = "INSERT INTO promo (id_nomor, harga_promo, status) VALUES ('$id_nomor', '$harga_promo','0')";
         if ($koneksi->query($sql_promo) === true) {
             $_SESSION['msg'] = ' Promo berhasil ditambahkan!';
@@ -54,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: promo.php');
         exit();
     }
-    
 
     header('Location:promo.php');
     exit();
@@ -62,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">NOMORCANTIK /</span> Promo</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pedagang Nomor /</span> Promo</h4>
 
     <div class="card mb-4">
         <div class="card-header p-0">
@@ -192,18 +194,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <form action="" method="POST" enctype="multipart/form-data">
                         <div class="form-floating form-floating-outline mb-4">
                             <label>Nomor Telp</label>
-                            <select class="selectpicker w-100" data-style="btn-default" name="id_nomor" data-live-search="true" required>
+                            <select class="selectpicker w-100" data-style="btn-default" name="id_nomor"
+                                data-live-search="true" required>
                                 <option selected disabled value="">Pilih Nomor</option>
                                 <?php 
                                 $nomorData = mysqli_query($koneksi, 'SELECT id_nomor, nomor FROM nomor');
                                 while($row = mysqli_fetch_assoc($nomorData)) { ?>
-                                    <option value="<?= $row['id_nomor'] ?>"><?= $row['nomor'] ?></option>
+                                <option value="<?= $row['id_nomor'] ?>"><?= $row['nomor'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" class="form-control" name="harga_promo" required placeholder="Masukkan Harga Promo">
+                            <input type="text" class="form-control" name="harga_promo" required
+                                placeholder="Masukkan Harga Promo">
                             <label for="harga_promo">Harga Promo</label>
                         </div>
                         <input type="hidden" name="action" value="insert">
@@ -220,9 +224,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-     $('.form-check-input').on('change', function() {
-        var id_promo = $(this).data('id-promo');
-        var status = $(this).is(':checked') ? 1 : 0;
+        $('.form-check-input').on('change', function() {
+            var id_promo = $(this).data('id-promo');
+            var status = $(this).is(':checked') ? 1 : 0;
 
             $.ajax({
                 url: 'update-status-promo.php',
@@ -235,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     var data = JSON.parse(response);
                     if (data.status === 'success') {
                         window.location.href =
-                        'promo.php';
+                            'promo.php';
                     } else {
                         console.log('Error occurred.');
                     }

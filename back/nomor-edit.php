@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'NOMORCANTIK Admin | Nomor';
+$title = 'Pedagang Nomor Admin | Nomor';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">NOMORCANTIK /</span> Edit Nomor</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pedagang Nomor /</span> Edit Nomor</h4>
 
     <div class="card mb-4">
         <div class="card-header p-0">
