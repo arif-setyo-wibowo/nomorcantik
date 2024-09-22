@@ -4,11 +4,10 @@ include '../koneksi.php';
 $title = 'NOMORCANTIK Admin | Ubah Data Admin';
 
 // Cek apakah pengguna sudah login
-// if (!isset($_SESSION['admin'])) {
-//     header('Location: ../login_admin.php'); 
-//     exit();
-// }
-
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
 
 // Validate admin ID
 if (!isset($_GET['id_admin']) || empty($_GET['id_admin'])) {

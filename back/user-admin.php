@@ -3,10 +3,10 @@ session_start();
 $title = 'NOMORCANTIK Admin | Data Tim Admin';
 
 // Cek apakah pengguna sudah login
-// if (!isset($_SESSION['admin'])) {
-//     header('Location: ../back_login.php'); 
-//     exit();
-// }
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
 
 
 include '../koneksi.php';

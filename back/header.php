@@ -1,3 +1,12 @@
+<?php
+if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+    session_unset(); 
+    session_destroy(); 
+    
+    header("Location: ../back_login.php"); 
+    exit();
+}
+?>
 <!doctype html>
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="../assets/back/" data-template="vertical-menu-template">
 <head>

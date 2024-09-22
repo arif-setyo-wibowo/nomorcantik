@@ -4,11 +4,10 @@ include '../koneksi.php';
 $title = 'NOMORCANTIK Admin | Ubah Password Admin';
 
 // Cek apakah pengguna sudah login
-// if (!isset($_SESSION['admin'])) {
-//     header('Location: ../login_admin.php'); 
-//     exit();
-// }
-
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
 
 if (!isset($_GET['id_admin']) || empty($_GET['id_admin'])) {
     die('ID Admin tidak ditemukan!');

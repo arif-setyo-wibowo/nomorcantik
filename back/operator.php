@@ -3,10 +3,10 @@ session_start();
 $title = 'NOMORCANTIK Admin | Operator';
 
 // Cek apakah pengguna sudah login
-// if (!isset($_SESSION['admin'])) {
-//     header('Location: ../back_login.php');
-//     exit();
-// }
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
 
 include '../koneksi.php';
 $no = 1;
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-$(document).ready(function() {
+    $(document).ready(function() {
      $('.form-check-input').on('change', function() {
         var id_operator = $(this).data('id-operator');
         var status = $(this).is(':checked') ? 1 : 0;

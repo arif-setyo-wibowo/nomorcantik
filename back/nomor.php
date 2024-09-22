@@ -3,10 +3,11 @@ session_start();
 $title = 'NOMORCANTIK Admin | Nomor';
 
 // Cek apakah pengguna sudah login
-// if (!isset($_SESSION['admin'])) {
-//     header('Location: ../login_admin.php'); 
-//     exit();
-// }
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
+
 
 include '../koneksi.php';
 $no = 1;

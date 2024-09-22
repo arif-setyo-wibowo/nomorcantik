@@ -2,6 +2,12 @@
 session_start();
 include '../koneksi.php';
 
+if (!isset($_SESSION['admin'])) {
+    header('Location: ../back_login.php');
+    exit();
+}
+
+
 function filter($type, $phone)
 {
     $change = '';

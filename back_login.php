@@ -32,9 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['admin'] = true;
                 $_SESSION['user'] = $username;
                 $_SESSION['nama'] = $user['nama']; 
-                $_SESSION['foto'] = $user['foto']; 
                 $_SESSION['msg'] = 'Login berhasil!';
-                header('Location: admin/index.php'); 
+                header('Location: back/index.php'); 
                 exit();
             } else {
                 $_SESSION['error'] = 'Username atau password salah.';
@@ -48,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['errors'] = $errors;
     }
 
-    header('Location: login_admin.php');
+    header('Location: back_login.php');
     exit();
 }
 ?>

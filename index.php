@@ -1,6 +1,8 @@
 <?php
 include './koneksi.php';
-
+$waQuery = mysqli_query($koneksi, 'SELECT * FROM wa');
+$wa = mysqli_fetch_assoc($waQuery);
+$rekening= mysqli_query($koneksi, 'SELECT * FROM rekening');
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]" . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/';
 $idOperator = isset($_GET['ByOperator']) ? mysqli_real_escape_string($koneksi, $_GET['ByOperator']) : null;
 $nomor = isset($_GET['nomor']) ? mysqli_real_escape_string($koneksi, $_GET['nomor']) : null;
@@ -35,7 +37,7 @@ function formatHarga($nilai)
 
 <head>
     <meta charset="utf-8">
-    <title>Nomor Cantik</title>
+    <title>Pedagang Nomor</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -114,14 +116,14 @@ function formatHarga($nilai)
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-primary bg-light px-2">Nomor</span>
-                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">cantik</span>
+                    <span class="h1 text-uppercase text-primary bg-light px-2">PEDAGANG</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">NOMOR</span>
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left"></div>
             <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Customer Service</p>
-                <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=&amp;text=Hallo Mau pesan nomer"><img
+                <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
                             src="assets/img/wa-button.png" style=" max-width: 20%;"></a></h5>
             </div>
         </div>
@@ -134,8 +136,8 @@ function formatHarga($nilai)
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Nomor</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Cantik</span>
+                        <span class="h1 text-uppercase text-dark bg-light px-2">PEDAGANG</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">NOMOR</span>
                     </a>
                 </nav>
             </div>
@@ -231,7 +233,7 @@ function formatHarga($nilai)
                                 value="all"
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === 'all' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
-                            <label class="custom-control-label" for="price-all">All Price</label>
+                            <label class="custom-control-label" for="price-all">Semua Harga</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         <div
@@ -277,6 +279,15 @@ function formatHarga($nilai)
                                 <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '100000' ? 'checked' : '' ?>
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-5">100 Jt++</label>
+                            <span class="badge border font-weight-normal">168</span>
+                        </div> 
+                        <div
+                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input" id="price-5" name="ByPrice"
+                                value="100000"
+                                <?= isset($_GET['ByPrice']) && $_GET['ByPrice'] === '100000' ? 'checked' : '' ?>
+                                onclick="submitPriceForm(this)">
+                            <label class="custom-control-label" for="price-5">Promo</label>
                             <span class="badge border font-weight-normal">168</span>
                         </div>
                     </form>
@@ -325,6 +336,7 @@ function formatHarga($nilai)
             <!-- Shop Sidebar End -->
 
 
+            
             <!-- Shop Product Start -->
             <div class="col-lg-6 col-md-8 bg-light mt-2">
                 <div class="row pb-3">
@@ -334,7 +346,20 @@ function formatHarga($nilai)
                             </div>
                         </div>
                     </div>
+                    //PROMO
+                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                        <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
+                            style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
+                            <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
 
+                        <div class="product-item bg-light mb-4">
+                            <div class="table">
+                               
+                            </div>
+                        </div>
+                    </div>
                     <?php foreach ($data as $operator): ?>
                     <?php
                     $id = $operator['id_operator'];
@@ -419,7 +444,8 @@ function formatHarga($nilai)
                                         <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
                                     </div>
                                     <div class="cell">
-                                        <a href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+
+                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
                                             target="_blank">
                                             <img src="assets/img/wa.png" alt="WhatsApp" width="50">
                                         </a>
@@ -439,36 +465,52 @@ function formatHarga($nilai)
                 <!-- Price Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
                         class="bg-secondary pr-3">Informasi</span></h5>
-                <div class="bg-light p-4 mb-30">
-
+                <div class="bg-light p-4 mb-30 text-center">
+                    <h6 class="text-center">Disini Kami Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator Silahkan KLIK Sesuai Nama Operator Dan Jenisnya Yang Tertera Di Sebelah KIRI Atau LOGO OPERATOR Yang Berada Di Tengah Halaman Website</h6>
+                    <br>
+                    <p>Bisa Hubungi Nomor Dibawah Ini</p>
+                    <p>WA : <?= htmlspecialchars($wa['wa']) ?></p>
+                    <h5 class="m-0"><a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
+                    src="assets/img/wa-button.png" style=" max-width:50%;"></a></h5>
                 </div>
                 <!-- Price End -->
 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">cara
-                        pembayaran</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cara Pembayaran</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <!-- Color End -->
-
+                    <?php if (mysqli_num_rows($rekening) > 0): ?>
+                        <ul class="list-unstyled">
+                            <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
+                                <li class="mb-2 text-center">
+                                    <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
+                                    Nomor Rekening: <?= htmlspecialchars($row['nomor_rekening']) ?><br>
+                                    <?php if (!empty($row['logo_rekening'])): ?>
+                                        <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo" style="max-width: 100px;"/>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endwhile; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p>Tidak ada informasi rekening tersedia.</p>
+                    <?php endif; ?>
                 </div>
-                <!-- Shop Sidebar End -->
+                <!-- Color End -->
             </div>
         </div>
         <!-- Shop End -->
-
+                    
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                    <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
-                        dolor. Rebum tempor no vero est magna amet no</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
+                    <h5 class="text-secondary text-uppercase mb-4">Pedagang Nomor</h5>
+                    <p class="mb-4"></p>
+                    <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
                     </p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p> -->
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i><a
-                            href="https://api.whatsapp.com/send?phone=6288210001000&amp;text=www.nomorcantik.com"><img
+                            href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text="><img
                                 src="assets/img/wa-button.png" style=" max-width: 20%;"></a></p>
                 </div>
             </div>
