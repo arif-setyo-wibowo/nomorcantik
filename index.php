@@ -563,10 +563,10 @@ function formatHarga($nilai)
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                     <h5 class="text-secondary text-uppercase mb-4">Pedagang Nomor</h5>
-                    <p class="mb-4"></p>
+                    <p class="mb-4">Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator</p>
                     <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
-                    </p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p> -->
+                    </p> -->
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>nomorciamik@gmail.com</p>
                     <p class="mb-0"><a
                             href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text="><img
                                 src="assets/img/wa-button.png" style=" max-width: 20%;"></a></p>
@@ -575,7 +575,7 @@ function formatHarga($nilai)
             <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
                 <div class="col-md-6 px-xl-0">
                     <p class="mb-md-0 text-center text-md-left text-secondary">
-                        &copy; <a class="text-primary" href="https://itboy.my.id/">ITBOY</a>. All Rights Reserved.
+                         © 2024 <a class="text-primary" href="https://itboy.my.id/">ITBOY</a>.  All Rights Reserved.
                     </p>
                 </div>
             </div>
@@ -585,8 +585,7 @@ function formatHarga($nilai)
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-
+        
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
