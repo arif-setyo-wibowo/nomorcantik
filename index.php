@@ -239,7 +239,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-all">Semua Harga</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -252,7 +252,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-1">0 - 500</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 0 AND 500");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 0 AND 500');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -265,7 +265,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-2">500 - 1 Jt</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 500 AND 1000");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 500 AND 1000');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -278,7 +278,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-3">1 Jt - 20 Jt</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 1000 AND 20000");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 1000 AND 20000');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -291,7 +291,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-4">20 Jt - 100 Jt</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 20000 AND 100000");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga BETWEEN 20000 AND 100000');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -304,7 +304,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-5">100 Jt++</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga > 100000");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM nomor LEFT JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND harga > 100000');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -317,7 +317,7 @@ function formatHarga($nilai) {
                                 onclick="submitPriceForm(this)">
                             <label class="custom-control-label" for="price-6">Promo</label>
                             <?php
-                            $dataNomor = mysqli_query($koneksi, "SELECT * FROM promo INNER JOIN nomor ON promo.id_nomor = nomor.id_nomor INNER JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND promo.status = 1");
+                            $dataNomor = mysqli_query($koneksi, 'SELECT * FROM promo INNER JOIN nomor ON promo.id_nomor = nomor.id_nomor INNER JOIN operator ON nomor.id_operator = operator.id_operator WHERE nomor.id_operator IS NOT NULL AND operator.status = 1 AND promo.status = 1');
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             ?>
                             <span class="badge border font-weight-normal"><?= $totalNomorHarga ?></span>
@@ -376,33 +376,41 @@ function formatHarga($nilai) {
                         </div>
                     </div>
                     <?php if(!$byOperator && !$byPrice && !$searchNomor): ?>
-                        <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
-                            <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
-                                style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
-                                <span class="h1 text-uppercase text-light bg-primary  px-2">Promo</span>
-                            </div>
-                            <?php
-                            $query = "SELECT * FROM promo JOIN nomor ON promo.id_nomor = nomor.id_nomor JOIN operator ON nomor.id_operator = operator.id_operator WHERE operator.status = 1 AND promo.status = 1 LIMIT 10";
-                            $dataPromo = mysqli_query($koneksi, $query);
-                            $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC);?>
-                            <div class="product-item bg-light mb-4">
-                                <div class="table">
+                    <?php
+                    $query = 'SELECT * FROM promo JOIN nomor ON promo.id_nomor = nomor.id_nomor JOIN operator ON nomor.id_operator = operator.id_operator WHERE operator.status = 1 AND promo.status = 1 LIMIT 10';
+                    $dataPromo = mysqli_query($koneksi, $query);
+                    $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC); ?>
+                    <?php if (mysqli_num_rows($dataPromo) > 0){ ?>
+                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                        <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
+                            style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
+                            <img class="img-fluid" src="./images/promo.png"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="product-item bg-light mb-4">
+                            <div class="table">
                                 <?php $no = 1; foreach ($promoData as $nomor): ?>
-                                    <div class="row">
-                                        <div class="cell"><?= $no++ ?></div>
-                                        <div class="cell">
-                                            <a href="detail.php?id_pro=<?= $nomor['id_promo'] ?>" style="text-decoration:none;">
-                                                <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
-                                            </a>
-                                        </div>
-                                        <div class="cell">
-                                            <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
-                                        </div>
+                                <div class="row">
+                                    <div class="cell"><?= $no++ ?></div>
+                                    <div class="cell">
+                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                     </div>
-                                <?php endforeach ?>
+                                    <div class="cell">
+                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
+                                    </div>
+                                    <div class="cell">
+
+                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+                                            target="_blank">
+                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
+                                        </a>
+                                    </div>
                                 </div>
+                                <?php endforeach ?>
                             </div>
                         </div>
+                    </div>
+                    <?php };?>
                     <?php endif;?>
                     <?php foreach ($data as $operator): ?>
                     <?php
@@ -412,11 +420,11 @@ function formatHarga($nilai) {
                     if ($byPrice && $byPrice != 'all') {
                         $rangeParts = explode('-', $byPrice);
                     
-                        if ($byPrice != 100000 && $byPrice != "promo") {
+                        if ($byPrice != 100000 && $byPrice != 'promo') {
                             $min = $rangeParts[0];
                             $max = $rangeParts[1];
                             $query .= " AND harga BETWEEN '$min' AND '$max'";
-                        } elseif ($byPrice == "promo") {
+                        } elseif ($byPrice == 'promo') {
                             $query = "SELECT * FROM promo INNER JOIN nomor ON promo.id_nomor = nomor.id_nomor WHERE nomor.id_operator = '$id' AND promo.status = 1";
                         } else {
                             $query .= " AND harga > '$byPrice'";
@@ -436,7 +444,7 @@ function formatHarga($nilai) {
                             }
                         } elseif ($byPrice) {
                             $dataNomor = mysqli_query($koneksi, $query);
-                        } elseif ($byPrice != "promo") {
+                        } elseif ($byPrice != 'promo') {
                             $dataNomor = mysqli_query($koneksi, $query .= ' LIMIT 10');
                         }
                     }
@@ -487,6 +495,13 @@ function formatHarga($nilai) {
                                     </div>
                                     <div class="cell">
                                         <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo'] ?? $nomor['harga'] ) ?></h5>
+                                    </div>
+                                    <div class="cell">
+
+                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
+                                            target="_blank">
+                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
+                                        </a>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -595,8 +610,8 @@ function formatHarga($nilai) {
 
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up text-light"></i></a>
-        
+        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
