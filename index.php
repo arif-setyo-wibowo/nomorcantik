@@ -29,10 +29,17 @@ if ($idOperator && str_contains($idOperator, '-digit') == false && !$nomor) {
 $data = mysqli_fetch_all($sql, MYSQLI_ASSOC);
 $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator WHERE status = 1'), MYSQLI_ASSOC);
 
-function formatHarga($nilai)
-{
-    return $nilai >= 1000 ? number_format($nilai / 1000, 0, ',', '.') . ' Jt' : number_format($nilai, 0, ',', '.');
+function formatHarga($nilai) {
+    if ($nilai >= 1000000) {
+        return number_format($nilai / 1000000, 2, ',', '') . ' M';
+    } elseif ($nilai >= 1000) {
+        return number_format($nilai / 1000, 0, ',', '') . ' jt';
+    } else {
+        return number_format($nilai, 0, ',', '');
+    }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -40,13 +47,12 @@ function formatHarga($nilai)
 
 <head>
     <meta charset="utf-8">
-    <title>Pedagang Nomor</title>
+    <title>pedagangnomor</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -119,17 +125,12 @@ function formatHarga($nilai)
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-primary bg-light px-2">PEDAGANG</span>
-                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">NOMOR</span>
+                    <span class="h1 text-uppercase text-light bg-primary  px-2">PEDAGANGNOMOR</span>
+                    
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left"></div>
-            <div class="col-lg-4 col-6 text-right">
-                <p class="m-0">Customer Service</p>
-                <h5 class="m-0"><a
-                        href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
-                            src="assets/img/wa-button.png" style=" max-width: 20%;"></a></h5>
-            </div>
+           
         </div>
     </div>
     <!-- Topbar End -->
@@ -140,8 +141,8 @@ function formatHarga($nilai)
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">PEDAGANG</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">NOMOR</span>
+                        <span class="h1 text-uppercase text-light bg-primary  px-2">PEDAGANGNOMOR</span>
+                        
                     </a>
                 </nav>
             </div>
@@ -173,7 +174,7 @@ function formatHarga($nilai)
                                 <?php endforeach; ?>
                             </select>
                             <input type="number" name="nomor" class="form-control"
-                                placeholder="Masukan nomor cantik yang anda cari"
+                                placeholder="Cari Nomor"
                                 value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
                                 <button class="input-group-text bg-transparent text-primary" type="submit">
@@ -207,7 +208,7 @@ function formatHarga($nilai)
                                 <?php endforeach; ?>
                             </select>
                             <input type="number" name="nomor" class="form-control"
-                                placeholder="Masukan nomor cantik yang anda cari"
+                                placeholder="Cari Nomor"
                                 value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
                                 <button class="input-group-text bg-transparent text-primary" type="submit">
@@ -227,8 +228,7 @@ function formatHarga($nilai)
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
                 <!-- Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
-                        dari harga</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">HARGA</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form id="byPrice" method="GET" action="">
                         <div
@@ -327,8 +327,7 @@ function formatHarga($nilai)
                 <!-- Price End -->
 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
-                        dari operator</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">operator</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form id="byOperator" method="GET" action="">
                         <div
@@ -367,8 +366,6 @@ function formatHarga($nilai)
             </div>
             <!-- Shop Sidebar End -->
 
-
-
             <!-- Shop Product Start -->
             <div class="col-lg-6 col-md-8 bg-light mt-2">
                 <div class="row pb-3">
@@ -379,39 +376,33 @@ function formatHarga($nilai)
                         </div>
                     </div>
                     <?php if(!$byOperator && !$byPrice && !$searchNomor): ?>
-                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
-                        <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
-                            style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
-                            <img class="img-fluid" src="./images/promo.png"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        </div>
-                        <?php
-                        $query = "SELECT * FROM promo JOIN nomor ON promo.id_nomor = nomor.id_nomor JOIN operator ON nomor.id_operator = operator.id_operator WHERE operator.status = 1 AND promo.status = 1 LIMIT 10";
-                        $dataPromo = mysqli_query($koneksi, $query);
-                        $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC);?>
-                        <div class="product-item bg-light mb-4">
-                            <div class="table">
-                            <?php $no = 1; foreach ($promoData as $nomor): ?>
-                                <div class="row">
-                                    <div class="cell"><?= $no++ ?></div>
-                                    <div class="cell">
-                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                        <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                            <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
+                                style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
+                                <span class="h1 text-uppercase text-light bg-primary  px-2">Promo</span>
+                            </div>
+                            <?php
+                            $query = "SELECT * FROM promo JOIN nomor ON promo.id_nomor = nomor.id_nomor JOIN operator ON nomor.id_operator = operator.id_operator WHERE operator.status = 1 AND promo.status = 1 LIMIT 10";
+                            $dataPromo = mysqli_query($koneksi, $query);
+                            $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC);?>
+                            <div class="product-item bg-light mb-4">
+                                <div class="table">
+                                <?php $no = 1; foreach ($promoData as $nomor): ?>
+                                    <div class="row">
+                                        <div class="cell"><?= $no++ ?></div>
+                                        <div class="cell">
+                                            <a href="detail.php?id_pro=<?= $nomor['id_promo'] ?>" style="text-decoration:none;">
+                                                <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                            </a>
+                                        </div>
+                                        <div class="cell">
+                                            <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
+                                        </div>
                                     </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
-                                    </div>
-                                    <div class="cell">
-
-                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
-                                            target="_blank">
-                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
-                                        </a>
-                                    </div>
+                                <?php endforeach ?>
                                 </div>
-                            <?php endforeach ?>
                             </div>
                         </div>
-                    </div>
                     <?php endif;?>
                     <?php foreach ($data as $operator): ?>
                     <?php
@@ -482,7 +473,6 @@ function formatHarga($nilai)
                             <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
-
                         <div class="product-item bg-light mb-4">
                             <div class="table">
                                 <?php
@@ -491,17 +481,12 @@ function formatHarga($nilai)
                                 <div class="row">
                                     <div class="cell"><?= $no++ ?></div>
                                     <div class="cell">
-                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                        <a href="detail.php?id_no=<?= $nomor['id_nomor'] ?>" style="text-decoration:none;">
+                                            <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                        </a>
                                     </div>
                                     <div class="cell">
                                         <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo'] ?? $nomor['harga'] ) ?></h5>
-                                    </div>
-                                    <div class="cell">
-
-                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
-                                            target="_blank">
-                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
-                                        </a>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -518,29 +503,28 @@ function formatHarga($nilai)
                 <!-- Price Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
                         class="bg-secondary pr-3">Informasi</span></h5>
-                <div class="bg-light p-4 mb-30 text-center">
-                    <h6 class="text-center">Disini Kami Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator
-                        Silahkan KLIK Sesuai Nama Operator Dan Jenisnya Yang Tertera Di Sebelah KIRI Atau LOGO OPERATOR
-                        Yang Berada Di Tengah Halaman Website</h6>
-                    <br>
-                    <p>Bisa Hubungi Nomor Dibawah Ini</p>
-                    <p>WA : <?= htmlspecialchars($wa['wa']) ?></p>
-                    <h5 class="m-0"><a
-                            href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=Hallo Mau pesan nomer"><img
-                                src="assets/img/wa-button.png" style=" max-width:50%;"></a></h5>
+                <div class="bg-light p-4 mb-30">
+                    <p class="text-justify"><strong>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi sebagian orang.</p>
+                    <p class="text-justify">Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan beberapa nomor itu:</p>
+                    <p class="text-justify my-0">Spesial.</p>
+                    <p class="text-justify my-0">Antik.</p>
+                    <p class="text-justify my-0">Langka.</p>
+                    <p class="text-justify my-0">Unik.</p>
+                    <p class="text-justify my-0">Tanda.</p>
+                    <p class="text-justify mt-2">Semoga anda bisa menemukan nomor yang sesuai dengan kebutuhan, kebahagiaan dan kepuasan batin anda.</p>
+                    <p class="text-center">🙏Terima Kasih🙏</strong></p>
                 </div>
                 <!-- Price End -->
 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cara
-                        Pembayaran</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Nomor Rekening</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <?php if (mysqli_num_rows($rekening) > 0): ?>
                     <ul class="list-unstyled">
                         <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
                         <li class="mb-2 text-center">
                             <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
-                            Nomor Rekening: <?= htmlspecialchars($row['nomor_rekening']) ?><br>
+                            <?= htmlspecialchars($row['nomor_rekening']) ?><br>
                             <?php if (!empty($row['logo_rekening'])): ?>
                             <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo"
                                 style="max-width: 100px;" class="my-3" />
@@ -555,27 +539,54 @@ function formatHarga($nilai)
                 <!-- Color End -->
             </div>
         </div>
+    </div>
         <!-- Shop End -->
 
 
         <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+        <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                    <h5 class="text-secondary text-uppercase mb-4">Pedagang Nomor</h5>
-                    <p class="mb-4">Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator</p>
+                    <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
+                    <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
                     <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
                     </p> -->
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>nomorciamik@gmail.com</p>
-                    <p class="mb-0"><a
-                            href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text="><img
-                                src="assets/img/wa-button.png" style=" max-width: 20%;"></a></p>
+                    <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
+                    <p class="mb-0">
+                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=">
+                            <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
+                            <strong class="text-white">Whatsapp : +6281223331168 </strong>
+                        </a>
+                    </p>
+                    <p class="mb-0">
+                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=">
+                            <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
+                            <strong class="text-white">Whatsapp : +6281223331168  </strong>
+                        </a>
+                    </p>
+                </div>
+                
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Ikuti Kami</h6>
+                        <div class="d-flex">
+                            <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+            </div>
+            <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
                 <div class="col-md-6 px-xl-0">
                     <p class="mb-md-0 text-center text-md-left text-secondary">
-                         © 2024 <a class="text-primary" href="https://itboy.my.id/">ITBOY</a>.  All Rights Reserved.
+                         © <a class="text-light" href="https://itboy.my.id/">ITBOY</a>
                     </p>
                 </div>
             </div>
@@ -584,7 +595,7 @@ function formatHarga($nilai)
 
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up text-light"></i></a>
         
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

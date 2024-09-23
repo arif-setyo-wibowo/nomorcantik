@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'Pedagang Nomor Admin | Nomor';
+$title = 'pedagangnomor Admin | Nomor';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pedagang Nomor /</span> Nomor</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Nomor</h4>
 
     <div class="card mb-4">
         <div class="card-header p-0">

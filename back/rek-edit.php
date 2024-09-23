@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'Pedagang Nomor Admin | Wa dan Rekening';
+$title = 'pedagangnomor Admin | Wa dan Rekening';
 
 if (!isset($_SESSION['admin'])) {
     header('Location: ../back_login.php'); 
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Pedagang Nomor /</span> Wa dan Rekening</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Wa dan Rekening</h4>
     <div class="row">
         <div class="col-md-6">
             <div class="card mb-4">

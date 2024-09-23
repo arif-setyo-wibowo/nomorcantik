@@ -71,7 +71,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="" class="app-brand-link">
-                        <span class="app-brand-text demo menu-text fw-bold ms-2 mt-2">Pedagang Nomor</span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2 mt-2">pedagangnomor</span>
                     </a>
                 </div>
 
@@ -102,7 +102,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                     <li class="menu-item <?php echo ($current_page == 'wa-rek.php') ? 'active' : ''; ?>">
                         <a href="wa-rek.php" class="menu-link">
                             <i class="menu-icon tf-icons mdi  mdi-credit-card"></i>
-                            <div>Wa dan Rekening</div>
+                            <div>Kontak dan Rekening</div>
                         </a>
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'user-admin.php') ? 'active' : ''; ?>">
