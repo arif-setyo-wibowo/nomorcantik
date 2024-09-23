@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         mysqli_stmt_close($stmt);
 
         // Redirect to prevent form resubmission
-        header('Location: wa_rek.php');
+        header('Location: wa-rek.php');
         exit();
     }
 }
