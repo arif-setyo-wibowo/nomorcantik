@@ -228,20 +228,18 @@ function formatHarga($nilai) {
 
                             <div class="tab-pane fade show active" id="tab-pane-1">
                                 <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($promo['nomor']); ?> - (<?= formatHarga($promo['harga_promo']) ?>)</h4>
-                                <p>Apabila anda berminat, silahkan chat kami :</p>
-                                <p><strong>Silahkan Klik Logo WA, untuk mendapatkan Informasi Tentang Nomor Tersebut.</strong></p>
+                                <p><strong>Cek Ketersediaan Nomor</strong></p>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul class="list-group list-group-flush">
                                         <?php for ($i = 0; $i < 2; $i++): ?>
                                             <?php if (isset($wa[$i])): ?>
                                             <li class="list-group-item px-0">
-                                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Apakah%20Nomor%20<?= urlencode($promo['nomor']) ?>%20Tersedia?"
+                                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($promo['nomor']) ?>%20harga%20<?= formatHarga($promo['harga_promo']) ?>%20Tersedia?"
                                                     target="_blank" style="text-decoration:none;">
-                                                    <img src="assets/img/wa.png" style="max-width: 10%; display:inline-block;">
-                                                    <h5 class="text-danger m-0" style="display:inline-block;">
+                                                    <h4 class="text-danger m-0" style="display:inline-block;">
                                                         +<?= htmlspecialchars($wa[$i]['wa']) ?>
-                                                    </h5>
+                                                    </h4>
                                                 </a>
                                             </li>
                                             <?php endif; ?>
@@ -284,20 +282,18 @@ function formatHarga($nilai) {
 
                             <div class="tab-pane fade show active" id="tab-pane-1">
                                 <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($nomor['nomor']); ?> - (<?= formatHarga($nomor['harga']) ?>)</h4>
-                                <p>Apabila anda berminat, silahkan chat kami :</p>
-                                <p><strong>Silahkan Klik Logo WA, untuk mendapatkan Informasi Tentang Nomor Tersebut.</strong></p>
+                                <p><strong>Cek Ketersediaan Nomor</strong></p>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul class="list-group list-group-flush">
                                         <?php for ($i = 0; $i < 2; $i++): ?>
                                             <?php if (isset($wa[$i])): ?>
                                             <li class="list-group-item px-0">
-                                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Apakah%20Nomor%20<?= urlencode($nomor['nomor']) ?>%20Tersedia?"
+                                                 <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($nomor['nomor']) ?>%20harga%20<?= formatHarga($nomor['harga']) ?>%20Tersedia?"
                                                     target="_blank" style="text-decoration:none;">
-                                                    <img src="assets/img/wa.png" style="max-width: 10%; display:inline-block;">
-                                                    <h5 class="text-danger m-0" style="display:inline-block;">
+                                                    <h4 class="text-danger m-0" style="display:inline-block;">
                                                         +<?= htmlspecialchars($wa[$i]['wa']) ?>
-                                                    </h5>
+                                                    </h4>
                                                 </a>
                                             </li>
                                             <?php endif; ?>
@@ -317,15 +313,15 @@ function formatHarga($nilai) {
     <!-- Shop Detail End -->
 
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
+     <!-- Footer Start -->
+     <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                     <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
-                    <p class="mb-4">Menyediakan Segala Jenis Nomor Cantik Dari Semua Operator</p>
+                    <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
                     <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
                     </p> -->
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3 text-light"></i>pedagangnomor@gmail.com</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
                     <?php 
                         // Ambil semua data dari tabel wa
                         $stmt = $koneksi->prepare('SELECT * FROM wa');
@@ -342,31 +338,25 @@ function formatHarga($nilai) {
                     <?php for ($i = 0; $i < 2; $i++): ?>
                         <?php if (isset($wa[$i])): ?>
                             <p class="mb-0">
-                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik;">
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik?">
                                     <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                                    <strong class="text-white">Whatsapp : +<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
+                                    <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
                                 </a>
                             </p>
                         <?php endif; ?>
                     <?php endfor; ?>
-                                
                 </div>
+                
                 <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Ikuti Kami</h6>
-                        <div class="d-flex">
-                            <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white"></i></a>
+                    <div class="row">
+                        <div class="col-md-4 mb-5">
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
+                            <div class="d-flex">
+                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white" style="font-size:34px;"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
             <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
                 <div class="col-md-6 px-xl-0">
@@ -378,8 +368,6 @@ function formatHarga($nilai) {
         </div>
         <!-- Footer End -->
 
-
-    <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up text-light"></i></a>
 
 

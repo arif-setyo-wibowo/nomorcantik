@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Wa dan Rekening</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Kontak dan Rekening</h4>
     <div class="row">
         <!-- Wa Section -->
         <div class="col-md-6">
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <li class="nav-item" role="presentation">
                             <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-home" aria-selected="false">
-                                Wa
+                                Kontak
                             </button>
                         </li>
                     </ul>
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <div class="tab-content p-0">
                         <!-- Rekening Table -->
                         <div class="tab-pane fade show active" id="navs-top-rekening">
-                            <table id="example1" class="table table-striped table-bordered">
+                            <table id="example2" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>

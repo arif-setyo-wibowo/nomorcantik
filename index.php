@@ -506,14 +506,14 @@ function formatHarga($nilai) {
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
                         class="bg-secondary pr-3">Informasi</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <p class="text-justify"><strong>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi sebagian orang.</p>
-                    <p class="text-justify">Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan beberapa nomor itu:</p>
-                    <p class="text-justify my-0">Spesial.</p>
-                    <p class="text-justify my-0">Antik.</p>
-                    <p class="text-justify my-0">Langka.</p>
-                    <p class="text-justify my-0">Unik.</p>
-                    <p class="text-justify my-0">Tanda.</p>
-                    <p class="text-justify mt-2">Semoga anda bisa menemukan nomor yang sesuai dengan kebutuhan, kebahagiaan dan kepuasan batin anda.</p>
+                    <p ><strong>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi sebagian orang.</p>
+                    <p >Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan beberapa nomor itu:</p>
+                    <p class=" my-0">Spesial.</p>
+                    <p class=" my-0">Antik.</p>
+                    <p class=" my-0">Langka.</p>
+                    <p class=" my-0">Unik.</p>
+                    <p class=" my-0">Tanda.</p>
+                    <p class=" mt-2">Semoga anda bisa menemukan nomor yang sesuai dengan kebutuhan, kebahagiaan dan kepuasan batin anda.</p>
                     <p class="text-center">🙏Terima Kasih🙏</strong></p>
                 </div>
                 <!-- Price End -->
@@ -570,9 +570,9 @@ function formatHarga($nilai) {
                     <?php for ($i = 0; $i < 2; $i++): ?>
                         <?php if (isset($wa[$i])): ?>
                             <p class="mb-0">
-                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik;">
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik?">
                                     <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                                    <strong class="text-white">Whatsapp : +<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
+                                    <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
                                 </a>
                             </p>
                         <?php endif; ?>
@@ -582,15 +582,9 @@ function formatHarga($nilai) {
                 <div class="col-lg-8 col-md-12">
                     <div class="row">
                         <div class="col-md-4 mb-5">
-
-                        </div>
-                        <div class="col-md-4 mb-5">
-                            
-                        </div>
-                        <div class="col-md-4 mb-5">
-                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Ikuti Kami</h6>
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
                             <div class="d-flex">
-                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white"></i></a>
+                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white" style="font-size:34px;"></i></a>
                             </div>
                         </div>
                     </div>
