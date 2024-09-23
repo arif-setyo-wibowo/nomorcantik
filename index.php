@@ -1,7 +1,6 @@
 <?php
 include './koneksi.php';
-$waQuery = mysqli_query($koneksi, 'SELECT * FROM wa');
-$wa = mysqli_fetch_assoc($waQuery);
+
 $rekening = mysqli_query($koneksi, 'SELECT * FROM rekening');
 $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]" . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/';
 $idOperator = isset($_GET['ByOperator']) ? mysqli_real_escape_string($koneksi, $_GET['ByOperator']) : null;
@@ -393,17 +392,12 @@ function formatHarga($nilai) {
                                 <div class="row">
                                     <div class="cell"><?= $no++ ?></div>
                                     <div class="cell">
-                                        <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                        <a href="detail.php?id_pro=<?= $nomor['id_promo'] ?>" style="text-decoration:none;">
+                                            <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                        </a>
                                     </div>
                                     <div class="cell">
                                         <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo']) ?></h5>
-                                    </div>
-                                    <div class="cell">
-
-                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
-                                            target="_blank">
-                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
-                                        </a>
                                     </div>
                                 </div>
                                 <?php endforeach ?>
@@ -496,13 +490,6 @@ function formatHarga($nilai) {
                                     <div class="cell">
                                         <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo'] ?? $nomor['harga'] ) ?></h5>
                                     </div>
-                                    <div class="cell">
-
-                                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=saya%20ingin%20info%20lebih%20lanjut%20nomor%20<?= urlencode($nomor['nomor']) ?>"
-                                            target="_blank">
-                                            <img src="assets/img/wa.png" alt="WhatsApp" width="50">
-                                        </a>
-                                    </div>
                                 </div>
                                 <?php endforeach; ?>
                             </div>
@@ -567,36 +554,47 @@ function formatHarga($nilai) {
                     <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
                     </p> -->
                     <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
-                    <p class="mb-0">
-                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=">
-                            <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                            <strong class="text-white">Whatsapp : +6281223331168 </strong>
-                        </a>
-                    </p>
-                    <p class="mb-0">
-                        <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa['wa']) ?>&amp;text=">
-                            <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                            <strong class="text-white">Whatsapp : +6281223331168  </strong>
-                        </a>
-                    </p>
+                    <?php 
+                        // Ambil semua data dari tabel wa
+                        $stmt = $koneksi->prepare('SELECT * FROM wa');
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        $wa = []; // Inisialisasi array untuk menyimpan data wa
+                        while ($row = $result->fetch_assoc()) {
+                            $wa[] = $row; // Masukkan data wa ke dalam array
+                        }
+
+                        $stmt->close();
+                    ?>
+                    <?php for ($i = 0; $i < 2; $i++): ?>
+                        <?php if (isset($wa[$i])): ?>
+                            <p class="mb-0">
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik;">
+                                    <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
+                                    <strong class="text-white">Whatsapp : +<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
+                                </a>
+                            </p>
+                        <?php endif; ?>
+                    <?php endfor; ?>
                 </div>
                 
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
+                <div class="col-lg-8 col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 mb-5">
 
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Ikuti Kami</h6>
-                        <div class="d-flex">
-                            <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white"></i></a>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Ikuti Kami</h6>
+                            <div class="d-flex">
+                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
             <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
                 <div class="col-md-6 px-xl-0">
