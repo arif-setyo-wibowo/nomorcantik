@@ -383,8 +383,7 @@ function formatHarga($nilai) {
                     <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
                         <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
                             style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
-                            <img class="img-fluid" src="./images/promo.png"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            <span class="h1 text-uppercase text-light bg-primary  px-2">PROMO</span>
                         </div>
                         <div class="product-item bg-light mb-4">
                             <div class="table">
