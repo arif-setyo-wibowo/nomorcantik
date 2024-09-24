@@ -338,7 +338,7 @@ function formatHarga($nilai) {
                     <?php for ($i = 0; $i < 2; $i++): ?>
                         <?php if (isset($wa[$i])): ?>
                             <p class="mb-0">
-                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Bisa%20saya%20mendpatkan%20info%20nomor%20cantik?">
+                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20pedagangnomor">
                                     <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
                                     <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
                                 </a>
