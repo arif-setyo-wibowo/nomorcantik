@@ -81,39 +81,85 @@ function formatHarga($nilai) {
         display: table-cell;
         padding: 5px;
         border: 1px solid #000;
-        /* Optional for border like a table */
         text-align: center;
-        /* Center content */
         vertical-align: middle;
-        /* Center vertically */
     }
 
     .cell img {
         max-width: 30%;
-        /* Ensure image doesn't exceed its container width */
         height: auto;
-        /* Maintain aspect ratio */
         object-fit: contain;
-        /* Prevent distortion */
+    }
+    .totlipharga h6 {
+        position: relative;
+        display: inline-block;
     }
 
-    /* Make sure the image adjusts properly for smaller screens */
-    @media (max-width: 600px) {
+    .totlipharga h6::after {
+        content: attr(title); 
+        position: absolute;
+        bottom: 125%; 
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #000;
+        color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out;
+        font-size: 12px;
+    }
+
+    .totlipharga h6:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+
+
+    @media (max-width: 1200px) {
+        .no-cell {
+            display: none !important;
+        }
+
         .cell img {
             width: 50px;
-            /* Adjust image width for smaller screens */
+        }
+
+        .cell h5 {
+            font-size: 15px !important; 
+        }
+        .cell h6 {
+            display: none !important;
+        }
+        .totlipharga h6 {
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .totlipharga h6::after {
+            font-size: 12px;
         }
     }
 
-    /* By default, hide the search form */
     .search-mobile {
         display: none;
     }
 
-    /* Show the search form only on screens smaller than 768px */
-    @media (max-width: 767px) {
+    @media (max-width: 1200px) {
         .search-mobile {
             display: block;
+        }
+    }
+
+    .no-logo {
+        display: none;
+    }
+
+    @media (max-width: 1200px) {
+        .no-logo {
+            display: inline-block !important;
         }
     }
 </style>
@@ -122,14 +168,12 @@ function formatHarga($nilai) {
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
-            <div class="col-lg-4">
+            <div class="col-lg-4 d-flex align-items-center">
+                <img class="px-2" src="images/logo/logo.jpeg" style="display:inline-block; max-width:90px; max-height:90px;" alt="">
                 <a href="" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-light bg-primary  px-2">PEDAGANGNOMOR</span>
-                    
+                    <strong><span class="text-uppercase text-light bg-primary px-2" style="font-size:25px;">PEDAGANGNOMOR</span></strong>
                 </a>
             </div>
-            <div class="col-lg-4 col-6 text-left"></div>
-           
         </div>
     </div>
     <!-- Topbar End -->
@@ -139,9 +183,9 @@ function formatHarga($nilai) {
         <div class="row px-xl-5">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
+                    <img class="px-2 no-logo" src="images/logo/logo.jpeg" style="max-width:90px; max-height:90px;" alt="">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-light bg-primary  px-2">PEDAGANGNOMOR</span>
-                        
+                        <strong><span class="text-uppercase text-light bg-primary px-2" style="font-size:25px;">PEDAGANGNOMOR</span></strong>
                     </a>
                 </nav>
             </div>
@@ -153,7 +197,8 @@ function formatHarga($nilai) {
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0">
                     <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
-                        <button class="btn btn-secondary">Halaman Utama</button></a>
+                        <button class="btn btn-secondary">Halaman Utama</button>
+                    </a>
                 </nav>
             </div>
             <div class="col-6 ">
@@ -172,8 +217,18 @@ function formatHarga($nilai) {
                                 </option>
                                 <?php endforeach; ?>
                             </select>
-                            <input type="number" name="nomor" class="form-control"
-                                placeholder="Cari Nomor"
+
+                            <!-- Dropdown untuk posisi -->
+                            <select class="custom-select" id="position-select" style="max-width:150px;" name="position">
+                                <option value="all" <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
+                                    Semua Posisi</option>
+                                <option value="tengah" <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
+                                    Tengah</option>
+                                <option value="belakang" <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
+                                    Belakang</option>
+                            </select>
+
+                            <input type="number" name="nomor" class="form-control" placeholder="Cari Nomor"
                                 value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
                                 <button class="input-group-text bg-transparent text-primary" type="submit">
@@ -186,33 +241,47 @@ function formatHarga($nilai) {
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
 
+    <!-- Breadcrumb End -->
     <div class="row search-mobile mt-0 mb-1">
         <div class="container-fluid">
-            <div class="row mx-xl-5">
+            <div class="row justify-content-center mx-xl-5">
                 <div class="col-12 p-4">
                     <form method="GET">
                         <div class="input-group">
-                            <select class="custom-select" id="search-category" style="max-width: 150px;"
-                                name="byOperator">
-                                <option value="all"
-                                    <?= !isset($_GET['byOperator']) || $_GET['byOperator'] === 'all' ? 'selected' : '' ?>>
-                                    Semua Operator</option>
-                                <?php foreach ($operatorData as $operator): ?>
-                                <option value="<?= $operator['id_operator'] ?>"
-                                    <?= isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($operator['nama_operator']) ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <input type="number" name="nomor" class="form-control"
-                                placeholder="Cari Nomor"
-                                value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
-                            <div class="input-group-append">
-                                <button class="input-group-text bg-transparent text-primary" type="submit">
-                                    <span><i class="fa fa-search"></i></span>
-                                </button>
+                            <div class="row m-2 text-center">
+                                <div class="col-md-6">
+                                    <select class="custom-select" id="search-category" name="byOperator">
+                                        <option value="all" <?= !isset($_GET['byOperator']) || $_GET['byOperator'] === 'all' ? 'selected' : '' ?>>
+                                            Semua Operator</option>
+                                        <?php foreach ($operatorData as $operator): ?>
+                                            <option value="<?= $operator['id_operator'] ?>" <?= isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($operator['nama_operator']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="custom-select" id="position-select" name="position">
+                                        <option value="all" <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
+                                            Semua Posisi</option>
+                                        <option value="tengah" <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
+                                            Tengah</option>
+                                        <option value="belakang" <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
+                                            Belakang</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <div class="input-group">
+                                        <input type="number" name="nomor" class="form-control" placeholder="Cari Nomor"
+                                            value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
+                                        <div class="input-group-append">
+                                            <button class="input-group-text bg-transparent text-primary" type="submit">
+                                                <span><i class="fa fa-search"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -220,7 +289,7 @@ function formatHarga($nilai) {
             </div>
         </div>
     </div>
-
+    
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5 mt-3">
@@ -362,17 +431,34 @@ function formatHarga($nilai) {
                 </div>
                 <!-- Color End -->
 
+                <!-- Color Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">kiri</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <ul class="list-unstyled">
+                        <li class="mb-2 text-center">
+                        </li>
+                    </ul>
+                    <p>Tidak ada informasi rekening tersedia.</p>
+                </div>
+                <!-- Color End -->
+
+
             </div>
             <!-- Shop Sidebar End -->
 
             <!-- Shop Product Start -->
-            <div class="col-lg-6 col-md-8 bg-light mt-2">
+            <div class="col col-lg-6 col-md-4 bg-light mt-2">
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="ml-2">
-                            </div>
+                        <hr>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="images/arrow.gif" class="mr-2" style="width:15px;" alt="" srcset="">
+                            <a href="" class="text-center" style="text-decoration: none;font-weight: bold; font-size: 16px;">
+                                Urutkan harga dari harga tertinggi ke terendah
+                            </a>
+                            <img src="images/arrow.gif" class="ml-2" style="width:15px;" alt="" srcset="">
                         </div>
+                        <hr>
                     </div>
                     <?php if(!$byOperator && !$byPrice && !$searchNomor): ?>
                     <?php
@@ -468,7 +554,7 @@ function formatHarga($nilai) {
                     $no = 1;
                     ?>
                     <?php foreach ($nomorChunks as $chunk): ?>
-                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                    <div class="col-6 col-sm-6 col-lg-6 pb-1 bg-light">
                         <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
                             style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
                             <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
@@ -480,14 +566,16 @@ function formatHarga($nilai) {
                                         $no = 1;
                                         foreach ($chunk as $nomor): ?>
                                 <div class="row">
-                                    <div class="cell"><?= $no++ ?></div>
-                                    <div class="cell">
-                                        <a href="detail.php?id_no=<?= $nomor['id_nomor'] ?>" style="text-decoration:none;">
+                                    <div class="cell no-cell"><?= $no++ ?></div>
+                                    <div class="cell totlipharga">
+                                        <a href="detail.php?id_no=<?= $nomor['id_nomor'] ?>" style="text-decoration:none;" title="<?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>">
                                             <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                         </a>
                                     </div>
-                                    <div class="cell">
-                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga_promo'] ?? $nomor['harga'] ) ?></h5>
+                                    <div class="cell no-cell ">
+                                        <h6 class="text-success m-0" title="<?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>">
+                                            <?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>
+                                        </h6>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -500,6 +588,7 @@ function formatHarga($nilai) {
             </div>
             <!-- Shop Product End -->
 
+            
             <div class="col-lg-3 col-md-4">
                 <!-- Price Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
@@ -541,63 +630,77 @@ function formatHarga($nilai) {
             </div>
         </div>
     </div>
-        <!-- Shop End -->
+    <!-- Shop End -->
 
 
-        <!-- Footer Start -->
-        <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
-            <div class="row px-xl-5 pt-5">
-                <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                    <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
-                    <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
-                    <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
-                    </p> -->
-                    <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
-                    <?php 
-                        // Ambil semua data dari tabel wa
-                        $stmt = $koneksi->prepare('SELECT * FROM wa');
-                        $stmt->execute();
-                        $result = $stmt->get_result();
+    <!-- Footer Start -->
+    <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
+                <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
+                <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
+                </p> -->
+                <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
+                <?php 
+                    // Ambil semua data dari tabel wa
+                    $stmt = $koneksi->prepare('SELECT * FROM wa');
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
-                        $wa = []; // Inisialisasi array untuk menyimpan data wa
-                        while ($row = $result->fetch_assoc()) {
-                            $wa[] = $row; // Masukkan data wa ke dalam array
-                        }
+                    $wa = []; // Inisialisasi array untuk menyimpan data wa
+                    while ($row = $result->fetch_assoc()) {
+                        $wa[] = $row; // Masukkan data wa ke dalam array
+                    }
 
-                        $stmt->close();
-                    ?>
-                    <?php for ($i = 0; $i < 2; $i++): ?>
-                        <?php if (isset($wa[$i])): ?>
-                            <p class="mb-0">
-                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20pedagangnomor ">
-                                    <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                                    <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
-                                </a>
-                            </p>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                </div>
-                
-                <div class="col-lg-8 col-md-12">
-                    <div class="row">
-                        <div class="col-md-4 mb-5">
-                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
-                            <div class="d-flex">
-                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white" style="font-size:34px;"></i></a>
-                            </div>
+                    $stmt->close();
+                ?>
+                <?php for ($i = 0; $i < 2; $i++): ?>
+                    <?php if (isset($wa[$i])): ?>
+                        <p class="mb-0">
+                            <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20pedagangnomor ">
+                                <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
+                                <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+            
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
+                        <div class="d-flex">
+                            <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank">
+                                <i class="fab fa-instagram text-white" style="font-size:34px;"></i>
+                            </a>
                         </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
+                        <a href="https://instagram.com/pedagangnomor" target="_blank" style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
+                            <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded" style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
+                        <a href="https://instagram.com/pedagangnomor" target="_blank" style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
+                            <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded" style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
-                <div class="col-md-6 px-xl-0">
-                    <p class="mb-md-0 text-center text-md-left text-secondary">
-                         © <a class="text-light" href="https://itboy.my.id/">ITBOY</a>
-                    </p>
-                </div>
+        </div>
+        <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
+            <div class="col-md-6 px-xl-0">
+                <p class="mb-md-0 text-center text-md-left text-secondary">
+                        © <a class="text-light" href="https://itboy.my.id/">ITBOY</a>
+                </p>
             </div>
         </div>
-        <!-- Footer End -->
+    </div>
+    <!-- Footer End -->
 
 
         <!-- Back to Top -->
@@ -650,6 +753,12 @@ function formatHarga($nilai) {
                 actionUrl += new URLSearchParams(operatorFormData).toString();
                 window.location.href = actionUrl;
             }
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
         </script>
 
 </body>

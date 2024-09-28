@@ -79,8 +79,32 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                 <?php
                     $current_page = basename($_SERVER['PHP_SELF']);
                 ?>
-
                 <ul class="menu-inner py-1">
+                    
+                    <li class="menu-header fw-medium mt-4">
+                        <span class="menu-header-text">Input Data Tampilan</span>
+                    </li>
+                    <li class="menu-item <?php echo ($current_page == 'logo-toko.php') ? 'active' : ''; ?>">
+                        <a href="logo-toko.php " class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
+                            <div>Logo dan Toko</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?php echo ($current_page == 'tokopedia-shopee.php') ? 'active' : ''; ?>">
+                        <a href="tokopedia-shopee.php " class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
+                            <div>Shopee dan Tokopedia</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?php echo ($current_page == 'kolom-kiri.php') ? 'active' : ''; ?>">
+                        <a href="kolom-kiri.php " class="menu-link">
+                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
+                            <div>Kolom Kiri</div>
+                        </a>
+                    </li>
+                    <li class="menu-header fw-medium mt-4">
+                        <span class="menu-header-text">Input Data</span>
+                    </li>
                     <li class="menu-item <?php echo ($current_page == 'operator.php') ? 'active' : ''; ?>">
                         <a href="operator.php " class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-shape"></i>
