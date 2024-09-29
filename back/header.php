@@ -93,7 +93,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                     <li class="menu-item <?php echo ($current_page == 'tokopedia-shopee.php') ? 'active' : ''; ?>">
                         <a href="tokopedia-shopee.php " class="menu-link">
                             <i class="menu-icon tf-icons mdi mdi-store"></i>
-                            <div>Online Shop</div>
+                            <div>Toko Online</div>
                         </a>
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'kolom-kiri.php') ? 'active' : ''; ?>">

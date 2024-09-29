@@ -215,12 +215,36 @@ function formatHarga($nilai)
         <div class="row px-xl-5">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
-                    <img class="px-2 no-logo" src="images/logo/logo.jpeg" style="max-width:90px; max-height:90px;"
-                        alt="">
-                    <a href="" class="text-decoration-none d-block d-lg-none">
-                        <strong><span class="text-uppercase text-light bg-primary px-2"
-                                style="font-size:25px;">PEDAGANGNOMOR</span></strong>
-                    </a>
+                <?php
+                $logoQuery = "SELECT logo, status, ukuran_nama FROM logo_toko LIMIT 1";  
+                $logoResult = mysqli_query($koneksi, $logoQuery);
+
+                if ($logoResult && mysqli_num_rows($logoResult) > 0) {
+                    $logoData = mysqli_fetch_assoc($logoResult);
+                    $logoUrl = 'assets/uploads/' . $logoData['logo'];
+                    $status = $logoData['status']; 
+                    $ukuranNama = $logoData['ukuran_nama'].'px'; 
+                }
+                if (isset($status) && $status == 1): ?>
+                    <img class="px-2 d-block d-lg-none" 
+                        src="<?= htmlspecialchars($logoUrl); ?>" 
+                        style=" max-width:90px; max-height:90px;" 
+                        alt="Logo" >
+                <?php else: ?>
+                    <img class="px-2" 
+                        src="<?= htmlspecialchars($logoUrl); ?>" 
+                        style="display:none; max-width:90px; max-height:90px;" 
+                        alt="Logo">
+                <?php endif; ?>
+
+            <a href="" class="text-decoration-none d-block d-lg-none">
+                <strong>
+                    <span class="text-uppercase text-light bg-primary px-2"
+                        style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px'; ?>;">
+                        PEDAGANGNOMOR
+                    </span>
+                </strong>
+            </a>
                 </nav>
             </div>
         </div>
@@ -285,7 +309,7 @@ function formatHarga($nilai)
             <div class="row justify-content-center mx-xl-5">
                 <div class="col-12 p-4">
                     <form method="GET">
-                        <div class="input-group">
+                        <div class="text-center">
                             <div class="row m-2 text-center">
                                 <div class="col-md-6">
                                     <select class="custom-select" id="search-category" name="byOperator">
@@ -338,7 +362,7 @@ function formatHarga($nilai)
     <div class="container-fluid">
         <div class="row px-xl-5 mt-3">
             <!-- Shop Sidebar Start -->
-            <div class="col-lg-3 col-md-4">
+            <div class="col-12 col-md-12 col-lg-3 ">
                 <!-- Price Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span
                         class="bg-secondary pr-3">HARGA</span></h5>
@@ -459,7 +483,7 @@ function formatHarga($nilai)
             <!-- Shop Sidebar End -->
 
             <!-- Shop Product Start -->
-            <div class="col col-lg-6 col-md-4 bg-light mt-2">
+            <div class="col-12 col-md-12 col-lg-6 bg-light mt-2">
                 <div class="row pb-3 mt-4">
                     <?php if($byOperator || $byPrice || $searchNomor): ?>
                     <div class="col-12 pb-1">
@@ -496,7 +520,7 @@ function formatHarga($nilai)
                     $dataPromo = mysqli_query($koneksi, $query);
                     $promoData = mysqli_fetch_all($dataPromo, MYSQLI_ASSOC); ?>
                     <?php if (mysqli_num_rows($dataPromo) > 0){ ?>
-                    <div class="col-md-12 col-sm-6 col-lg-6 pb-1 bg-light">
+                    <div class="col-md-12 col-sm-6 col-sm-6 col-lg-6 pb-1 bg-light">
                         <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
                             style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
                             <span class="h1 text-uppercase text-light bg-primary  px-2">PROMO</span>
@@ -587,7 +611,7 @@ function formatHarga($nilai)
                     ?>
 
                     <?php foreach ($nomorChunks as $chunk): ?>
-                    <div class="col-6 col-sm-6 col-lg-6 pb-1 bg-light">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-6 pb-1 bg-light">
                         <div class="h-2 rounded-pill mt-4 mb-3 d-flex justify-content-center align-items-center"
                             style="width: 100px; height: 60px; margin-left:auto; margin-right:auto;">
                             <img class="img-fluid" src="./assets/uploads/<?= htmlspecialchars($operator['logo']) ?>"
@@ -605,11 +629,8 @@ function formatHarga($nilai)
                                             <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                         </a>
                                     </div>
-                                    <div class="cell no-cell">
-                                        <h6 class="text-success m-0"
-                                            title="<?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>">
-                                            <?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>
-                                        </h6>
+                                    <div class="cell">
+                                        <h5 class="text-success m-0"><?= formatHarga($nomor['harga']) ?></h5>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -622,14 +643,13 @@ function formatHarga($nilai)
             </div>
             <!-- Shop Product End -->
 
-
-            <div class="col-lg-3 col-md-4">
+            <div class="col-12 col-md-12 col-lg-3 ">
                 <h5 class="section-title position-relative text-uppercase mb-3">
                     <span class="bg-secondary pr-3">Informasi</span>
                 </h5>
                 <div class="bg-light p-4 mb-30">
-                    <p><strong>Mendapatkan nomor terbaik adalah kepuasan batin bagi sebagian orang.</strong></p>
-                    <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia, menjadikan nomor tersebut:
+                    <p>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi sebagian orang. </p>
+                    <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan beberapa nomor itu:
                     </p>
                     <ul class="list-unstyled">
                         <li>Spesial</li>
@@ -704,12 +724,16 @@ function formatHarga($nilai)
 
             <div class="col-lg-8 col-md-12">
                 <div class="row">
-                    <div class="col-md-4 mb-5">
+                    <div class="col col-md-2 mb-5">
                         <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
                         <div class="d-flex">
-                            <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor"
+                            <!-- <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor"
                                 target="_blank">
                                 <i class="fab fa-instagram text-white" style="font-size:34px;"></i>
+                            </a> -->
+                            <a href="https://instagram.com/pedagangnomor" target="_blank"
+                                style="background-color: #f12c2c; display: inline-block; border-radius: 8px; padding:12px;">
+                                <i class="fab fa-instagram text-white" style="font-size:34px; height:34px;"></i>
                             </a>
                         </div>
                     </div>
@@ -725,24 +749,24 @@ function formatHarga($nilai)
                     }
                     ?>
 
-                    <div class="col-md-4 mb-5">
+                    <div class="col col-md-2 mb-5">
                         <?php if (isset($shops[1]) && $shops[1]['status'] == 1): ?>
                             <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
                             <a href="<?= htmlspecialchars($shops[1]['link']) ?>" target="_blank"
                                 style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
                                 <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
-                                    style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
                             </a>
                         <?php endif; ?>
                     </div>
 
-                    <div class="col-md-4 mb-5">
+                    <div class="col col-md-2 mb-5">
                         <?php if (isset($shops[2]) && $shops[2]['status'] == 1): ?>
                             <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
                             <a href="<?= htmlspecialchars($shops[2]['link']) ?>" target="_blank"
                                 style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
                                 <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
-                                    style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
                             </a>
                         <?php endif; ?>
                     </div>

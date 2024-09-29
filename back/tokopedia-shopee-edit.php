@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'pedagangnomor Admin | Edit Online Shop';
+$title = 'pedagangnomor Admin | Edit Toko Online';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
@@ -13,7 +13,7 @@ include '../koneksi.php';
 // Initialize error array
 $errors = [];
 
-// Get the id of the online shop
+// Get the id of the Toko Online
 $id_online_shop = intval($_GET['id_online_shop']);
 $waData = mysqli_query($koneksi, "SELECT * FROM online_shop WHERE id_online_shop = $id_online_shop");
 $currentWa = mysqli_fetch_assoc($waData);
@@ -34,12 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "UPDATE online_shop SET link = '$link' WHERE id_online_shop = $id_online_shop";
         if (mysqli_query($koneksi, $query)) {
             // Set success message and redirect back to the listing page
-            $_SESSION['msg'] = 'Data online shop berhasil diubah.';
+            $_SESSION['msg'] = 'Data Toko Online berhasil diubah.';
             header('Location: tokopedia-shopee.php');
             exit();
         } else {
             // Set error message in case of query failure
-            $_SESSION['error'] = 'Gagal mengubah data online shop.';
+            $_SESSION['error'] = 'Gagal mengubah data Toko Online.';
         }
     }
 }
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Online Shop</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Toko Online</h4>
     <div class="row">
         <div class="col-md-6">
             <div class="card mb-4">
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="false"
                                     tabindex="-1">
-                                    Ubah Online Shop
+                                    Ubah Toko Online
                                 </button>
                             </li>
                         </ul>

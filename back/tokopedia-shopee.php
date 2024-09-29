@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = 'pedagangnomor Admin | Online Shop';
+$title = 'pedagangnomor Admin | Toko Online';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
@@ -16,7 +16,7 @@ $data = mysqli_query($koneksi, 'SELECT * FROM online_shop');
 ?>
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Online Shop</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Toko Online</h4>
     <div class="row">
         <!-- Wa Section -->
         <div class="col-md-6">
@@ -77,7 +77,7 @@ $data = mysqli_query($koneksi, 'SELECT * FROM online_shop');
                         <li class="nav-item" role="presentation">
                             <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-home" aria-selected="false">
-                                    Online Shop
+                                    Toko Online
                             </button>
                         </li>
                     </ul>
