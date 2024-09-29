@@ -36,8 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $updateQuery = "UPDATE rekening SET nama_rekening = ?, nomor_rekening = ?";
         $params = [$nama_rekening, $nomor_rekening];
 
+        // Handle logo upload
         if (!empty($logo['name'])) {
-            // Handle logo upload
+            // Hapus gambar lama jika ada
+            if ($currentRekening && !empty($currentRekening['logo_rekening'])) {
+                $old_logo_file = '../assets/uploads/' . $currentRekening['logo_rekening'];
+                if (file_exists($old_logo_file)) {
+                    unlink($old_logo_file); // Menghapus file lama
+                }
+            }
+
+            // Proses unggah file gambar baru
             $file_extension = pathinfo($logo['name'], PATHINFO_EXTENSION);
             $new_file_name = uniqid() . '.' . strtolower($file_extension);
             $target_file = '../assets/uploads/' . $new_file_name;
@@ -53,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $updateQuery .= " WHERE id_rekening = ?";
         $params[] = $id_rekening;
 
+        // Menyiapkan dan menjalankan pernyataan
         $stmt = mysqli_prepare($koneksi, $updateQuery);
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, str_repeat('s', count($params) - 1) . 'i', ...$params);
@@ -73,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 ?>
+
 <?php include 'header.php'; ?>
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">pedagangnomor /</span> Wa dan Rekening</h4>

@@ -173,12 +173,38 @@ function formatHarga($nilai)
     <div class="container-fluid">
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4 d-flex align-items-center">
-                <img class="px-2" src="images/logo/logo.jpeg"
-                    style="display:inline-block; max-width:90px; max-height:90px;" alt="">
-                <a href="" class="text-decoration-none">
-                    <strong><span class="text-uppercase text-light bg-primary px-2"
-                            style="font-size:25px;">PEDAGANGNOMOR</span></strong>
-                </a>
+
+            <?php
+            $logoQuery = "SELECT logo, status, ukuran_nama FROM logo_toko LIMIT 1";  
+            $logoResult = mysqli_query($koneksi, $logoQuery);
+
+            if ($logoResult && mysqli_num_rows($logoResult) > 0) {
+                $logoData = mysqli_fetch_assoc($logoResult);
+                $logoUrl = 'assets/uploads/' . $logoData['logo'];
+                $status = $logoData['status']; 
+                $ukuranNama = $logoData['ukuran_nama'].'px'; 
+            }
+            if (isset($status) && $status == 1): ?>
+                <img class="px-2" 
+                    src="<?= htmlspecialchars($logoUrl); ?>" 
+                    style="display:inline-block; max-width:90px; max-height:90px;" 
+                    alt="Logo">
+            <?php else: ?>
+                <img class="px-2" 
+                    src="<?= htmlspecialchars($logoUrl); ?>" 
+                    style="display:none; max-width:90px; max-height:90px;" 
+                    alt="Logo">
+            <?php endif; ?>
+
+            <a href="" class="text-decoration-none">
+                <strong>
+                    <span class="text-uppercase text-light bg-primary px-2"
+                        style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px'; ?>;">
+                        PEDAGANGNOMOR
+                    </span>
+                </strong>
+            </a>
+
             </div>
         </div>
     </div>
@@ -391,18 +417,44 @@ function formatHarga($nilai)
                 <!-- Color End -->
 
                 <!-- Color Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span
-                        class="bg-secondary pr-3">kiri</span></h5>
-                <div class="bg-light p-4 mb-30">
-                    <ul class="list-unstyled">
-                        <li class="mb-2 text-center">
-                        </li>
-                    </ul>
-                    <p>Tidak ada informasi rekening tersedia.</p>
-                </div>
-                <!-- Color End -->
+                 
+                <?php
+                $kolomQuery = "SELECT * FROM kolom";
+                $kolom = mysqli_query($koneksi, $kolomQuery);
 
+                // Check for query success
+                if (!$kolom) {
+                    echo "Query error: " . mysqli_error($koneksi);
+                    exit; // Exit if there's a query error
+                }
 
+                // Store all rows in an array
+                $kolomData = [];
+                while ($row = mysqli_fetch_assoc($kolom)) {
+                    if ($row['status'] == 1) { // Check if status is 1
+                        $kolomData[] = $row; // Store only rows with status = 1
+                    }
+                }
+                if (count($kolomData) > 0): ?>
+                    <?php foreach ($kolomData as $row): ?>
+                        <h5 class="section-title position-relative text-uppercase mb-3">
+                            <span class="bg-secondary pr-3"><?= htmlspecialchars($row['judul']) ?></span>
+                        </h5>
+                        <div class="bg-light p-4 mb-30">
+                            <ul class="list-unstyled">
+                                <li class="mb-2 text-center">
+                                    <strong><?= htmlspecialchars($row['data']) ?></strong><br>
+                                    <?= htmlspecialchars($row['isi_data']) ?><br>
+                                    <?php if (!empty($row['logo'])): ?>
+                                    <img src="./assets/uploads/<?= htmlspecialchars($row['logo']) ?>" alt="Logo"
+                                        style="max-width: 100px;" class="my-3" />
+                                    <?php endif; ?>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                <?php endif; ?>
             </div>
             <!-- Shop Sidebar End -->
 
@@ -661,22 +713,41 @@ function formatHarga($nilai)
                             </a>
                         </div>
                     </div>
+                    <?php
+                    $shopQuery = "SELECT * FROM online_shop WHERE id_online_shop IN (1, 2)";
+                    $shopResult = mysqli_query($koneksi, $shopQuery);
+
+                    $shops = [];
+                    if ($shopResult && mysqli_num_rows($shopResult) > 0) {
+                        while ($row = mysqli_fetch_assoc($shopResult)) {
+                            $shops[$row['id_online_shop']] = $row; // Store shops by id_online_shop
+                        }
+                    }
+                    ?>
+
                     <div class="col-md-4 mb-5">
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
-                        <a href="https://instagram.com/pedagangnomor" target="_blank"
-                            style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
-                            <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
-                                style="max-width: 100%; max-height: 250px; object-fit: cover;">
-                        </a>
+                        <?php if (isset($shops[1]) && $shops[1]['status'] == 1): ?>
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
+                            <a href="<?= htmlspecialchars($shops[1]['link']) ?>" target="_blank"
+                                style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
+                                <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
+                                    style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                            </a>
+                        <?php endif; ?>
                     </div>
+
                     <div class="col-md-4 mb-5">
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
-                        <a href="https://instagram.com/pedagangnomor" target="_blank"
-                            style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
-                            <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
-                                style="max-width: 100%; max-height: 250px; object-fit: cover;">
-                        </a>
+                        <?php if (isset($shops[2]) && $shops[2]['status'] == 1): ?>
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
+                            <a href="<?= htmlspecialchars($shops[2]['link']) ?>" target="_blank"
+                                style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
+                                <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
+                                    style="max-width: 100%; max-height: 250px; object-fit: cover;">
+                            </a>
+                        <?php endif; ?>
                     </div>
+
+
                 </div>
             </div>
         </div>

@@ -86,19 +86,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'logo-toko.php') ? 'active' : ''; ?>">
                         <a href="logo-toko.php " class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
+                            <i class="menu-icon tf-icons mdi mdi-image-multiple-outline"></i>
                             <div>Logo dan Toko</div>
                         </a>
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'tokopedia-shopee.php') ? 'active' : ''; ?>">
                         <a href="tokopedia-shopee.php " class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
-                            <div>Shopee dan Tokopedia</div>
+                            <i class="menu-icon tf-icons mdi mdi-store"></i>
+                            <div>Online Shop</div>
                         </a>
                     </li>
                     <li class="menu-item <?php echo ($current_page == 'kolom-kiri.php') ? 'active' : ''; ?>">
                         <a href="kolom-kiri.php " class="menu-link">
-                            <i class="menu-icon tf-icons mdi mdi-shape"></i>
+                            <i class="menu-icon tf-icons mdi mdi-table-column"></i>
                             <div>Kolom Kiri</div>
                         </a>
                     </li>

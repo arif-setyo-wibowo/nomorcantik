@@ -25,6 +25,14 @@ if (isset($_GET['id'])) {
             $new_file_name = uniqid() . "." . strtolower($file_extension);
             $target_file = "../assets/uploads/" . $new_file_name;
 
+            // Hapus gambar lama jika ada
+            if ($currentKolom && !empty($currentKolom['logo'])) {
+                $old_logo_file = $target_dir . $currentKolom['logo'];
+                if (file_exists($old_logo_file)) {
+                    unlink($old_logo_file);
+                }
+            }
+            
             if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
                 $logo = $new_file_name;
             }
