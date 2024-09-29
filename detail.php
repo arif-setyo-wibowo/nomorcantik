@@ -111,14 +111,14 @@ function formatHarga($nilai) {
         <div class="row mx-xl-5 bg-light">
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0">
-                    <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="index.php">
+                    <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
                         <button class="btn btn-secondary">Halaman Utama</button>
                     </a>
                 </nav>
             </div>
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
-                    <form method="GET" action="index.php?">
+                    <form method="GET" action="index.php">
                         <div class="input-group">
                             <select class="custom-select" id="search-category" style="max-width: 200px;"
                                 name="ByOperator">
@@ -132,8 +132,21 @@ function formatHarga($nilai) {
                                 </option>
                                 <?php endforeach; ?>
                             </select>
-                            <input type="number" name="nomor" class="form-control"
-                                placeholder="Cari Nomor"
+
+                            <!-- Dropdown untuk posisi -->
+                            <select class="custom-select" id="position-select" style="max-width:150px;" name="position">
+                                <option value="all"
+                                    <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
+                                    Semua Posisi</option>
+                                <option value="tengah"
+                                    <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
+                                    Tengah</option>
+                                <option value="belakang"
+                                    <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
+                                    Belakang</option>
+                            </select>
+
+                            <input type="number" name="nomor" class="form-control" placeholder="Cari Nomor" required
                                 value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
                             <div class="input-group-append">
                                 <button class="input-group-text bg-transparent text-primary" type="submit">
@@ -146,33 +159,54 @@ function formatHarga($nilai) {
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
 
+    <!-- Breadcrumb End -->
     <div class="row search-mobile mt-0 mb-1">
         <div class="container-fluid">
-            <div class="row mx-xl-5">
+            <div class="row justify-content-center mx-xl-5">
                 <div class="col-12 p-4">
-                    <form method="GET" action="index.php?">
-                        <div class="input-group">
-                            <select class="custom-select" id="search-category" style="max-width: 150px;"
-                                name="byOperator">
-                                <option value="all"
-                                    <?= !isset($_GET['byOperator']) || $_GET['byOperator'] === 'all' ? 'selected' : '' ?>>
-                                    Semua Operator</option>
-                                <?php foreach ($operatorData as $operator): ?>
-                                <option value="<?= $operator['id_operator'] ?>"
-                                    <?= isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($operator['nama_operator']) ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <input type="number" name="nomor" class="form-control"
-                                placeholder="Cari Nomor"
-                                value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
-                            <div class="input-group-append">
-                                <button class="input-group-text bg-transparent text-primary" type="submit">
-                                    <span><i class="fa fa-search"></i></span>
-                                </button>
+                    <form method="GET" action="index.php">
+                        <div class="text-center">
+                            <div class="row m-2 text-center">
+                                <div class="col-md-6">
+                                    <select class="custom-select" id="search-category" name="byOperator">
+                                        <option value="all"
+                                            <?= !isset($_GET['byOperator']) || $_GET['byOperator'] === 'all' ? 'selected' : '' ?>>
+                                            Semua Operator</option>
+                                        <?php foreach ($operatorData as $operator): ?>
+                                        <option value="<?= $operator['id_operator'] ?>"
+                                            <?= isset($_GET['byOperator']) && $_GET['byOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($operator['nama_operator']) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="custom-select" id="position-select" name="position">
+                                        <option value="all"
+                                            <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
+                                            Semua Posisi</option>
+                                        <option value="tengah"
+                                            <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
+                                            Tengah</option>
+                                        <option value="belakang"
+                                            <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
+                                            Belakang</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <div class="input-group">
+                                        <input type="number" name="nomor" class="form-control"
+                                            placeholder="Cari Nomor"
+                                            value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
+                                        <div class="input-group-append">
+                                            <button class="input-group-text bg-transparent text-primary"
+                                                type="submit">
+                                                <span><i class="fa fa-search"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
