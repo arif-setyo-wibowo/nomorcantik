@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id_operator = intval($_POST['id_operator']);
         $nomor = $_POST['nomor'];
         $harga = intval($_POST['harga']);
+        $kode = $_POST['kode'];
 
         $sql = "INSERT INTO nomor (id_operator, nomor, harga, tipe, kode) VALUES ('$id_operator', '$nomor', '$harga','$tipe','$kode')";
         if ($koneksi->query($sql) === true) {

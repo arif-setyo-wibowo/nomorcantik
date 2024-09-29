@@ -17,6 +17,7 @@ if (isset($_GET['id'])) {
         $nomor = $_POST['nomor'];
         $harga = intval($_POST['harga']);
         $tipe = $_POST['tipe'];
+        $kode = $_POST['kode'];
 
         $sql = "UPDATE nomor SET id_operator='$id_operator', nomor='$nomor', harga='$harga', tipe='$tipe', kode='$kode' WHERE id_nomor=$id_nomor";
         

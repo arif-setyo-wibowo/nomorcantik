@@ -269,7 +269,7 @@ function formatHarga($nilai) {
                                         <?php for ($i = 0; $i < 2; $i++): ?>
                                             <?php if (isset($wa[$i])): ?>
                                             <li class="list-group-item px-0">
-                                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($promo['nomor']) ?>%20harga%20<?= formatHarga($promo['harga_promo']) ?>%20Tersedia?"
+                                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($promo['nomor']) ?>%20<?= urlencode($promo['kode']) ?>%20harga%20<?= formatHarga($promo['harga_promo']) ?>%20Tersedia?"
                                                     target="_blank" style="text-decoration:none;">
                                                     <h4 class="text-danger m-0" style="display:inline-block;">
                                                         +<?= htmlspecialchars($wa[$i]['wa']) ?>
@@ -323,7 +323,7 @@ function formatHarga($nilai) {
                                         <?php for ($i = 0; $i < 2; $i++): ?>
                                             <?php if (isset($wa[$i])): ?>
                                             <li class="list-group-item px-0">
-                                                 <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($nomor['nomor']) ?>%20harga%20<?= formatHarga($nomor['harga']) ?>%20Tersedia?"
+                                                 <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($nomor['nomor']) ?>%20<?= urlencode($nomor['kode']) ?>%20harga%20<?= formatHarga($nomor['harga']) ?>%20Tersedia?"
                                                     target="_blank" style="text-decoration:none;">
                                                     <h4 class="text-danger m-0" style="display:inline-block;">
                                                         +<?= htmlspecialchars($wa[$i]['wa']) ?>
