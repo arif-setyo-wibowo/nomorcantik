@@ -32,7 +32,12 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 function formatHarga($nilai)
 {
     if ($nilai >= 1000000) {
-        return number_format($nilai / 1000000, 2, ',', '') . ' M';
+        // Jika nilai adalah kelipatan jutaan dan bulat, tampilkan tanpa desimal
+        if ($nilai % 1000000 == 0) {
+            return number_format($nilai / 1000000, 0, ',', '') . ' M';
+        } else {
+            return number_format($nilai / 1000000, 2, ',', '') . ' M';
+        }
     } elseif ($nilai >= 1000) {
         return number_format($nilai / 1000, 0, ',', '') . ' jt';
     } else {
