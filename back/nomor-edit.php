@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
         $harga = intval($_POST['harga']);
         $tipe = $_POST['tipe'];
 
-        $sql = "UPDATE nomor SET id_operator='$id_operator', nomor='$nomor', harga='$harga', tipe='$tipe' WHERE id_nomor=$id_nomor";
+        $sql = "UPDATE nomor SET id_operator='$id_operator', nomor='$nomor', harga='$harga', tipe='$tipe', kode='$kode' WHERE id_nomor=$id_nomor";
         
         if ($koneksi->query($sql) === true) {
             $_SESSION['msg'] = 'Nomor berhasil diperbarui!';
@@ -145,6 +145,12 @@ if (isset($_GET['id'])) {
                             <input type="number" class="form-control" id="basic-default-fullname" name="harga"
                                 placeholder="Nomor" value="<?= $nomor['harga'] ?>" required />
                             <label for="basic-default-fullname">Harga</label>
+                        </div>
+                        
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="text" class="form-control" id="basic-default-fullname" name="kode"
+                                placeholder="Kode" value="<?= $nomor['kode'] ?>" required />
+                            <label for="basic-default-fullname">Kode</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
                             <label>Tipe</label>

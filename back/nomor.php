@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nomor = $_POST['nomor'];
         $harga = intval($_POST['harga']);
 
-        $sql = "INSERT INTO nomor (id_operator, nomor, harga, tipe) VALUES ('$id_operator', '$nomor', '$harga','$tipe')";
+        $sql = "INSERT INTO nomor (id_operator, nomor, harga, tipe, kode) VALUES ('$id_operator', '$nomor', '$harga','$tipe','$kode')";
         if ($koneksi->query($sql) === true) {
             $_SESSION['msg'] = 'Berhasil Menambahkan Nomor!';
         } else {
@@ -139,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Kode</th>
                                 <th>Operator</th>
                                 <th>Nomor</th>
                                 <th>Harga</th>
@@ -150,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
+                                <td><?= $d['kode'] ?></td>
                                 <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
                                 <td><?= $d['nomor'] ?></td>
                                 <td><?= $d['harga'] ?> </td>
@@ -190,8 +192,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="basic-default-fullname">Nomor</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="number" class="form-control" id="basic-default-fullname" name="harga" placeholder="Nomor" required />
+                            <input type="number" class="form-control" id="basic-default-fullname" name="harga" placeholder="Harga" required />
                             <label for="basic-default-fullname">Harga</label>
+                        </div>
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="text" class="form-control" id="basic-default-fullname" name="kode" placeholder="Kode" required />
+                            <label for="basic-default-fullname">Kode</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
                             <label>Tipe</label>
