@@ -68,7 +68,7 @@ if ($_FILES['csv']['size'] > 0) {
                 $stmtImport = $koneksi->prepare($import);
                 $stmtImport->bind_param("iss", $id_operator, $data[1], $data[0]);
             } else {
-                $import = "INSERT INTO nomor (id_operator, nomor, harga, tipe) VALUES (?, ?, ?, 'reseller')";
+                $import = "INSERT INTO nomor (id_operator, nomor, harga, tipe, kode) VALUES (?, ?, ?, 'supplier', ?)";
                 $stmtImport = $koneksi->prepare($import);
                 $stmtImport->bind_param("iss", $id_operator, $data[0], $data[1]);
             }
