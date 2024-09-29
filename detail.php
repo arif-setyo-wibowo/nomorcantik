@@ -227,7 +227,7 @@ function formatHarga($nilai) {
                             ?>
 
                             <div class="tab-pane fade show active" id="tab-pane-1">
-                                <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($promo['nomor']); ?> - (<?= formatHarga($promo['harga_promo']) ?>)</h4>
+                                <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($promo['kode']); ?>  <?php echo htmlspecialchars($promo['nomor']); ?> - (<?= formatHarga($promo['harga_promo']) ?>)</h4>
                                 <p><strong>Cek Ketersediaan Nomor</strong></p>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -281,7 +281,7 @@ function formatHarga($nilai) {
                             ?>
 
                             <div class="tab-pane fade show active" id="tab-pane-1">
-                                <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($nomor['nomor']); ?> - (<?= formatHarga($nomor['harga']) ?>)</h4>
+                                <h4 class="mb-3">Pesan Nomor <?php echo htmlspecialchars($nomor['kode']); ?>  <?php echo htmlspecialchars($nomor['nomor']); ?> - (<?= formatHarga($nomor['harga']) ?>)</h4>
                                 <p><strong>Cek Ketersediaan Nomor</strong></p>
                                 <div class="row">
                                     <div class="col-md-6">
