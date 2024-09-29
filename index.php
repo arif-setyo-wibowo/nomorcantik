@@ -491,7 +491,7 @@ function formatHarga($nilai)
                         <div class="d-flex align-items-center justify-content-center">
                             <?php
                             $arrowStyle = $sortBy == 'ASC' ? '' : 'transform: rotate(180deg);';
-                            $buttonText = $sortBy == 'ASC' ? 'Urutkan harga dari harga tertinggi ke terendah' : 'Urutkan harga dari harga terendah ke tertinggi';
+                            $buttonText = $sortBy == 'ASC' ? 'Tertinggi - Terendah' : 'Terendah - Tertinggi';
                             $nextSort = $sortBy == 'ASC' ? 'DESC' : 'ASC';
                             ?>
 
