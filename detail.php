@@ -315,58 +315,97 @@ function formatHarga($nilai) {
 
      <!-- Footer Start -->
      <div class="container-fluid bg-danger text-secondary mt-5 pt-5">
-            <div class="row px-xl-5 pt-5">
-                <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                    <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
-                    <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
-                    <!-- <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA
-                    </p> -->
-                    <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
-                    <?php 
-                        // Ambil semua data dari tabel wa
-                        $stmt = $koneksi->prepare('SELECT * FROM wa');
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        $wa = []; // Inisialisasi array untuk menyimpan data wa
-                        while ($row = $result->fetch_assoc()) {
-                            $wa[] = $row; // Masukkan data wa ke dalam array
-                        }
-
-                        $stmt->close();
-                    ?>
-                    <?php for ($i = 0; $i < 2; $i++): ?>
-                        <?php if (isset($wa[$i])): ?>
-                            <p class="mb-0">
-                                <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20pedagangnomor">
-                                    <!-- <img src="assets/img/wa.png" style=" max-width: 15%;"> -->
-                                    <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?> </strong>
-                                </a>
-                            </p>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                </div>
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <h5 class="text-secondary text-uppercase mb-4">PedagangNomor</h5>
+                <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
+                <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
+                <?php
+                $stmt = $koneksi->prepare('SELECT * FROM wa');
+                $stmt->execute();
+                $result = $stmt->get_result();
                 
-                <div class="col-lg-8 col-md-12">
-                    <div class="row">
-                        <div class="col-md-4 mb-5">
-                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
-                            <div class="d-flex">
-                                <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor" target="_blank"><i class="fab fa-instagram text-white" style="font-size:34px;"></i></a>
-                            </div>
+                $wa = [];
+                while ($row = $result->fetch_assoc()) {
+                    $wa[] = $row;
+                }
+                
+                $stmt->close();
+                ?>
+                <?php for ($i = 0; $i < 2; $i++): ?>
+                <?php if (isset($wa[$i])): ?>
+                <p class="mb-0">
+                    <a
+                        href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20pedagangnomor ">
+                        <strong class="text-white" style="font-size:20px;">+<?= htmlspecialchars($wa[$i]['wa']) ?>
+                        </strong>
+                    </a>
+                </p>
+                <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col col-md-2 mb-5">
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Instagram</h6>
+                        <div class="d-flex">
+                            <!-- <a class="btn btn-primary btn-square" href="https://instagram.com/pedagangnomor"
+                                target="_blank">
+                                <i class="fab fa-instagram text-white" style="font-size:34px;"></i>
+                            </a> -->
+                            <a href="https://instagram.com/pedagangnomor" target="_blank"
+                                style="background-color: #f12c2c; display: inline-block; border-radius: 8px; padding:12px;">
+                                <i class="fab fa-instagram text-white" style="font-size:34px; height:34px;"></i>
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
-                <div class="col-md-6 px-xl-0">
-                    <p class="mb-md-0 text-center text-md-left text-secondary">
-                         © <a class="text-light" href="https://itboy.my.id/">ITBOY</a>
-                    </p>
+                    <?php
+                    $shopQuery = "SELECT * FROM online_shop WHERE id_online_shop IN (1, 2)";
+                    $shopResult = mysqli_query($koneksi, $shopQuery);
+
+                    $shops = [];
+                    if ($shopResult && mysqli_num_rows($shopResult) > 0) {
+                        while ($row = mysqli_fetch_assoc($shopResult)) {
+                            $shops[$row['id_online_shop']] = $row; // Store shops by id_online_shop
+                        }
+                    }
+                    ?>
+
+                    <div class="col col-md-2 mb-5">
+                        <?php if (isset($shops[1]) && $shops[1]['status'] == 1): ?>
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
+                            <a href="<?= htmlspecialchars($shops[1]['link']) ?>" target="_blank"
+                                style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
+                                <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
+                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
+                            </a>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="col col-md-2 mb-5">
+                        <?php if (isset($shops[2]) && $shops[2]['status'] == 1): ?>
+                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
+                            <a href="<?= htmlspecialchars($shops[2]['link']) ?>" target="_blank"
+                                style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
+                                <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
+                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
+                            </a>
+                        <?php endif; ?>
+                    </div>
+
+
                 </div>
             </div>
         </div>
-        <!-- Footer End -->
+        <div class="row border-top mx-xl-5 py-4" style="border-color: #ffffff !important;">
+            <div class="col-md-6 px-xl-0">
+                <p class="mb-md-0 text-center text-md-left text-secondary">
+                    © <a class="text-light" href="https://itboy.my.id/">ITBOY</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up text-light"></i></a>
 
