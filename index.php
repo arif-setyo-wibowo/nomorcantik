@@ -179,7 +179,7 @@ function formatHarga($nilai)
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4 d-flex align-items-center">
 
-            <?php
+                <?php
             $logoQuery = "SELECT logo, status, ukuran_nama FROM logo_toko LIMIT 1";  
             $logoResult = mysqli_query($koneksi, $logoQuery);
 
@@ -190,25 +190,21 @@ function formatHarga($nilai)
                 $ukuranNama = $logoData['ukuran_nama'].'px'; 
             }
             if (isset($status) && $status == 1): ?>
-                <img class="px-2" 
-                    src="<?= htmlspecialchars($logoUrl); ?>" 
-                    style="display:inline-block; max-width:90px; max-height:90px;" 
-                    alt="Logo">
-            <?php else: ?>
-                <img class="px-2" 
-                    src="<?= htmlspecialchars($logoUrl); ?>" 
-                    style="display:none; max-width:90px; max-height:90px;" 
-                    alt="Logo">
-            <?php endif; ?>
+                <img class="px-2" src="<?= htmlspecialchars($logoUrl) ?>"
+                    style="display:inline-block; max-width:90px; max-height:90px;" alt="Logo">
+                <?php else: ?>
+                <img class="px-2" src="<?= htmlspecialchars($logoUrl) ?>"
+                    style="display:none; max-width:90px; max-height:90px;" alt="Logo">
+                <?php endif; ?>
 
-            <a href="" class="text-decoration-none">
-                <strong>
-                    <span class="text-uppercase text-light bg-primary px-2"
-                        style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px'; ?>;">
-                        PEDAGANGNOMOR
-                    </span>
-                </strong>
-            </a>
+                <a href="" class="text-decoration-none">
+                    <strong>
+                        <span class="text-uppercase text-light bg-primary px-2"
+                            style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px' ?>;">
+                            PEDAGANGNOMOR
+                        </span>
+                    </strong>
+                </a>
 
             </div>
         </div>
@@ -220,7 +216,7 @@ function formatHarga($nilai)
         <div class="row px-xl-5">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-ligt navbar-dark py-3 py-lg-0 px-0">
-                <?php
+                    <?php
                 $logoQuery = "SELECT logo, status, ukuran_nama FROM logo_toko LIMIT 1";  
                 $logoResult = mysqli_query($koneksi, $logoQuery);
 
@@ -231,25 +227,21 @@ function formatHarga($nilai)
                     $ukuranNama = $logoData['ukuran_nama'].'px'; 
                 }
                 if (isset($status) && $status == 1): ?>
-                    <img class="px-2 d-block d-lg-none" 
-                        src="<?= htmlspecialchars($logoUrl); ?>" 
-                        style=" max-width:90px; max-height:90px;" 
-                        alt="Logo" >
-                <?php else: ?>
-                    <img class="px-2" 
-                        src="<?= htmlspecialchars($logoUrl); ?>" 
-                        style="display:none; max-width:90px; max-height:90px;" 
-                        alt="Logo">
-                <?php endif; ?>
+                    <img class="px-2 d-block d-lg-none" src="<?= htmlspecialchars($logoUrl) ?>"
+                        style=" max-width:90px; max-height:90px;" alt="Logo">
+                    <?php else: ?>
+                    <img class="px-2" src="<?= htmlspecialchars($logoUrl) ?>"
+                        style="display:none; max-width:90px; max-height:90px;" alt="Logo">
+                    <?php endif; ?>
 
-            <a href="" class="text-decoration-none d-block d-lg-none">
-                <strong>
-                    <span class="text-uppercase text-light bg-primary px-2"
-                        style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px'; ?>;">
-                        PEDAGANGNOMOR
-                    </span>
-                </strong>
-            </a>
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <strong>
+                            <span class="text-uppercase text-light bg-primary px-2"
+                                style="font-size: <?= isset($ukuranNama) ? htmlspecialchars($ukuranNama) : '25px' ?>;">
+                                PEDAGANGNOMOR
+                            </span>
+                        </strong>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -391,12 +383,12 @@ function formatHarga($nilai)
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             $checked = isset($_GET['ByPrice']) && $_GET['ByPrice'] === (string) $value ? 'checked' : '';
                             echo "
-                                                                                                        <div class='custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3'>
-                                                                                                            <input type='checkbox' class='custom-control-input' id='$id' name='ByPrice' value='$value' $checked onclick='submitPriceForm(this)'>
-                                                                                                            <label class='custom-control-label' for='$id'>$label</label>
-                                                                                                            <span class='badge border font-weight-normal'>$totalNomorHarga</span>
-                                                                                                        </div>
-                                                                                                        ";
+                                                                                                                                <div class='custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3'>
+                                                                                                                                    <input type='checkbox' class='custom-control-input' id='$id' name='ByPrice' value='$value' $checked onclick='submitPriceForm(this)'>
+                                                                                                                                    <label class='custom-control-label' for='$id'>$label</label>
+                                                                                                                                    <span class='badge border font-weight-normal'>$totalNomorHarga</span>
+                                                                                                                                </div>
+                                                                                                                                ";
                         }
                         
                         foreach ($priceRanges as $value => $details) {
@@ -446,7 +438,7 @@ function formatHarga($nilai)
                 <!-- Color End -->
 
                 <!-- Color Start -->
-                 
+
                 <?php
                 $kolomQuery = "SELECT * FROM kolom";
                 $kolom = mysqli_query($koneksi, $kolomQuery);
@@ -465,23 +457,23 @@ function formatHarga($nilai)
                     }
                 }
                 if (count($kolomData) > 0): ?>
-                    <?php foreach ($kolomData as $row): ?>
-                        <h5 class="section-title position-relative text-uppercase mb-3">
-                            <span class="bg-secondary pr-3"><?= htmlspecialchars($row['judul']) ?></span>
-                        </h5>
-                        <div class="bg-light p-4 mb-30">
-                            <ul class="list-unstyled">
-                                <li class="mb-2 text-center">
-                                    <strong><?= htmlspecialchars($row['data']) ?></strong><br>
-                                    <?= htmlspecialchars($row['isi_data']) ?><br>
-                                    <?php if (!empty($row['logo'])): ?>
-                                    <img src="./assets/uploads/<?= htmlspecialchars($row['logo']) ?>" alt="Logo"
-                                        style="max-width: 100px;" class="my-3" />
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
-                        </div>
-                    <?php endforeach; ?>
+                <?php foreach ($kolomData as $row): ?>
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3"><?= htmlspecialchars($row['judul']) ?></span>
+                </h5>
+                <div class="bg-light p-4 mb-30">
+                    <ul class="list-unstyled">
+                        <li class="mb-2 text-center">
+                            <strong><?= htmlspecialchars($row['data']) ?></strong><br>
+                            <?= htmlspecialchars($row['isi_data']) ?><br>
+                            <?php if (!empty($row['logo'])): ?>
+                            <img src="./assets/uploads/<?= htmlspecialchars($row['logo']) ?>" alt="Logo"
+                                style="max-width: 100px;" class="my-3" />
+                            <?php endif; ?>
+                        </li>
+                    </ul>
+                </div>
+                <?php endforeach; ?>
                 <?php else: ?>
                 <?php endif; ?>
             </div>
@@ -569,9 +561,6 @@ function formatHarga($nilai)
                         }
                     }
                     
-                    if ($sortBy) {
-                        $query .= ' ORDER BY harga ' . ($sortBy === 'ASC' ? 'ASC' : 'DESC');
-                    }
                     
                     if ($searchNomor) {
                         $position = isset($_GET['position']) ? mysqli_real_escape_string($koneksi, $_GET['position']) : null;
@@ -591,16 +580,22 @@ function formatHarga($nilai)
                         }
                     
                         $dataNomor = mysqli_query($koneksi, $query2);
-                    
-                    }
-                    else{
+                    } else {
                         if (isset($byOperator) && str_contains($byOperator, '-digit')) {
                             $angkaDepan = explode('-digit', $byOperator)[0];
                             $query .= " AND LENGTH(TRIM(REPLACE(nomor, ' ', ''))) = " . intval($angkaDepan);
+                        } elseif (!$byOperator && !$byPrice && !$sortBy) {
+                            $query .= ' LIMIT 10';
                         }
-                        
+
+                        if ($sortBy) {
+                            $query .= ' ORDER BY harga ' . ($sortBy === 'ASC' ? 'ASC' : 'DESC');
+                        }
+                    
                         $dataNomor = mysqli_query($koneksi, $query);
                     }
+
+                    
                     
                     $nomorData = mysqli_fetch_all($dataNomor, MYSQLI_ASSOC);
                     
@@ -653,8 +648,10 @@ function formatHarga($nilai)
                     <span class="bg-secondary pr-3">Informasi</span>
                 </h5>
                 <div class="bg-light p-4 mb-30">
-                    <p>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi sebagian orang. </p>
-                    <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan beberapa nomor itu:
+                    <p>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi
+                        sebagian orang. </p>
+                    <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan
+                        beberapa nomor itu:
                     </p>
                     <ul class="list-unstyled">
                         <li>Spesial</li>
@@ -743,9 +740,9 @@ function formatHarga($nilai)
                         </div>
                     </div>
                     <?php
-                    $shopQuery = "SELECT * FROM online_shop WHERE id_online_shop IN (1, 2)";
+                    $shopQuery = 'SELECT * FROM online_shop WHERE id_online_shop IN (1, 2)';
                     $shopResult = mysqli_query($koneksi, $shopQuery);
-
+                    
                     $shops = [];
                     if ($shopResult && mysqli_num_rows($shopResult) > 0) {
                         while ($row = mysqli_fetch_assoc($shopResult)) {
@@ -756,23 +753,23 @@ function formatHarga($nilai)
 
                     <div class="col col-md-2 mb-5">
                         <?php if (isset($shops[1]) && $shops[1]['status'] == 1): ?>
-                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
-                            <a href="<?= htmlspecialchars($shops[1]['link']) ?>" target="_blank"
-                                style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
-                                <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
-                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
-                            </a>
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Shopee</h6>
+                        <a href="<?= htmlspecialchars($shops[1]['link']) ?>" target="_blank"
+                            style="background-color: #f1582c; display: inline-block; border-radius: 8px; padding:12px;">
+                            <img src="images/logo/shopee.png" alt="Shopee" class="img-fluid rounded"
+                                style="max-width: 34px; max-height: 250px; object-fit: cover;">
+                        </a>
                         <?php endif; ?>
                     </div>
 
                     <div class="col col-md-2 mb-5">
                         <?php if (isset($shops[2]) && $shops[2]['status'] == 1): ?>
-                            <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
-                            <a href="<?= htmlspecialchars($shops[2]['link']) ?>" target="_blank"
-                                style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
-                                <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
-                                    style="max-width: 34px; max-height: 250px; object-fit: cover;">
-                            </a>
+                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Tokopedia</h6>
+                        <a href="<?= htmlspecialchars($shops[2]['link']) ?>" target="_blank"
+                            style="background-color: #d4f4c6; display: inline-block; border-radius: 8px; padding:12px;">
+                            <img src="images/logo/tokopedia.png" alt="Tokopedia" class="img-fluid rounded"
+                                style="max-width: 34px; max-height: 250px; object-fit: cover;">
+                        </a>
                         <?php endif; ?>
                     </div>
 
