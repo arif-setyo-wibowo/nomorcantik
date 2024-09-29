@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label>Tipe</label>
                             <select class="selectpicker w-100" data-style="btn-default" name="tipe" data-live-search="true" required>
                                 <option selected disabled value="">Pilih Tipe</option>
-                                <option value="reseller">Reseller</option>
+                                <option value="stok">Stok</option>
                                 <option value="supplier">Supplier</option>
                             </select>
                         </div>
