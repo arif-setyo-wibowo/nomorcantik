@@ -155,7 +155,7 @@ if (isset($_GET['id'])) {
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
                             <label>Tipe</label>
-                            <select class="selectpicker w-100" data-style="btn-default" name="tipe" data-live-search="true" required>
+                            <select class="selectpicker w-100" data-style="btn-default" name="tipe" data-live-search="true">
                                 <option selected disabled value="">Pilih Tipe</option>
                                 <option value="stok"  <?= $nomor['tipe'] == "stok" ? 'selected' : '' ?>>Stok</option>
                                 <option value="supplier"  <?= $nomor['tipe'] == "supplier"  ? 'selected' : '' ?>>Supplier</option>

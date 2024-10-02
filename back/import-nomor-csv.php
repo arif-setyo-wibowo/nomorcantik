@@ -64,13 +64,13 @@ if ($_FILES['csv']['size'] > 0) {
             $stmtCheck->store_result();
 
             if ($stmtCheck->num_rows > 0) {
-                $import = "UPDATE nomor SET id_operator = ?, harga = ? WHERE nomor = ?";
+                $import = "UPDATE nomor SET id_operator = ?, harga = ?, kode = ? WHERE nomor = ?";
                 $stmtImport = $koneksi->prepare($import);
-                $stmtImport->bind_param("iss", $id_operator, $data[1], $data[0]);
+                $stmtImport->bind_param("isss", $id_operator, $data[1], $data[2], $data[0]);
             } else {
                 $import = "INSERT INTO nomor (id_operator, nomor, harga, tipe, kode) VALUES (?, ?, ?, 'supplier', ?)";
                 $stmtImport = $koneksi->prepare($import);
-                $stmtImport->bind_param("iss", $id_operator, $data[0], $data[1]);
+                $stmtImport->bind_param("isss", $id_operator, $data[0], $data[1], $data[2]);
             }
 
             $stmtImport->execute();

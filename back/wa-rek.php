@@ -4,7 +4,7 @@ $title = 'pedagangnomor Admin | Wa dan Rekening';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
-    header('Location: ../back_login.php'); 
+    header('Location: ../back_login.php');
     exit();
 }
 
@@ -18,42 +18,42 @@ $dataRekening = mysqli_query($koneksi, 'SELECT * FROM rekening');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'insert') {
     $namaRekening = $_POST['nama_rekening'];
     $nomorRekening = $_POST['nomor_rekening'];
-    
+
     // Handle file upload for the logo
-    $logo = $_FILES['logo']['name'];
-    $tmp_name = $_FILES['logo']['tmp_name'];
-    $target_dir = '../assets/uploads/';
-    $target_file = $target_dir . basename($logo);
-    
-    
-    if (move_uploaded_file($tmp_name, $target_file)) {
-        $insertQuery = "INSERT INTO rekening (nama_rekening, nomor_rekening, logo_rekening) 
-                        VALUES ('$namaRekening', '$nomorRekening', '$logo')";
-        if (mysqli_query($koneksi, $insertQuery)) {
-            $_SESSION['msg'] = 'Data rekening berhasil ditambahkan!';
-        } else {
-            $_SESSION['error'] = 'Gagal menambahkan data rekening!';
-        }
+    if (isset($_FILES['logo'])) {
+        $logo = $_FILES['logo']['name'];
+        $tmp_name = $_FILES['logo']['tmp_name'];
+        $target_dir = '../assets/uploads/';
+        $target_file = $target_dir . basename($logo);
     } else {
-        $_SESSION['error'] = 'Gagal mengupload logo rekening!';
+        $logo = '';
     }
-    
-    header('Location: '.$_SERVER['PHP_SELF']);
+    move_uploaded_file($tmp_name, $target_file);
+
+    $insertQuery = "INSERT INTO rekening (nama_rekening, nomor_rekening, logo_rekening) 
+                        VALUES ('$namaRekening', '$nomorRekening', '$logo')";
+    if (mysqli_query($koneksi, $insertQuery)) {
+        $_SESSION['msg'] = 'Data rekening berhasil ditambahkan!';
+    } else {
+        $_SESSION['error'] = 'Gagal menambahkan data rekening!';
+    }
+
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit();
 }
 
 // Handle delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
     $idRekening = $_POST['id_rekening'];
-    
+
     $deleteQuery = "DELETE FROM rekening WHERE id_rekening = '$idRekening'";
     if (mysqli_query($koneksi, $deleteQuery)) {
         $_SESSION['msg'] = 'Data rekening berhasil dihapus!';
     } else {
         $_SESSION['error'] = 'Gagal menghapus data rekening!';
     }
-    
-    header('Location: '.$_SERVER['PHP_SELF']);
+
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit();
 }
 
@@ -88,11 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         });
                     </script>
                     <?php unset($_SESSION['error']); endif; ?>
-                    
+
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button type="button" class="nav-link waves-effect active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-home" aria-selected="false">
+                            <button type="button" class="nav-link waves-effect active" role="tab"
+                                data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-selected="false">
                                 Kontak
                             </button>
                         </li>
@@ -132,13 +132,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-rekening" aria-selected="true">
+                                data-bs-target="#navs-top-rekening" aria-selected="true">
                                 Rekening
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-add" aria-selected="false">
+                                data-bs-target="#navs-top-add" aria-selected="false">
                                 Tambah Data
                             </button>
                         </li>
@@ -169,10 +169,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             <a href="rek-edit.php?id=<?php echo $d['id_rekening']; ?>" class="btn btn-info btn-sm">
                                                 Edit
                                             </a>
-                                            <form action="" method="POST" id="delete-form-<?php echo $d['id_rekening']; ?>" style="display:inline;">
+                                            <form action="" method="POST" id="delete-form-<?php echo $d['id_rekening']; ?>"
+                                                style="display:inline;">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id_rekening" value="<?php echo $d['id_rekening']; ?>">
-                                                <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?php echo $d['id_rekening']; ?>">Delete</button>
+                                                <button type="button" class="btn btn-danger btn-sm confirm-text"
+                                                    data-form-id="<?php echo $d['id_rekening']; ?>">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -194,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 </div>
                                 <div class="mb-4">
                                     <label for="logo">Logo Rekening</label>
-                                    <input type="file" name="logo" class="form-control" required>
+                                    <input type="file" name="logo" class="form-control">
                                 </div>
                                 <input type="hidden" name="action" value="insert">
                                 <button type="submit" class="btn btn-primary">Tambah</button>
