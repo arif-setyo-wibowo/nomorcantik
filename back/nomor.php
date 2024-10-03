@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="basic-default-fullname">Harga</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" class="form-control" id="basic-default-fullname" name="kode" placeholder="Kode" required />
+                            <input type="text" class="form-control" id="basic-default-fullname" name="kode" placeholder="Kode" />
                             <label for="basic-default-fullname">Kode</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">

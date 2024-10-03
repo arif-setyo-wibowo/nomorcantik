@@ -150,7 +150,7 @@ if (isset($_GET['id'])) {
                         
                         <div class="form-floating form-floating-outline mb-4">
                             <input type="text" class="form-control" id="basic-default-fullname" name="kode"
-                                placeholder="Kode" value="<?= $nomor['kode'] ?>" required />
+                                placeholder="Kode" value="<?= $nomor['kode'] ?>" />
                             <label for="basic-default-fullname">Kode</label>
                         </div>
                         <div class="form-floating form-floating-outline mb-4">
