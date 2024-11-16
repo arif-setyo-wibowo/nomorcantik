@@ -30,15 +30,27 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 
 function formatHarga($nilai)
 {
-    if ($nilai >= 1000000) {
-        return 'Rp. ' . number_format($nilai / 1000000, 2, ',', '') . ' M';
+    if ($nilai >= 100000000) {
+        // If value is 100 million or more, display in "M" format with one decimal place
+        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
+    } elseif ($nilai >= 1000000) {
+        // If value is in millions, display in "M" format with one decimal place
+        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
-        return 'Rp. ' . number_format($nilai / 1000, 0, ',', '') . ' jt';
+        // For values in thousands
+        // Check if the last two digits are 00
+        if ($nilai % 100 == 0) {
+            // Round to 1 decimal place if last two digits are 00
+            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
+        } else {
+            // Otherwise, show with 3 decimal places
+            return number_format($nilai / 1000, 3, ',', '.') . ' jt';
+        }
     } else {
-        return 'Rp. ' . number_format($nilai, 0, ',', '');
+        // For values less than 1000, just display the value
+        return number_format($nilai, 0, ',', '.');
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
