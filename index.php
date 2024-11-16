@@ -33,22 +33,24 @@ function formatHarga($nilai)
 {
     if ($nilai >= 100000000) {
         // If value is 100 million or more, display in "M" format with one decimal place
-        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
+        return number_format($nilai / 1000000, 1, '.', '.') . ' M';
     } elseif ($nilai >= 1000000) {
         // If value is in millions, display in "M" format with one decimal place
-        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
+        return number_format($nilai / 1000000, 1, '.', '.') . ' M';
     } elseif ($nilai >= 100000) {
-        // If value is in hundreds of thousands, round to the nearest 100k and display in "jt" format
-        $nilai = round($nilai / 1000);  // Round to nearest thousand
-        return number_format($nilai, 0, ',', '.') . ' jt';
+        // If value is in hundreds of thousands, round to nearest 10k and display in "jt" format
+        $nilai = round($nilai / 10000) * 10; // Round to the nearest 10,000 and convert to "jt"
+        return number_format($nilai, 0, '.', '.') . ' Jt';
     } elseif ($nilai >= 1000) {
-        // If value is in thousands, display in "jt" format
-        return number_format($nilai / 1000, 3, ',', '.') . ' jt';
+        // If value is in thousands, round to nearest 1000 and display in "jt" format with one decimal place
+        $nilai = round($nilai / 1000, 1);  // Round to nearest 1000 and show one decimal place
+        return number_format($nilai, 1, '.', '.') . ' Jt';
     } else {
         // For values less than 1000, just display the value
-        return number_format($nilai, 0, ',', '.');
+        return number_format($nilai, 0, '.', '.');
     }
 }
+
 
 
 ?>
