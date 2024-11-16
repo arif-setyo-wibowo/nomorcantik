@@ -3,7 +3,6 @@ $(document).ready(function() {
         paging: false,
         responsive: true,
         lengthChange: false,
-        pageLength: 10, 
         autoWidth: false,
         buttons: [{
             extend: 'collection',
