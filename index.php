@@ -41,17 +41,19 @@ function formatHarga($nilai)
         // For values in thousands
         $roundedValue = $nilai / 1000;
 
-        // Round to 3 decimal places for better precision (to show 2.888 as 2.888 jt)
+        // If the value is exactly divisible by 1000, display with one decimal place
         if ($nilai % 1000 == 0) {
-            return number_format($roundedValue, 0, ',', '.') . ' jt';
+            return number_format($roundedValue, 1, ',', '.') . ' jt';
         } else {
-            return number_format($roundedValue, 3, ',', '.') . ' jt'; // Display with 3 decimals
+            // If not, show with 3 decimal places
+            return number_format($roundedValue, 3, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
