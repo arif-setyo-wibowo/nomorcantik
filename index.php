@@ -39,21 +39,20 @@ function formatHarga($nilai)
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        $roundedValue = $nilai / 1000;
-
-        // If the value is exactly divisible by 1000, display with one decimal place
-        if ($nilai % 1000 == 0) {
-            // Show with 1 decimal point for exact multiples of 1000
-            return number_format($roundedValue, 1, ',', '.') . ' jt';
+        // Check if the last two digits are 00
+        if ($nilai % 100 == 0) {
+            // Round to 1 decimal place if last two digits are 00
+            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
         } else {
-            // Show with 3 decimal places for non-exact multiples of 1000
-            return number_format($roundedValue, 3, ',', '.') . ' jt';
+            // Otherwise, show with 3 decimal places
+            return number_format($nilai / 1000, 3, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
