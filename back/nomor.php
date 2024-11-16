@@ -10,8 +10,25 @@ if (!isset($_SESSION['admin'])) {
 
 
 include '../koneksi.php';
-$no = 1;
-$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
+include '../koneksi.php';
+
+// Ambil parameter untuk pagination
+$limit = 10; // Menampilkan 10 data per halaman
+$start = isset($_GET['start']) ? $_GET['start'] : 0; // Offset data berdasarkan halaman
+
+// Query untuk mengambil data dengan pagination
+$query = "SELECT n.*, o.nama_operator 
+          FROM nomor n
+          LEFT JOIN operator o ON n.id_operator = o.id_operator
+          LIMIT $start, $limit"; 
+
+$data = mysqli_query($koneksi, $query);
+
+// Query untuk mengambil total data (untuk pagination)
+$totalQuery = "SELECT COUNT(*) as total FROM nomor";
+$totalDataResult = mysqli_query($koneksi, $totalQuery);
+$totalData = mysqli_fetch_assoc($totalDataResult)['total'];
+
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -173,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php endwhile;?>
                         </tbody>
                     </table>
+                    <div id="pagination"></div>
                 </div>
 
                 <!-- Tab for inserting data manually or via CSV -->
