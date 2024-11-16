@@ -38,19 +38,20 @@ function formatHarga($nilai)
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        // Check if the last two digits are 00
-        if ($nilai % 100 == 0) {
-            // Round to 1 decimal place if last two digits are 00
-            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
+        // Check if the value ends with two zeroes (like 1000, 2000, etc.)
+        if ($nilai % 1000 == 0) {
+            // If it's an exact thousand, round to 0 decimal places
+            return number_format($nilai / 1000, 0, ',', '.') . ' jt';
         } else {
-            // Otherwise, show with 3 decimal places
-            return number_format($nilai / 1000, 3, ',', '.') . ' jt';
+            // Otherwise, show with 1 decimal place (e.g., 4500 becomes 4.5 jt)
+            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

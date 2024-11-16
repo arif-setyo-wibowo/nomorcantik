@@ -39,19 +39,20 @@ function formatHarga($nilai)
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        // Check if the value has only 4 digits and ends with two zeroes (e.g., 1000 -> 1jt)
+        // Check if the value ends with two zeroes (like 1000, 2000, etc.)
         if ($nilai % 1000 == 0) {
-            // Round to whole number (1 jt instead of 1.0 jt)
+            // If it's an exact thousand, round to 0 decimal places
             return number_format($nilai / 1000, 0, ',', '.') . ' jt';
         } else {
-            // Otherwise, show with 3 decimal places (for cases like 2888 -> 2.888 jt)
-            return number_format($nilai / 1000, 3, ',', '.') . ' jt';
+            // Otherwise, show with 1 decimal place (e.g., 4500 becomes 4.5 jt)
+            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
