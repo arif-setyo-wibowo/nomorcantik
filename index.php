@@ -31,17 +31,18 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 
 function formatHarga($nilai)
 {
-    if ($nilai >= 1000000) {
-        // Jika nilai adalah kelipatan jutaan dan bulat, tampilkan tanpa desimal
-        if ($nilai % 1000000 == 0) {
-            return number_format($nilai / 1000000, 0, ',', '') . ' M';
-        } else {
-            return number_format($nilai / 1000000, 2, ',', '') . ' M';
-        }
+    if ($nilai >= 100000000) {
+        // Jika nilai adalah kelipatan 100 juta dan lebih, tampilkan dalam format juta dengan dua desimal
+        return number_format($nilai / 1000000, 2, ',', '.') . ' M';
+    } elseif ($nilai >= 1000000) {
+        // Jika nilai di atas 1 juta, tampilkan dalam format juta
+        return number_format($nilai / 1000000, 2, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
-        return number_format($nilai / 1000, 0, ',', '') . ' jt';
+        // Jika nilai di atas 1 ribu, tampilkan dalam format jt
+        return number_format($nilai / 1000, 3, ',', '.') . ' jt';
     } else {
-        return number_format($nilai, 0, ',', '');
+        // Jika nilai kurang dari 1000, tampilkan nilai aslinya
+        return number_format($nilai, 0, ',', '.');
     }
 }
 
