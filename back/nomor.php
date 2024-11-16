@@ -150,14 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
 
-                    <form method="GET" class="mb-3">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Cari Nomor" value="<?= $_GET['search'] ?? '' ?>">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-search"></i> Cari
-                            </button>
-                        </div>
-                    </form>
+                <form method="GET" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Cari Nomor" value="<?= $_GET['search'] ?? '' ?>">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Cari
+                        </button>
+                    </div>
+                </form>
 
                     <table  class="table table-striped table-bordered">
                         <thead>
@@ -173,6 +173,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </thead>
                         <tbody>
 
+                        <?php 
+                        // Ambil nilai pencarian jika ada
+                        $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+                        // Query untuk mengambil data dengan filter pencarian
+                        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
+                        $data = mysqli_query($conn, $query); ?>
                          <?php $no = $offset + 1;
                          while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
