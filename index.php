@@ -32,26 +32,26 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 function formatHarga($nilai)
 {
     if ($nilai >= 100000000) {
-        // If value is 100 million or more, display in "M" format with one decimal place
+        // For values in millions or more, display in "M" format with 1 decimal place
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000000) {
-        // If value is in millions, display in "M" format with one decimal place
+        // For values in millions, display in "M" format with 1 decimal place
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        // Check if the value ends with two zeroes (like 1000, 2000, etc.)
+        // If the number is an exact multiple of 1000, no decimal place
         if ($nilai % 1000 == 0) {
-            // If it's an exact thousand, round to 0 decimal places
-            return number_format($nilai / 1000, 0, ',', '.') . ' jt';
+            return number_format($nilai / 1000, 0, ',', '.') . ' jt'; // No decimal
         } else {
-            // Otherwise, show with 1 decimal place (e.g., 4500 becomes 4.5 jt)
-            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
+            // For other cases, use 1 decimal place
+            return number_format($nilai / 1000, 1, ',', '.') . ' jt'; // 1 decimal
         }
     } else {
-        // For values less than 1000, just display the value
+        // For values less than 1000, display the number as is
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
