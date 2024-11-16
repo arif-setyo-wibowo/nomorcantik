@@ -32,19 +32,24 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 function formatHarga($nilai)
 {
     if ($nilai >= 100000000) {
-        // Jika nilai adalah kelipatan 100 juta dan lebih, tampilkan dalam format juta dengan dua desimal
-        return number_format($nilai / 1000000, 2, ',', '.') . ' M';
+        // If value is 100 million or more, display in "M" format with one decimal place
+        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000000) {
-        // Jika nilai di atas 1 juta, tampilkan dalam format juta
-        return number_format($nilai / 1000000, 2, ',', '.') . ' M';
+        // If value is in millions, display in "M" format with one decimal place
+        return number_format($nilai / 1000000, 1, ',', '.') . ' M';
+    } elseif ($nilai >= 100000) {
+        // If value is in hundreds of thousands, round to the nearest 100k and display in "jt" format
+        $nilai = round($nilai / 1000);  // Round to nearest thousand
+        return number_format($nilai, 0, ',', '.') . ' jt';
     } elseif ($nilai >= 1000) {
-        // Jika nilai di atas 1 ribu, tampilkan dalam format jt
+        // If value is in thousands, display in "jt" format
         return number_format($nilai / 1000, 3, ',', '.') . ' jt';
     } else {
-        // Jika nilai kurang dari 1000, tampilkan nilai aslinya
+        // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 ?>
 
