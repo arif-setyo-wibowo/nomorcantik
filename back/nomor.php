@@ -310,6 +310,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- / Content -->
 <script>
+$(document).ready(function() {
+    $('#example1').DataTable({
+        searching: false,  // Disable the search feature
+    });
+});
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
