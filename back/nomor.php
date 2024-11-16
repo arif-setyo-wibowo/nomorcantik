@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
-                    <table  class="table table-striped table-bordered">
+                    <table id="example1" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -188,36 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tbody>
                     </table>
 
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <!-- Tombol Previous -->
-                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-
-                            <!-- Pagination Numbers -->
-                            <?php 
-                            // Menentukan halaman sekitar yang ditampilkan
-                            $start_page = max(1, $page - 2);
-                            $end_page = min($total_pages, $page + 2);
-
-                            // Menampilkan halaman
-                            for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                                </li>
-                            <?php endfor; ?>
-
-                            <!-- Tombol Next -->
-                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    
 
                 </div>
 

@@ -1,8 +1,9 @@
 $(document).ready(function() {
     $("#example1").DataTable({
-        "paging": false,
+        paging: true,
         responsive: true,
         lengthChange: false,
+        pageLength: 10, 
         autoWidth: false,
         buttons: [{
             extend: 'collection',
