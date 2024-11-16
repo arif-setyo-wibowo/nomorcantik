@@ -39,18 +39,19 @@ function formatHarga($nilai)
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        // If the number is an exact multiple of 1000, no decimal place
+        // If the number is an exact multiple of 1000, no decimal
         if ($nilai % 1000 == 0) {
             return number_format($nilai / 1000, 0, ',', '.') . ' jt'; // No decimal
         } else {
-            // For other cases, use 1 decimal place
-            return number_format($nilai / 1000, 1, ',', '.') . ' jt'; // 1 decimal
+            // For other cases, display with 3 decimal places
+            return number_format($nilai / 1000, 3, ',', '.') . ' jt'; // 3 decimal
         }
     } else {
         // For values less than 1000, display the number as is
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
