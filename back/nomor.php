@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
 
-                    <table  class="table table-striped table-bordered">
+                    <table id="example1" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -173,13 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </thead>
                         <tbody>
 
-                        <?php 
-                        // Ambil nilai pencarian jika ada
-                        $search = isset($_GET['search']) ? $_GET['search'] : '';
-
-                        // Query untuk mengambil data dengan filter pencarian
-                        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
-                        $data = mysqli_query($conn, $query); ?>
                          <?php $no = $offset + 1;
                          while($d = mysqli_fetch_array($data)) : ?>
                             <tr>

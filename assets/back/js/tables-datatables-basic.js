@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $("#example1").DataTable({
-        paging: true,
+        paging: false,
         responsive: true,
         lengthChange: false,
         pageLength: 10, 
