@@ -8,49 +8,10 @@ if (!isset($_SESSION['admin'])) {
     exit();
 }
 
-// Database connection
-include('koneksi.php');
 
-// Ambil parameter untuk pagination
-$limit = 10; // Menampilkan 10 data per halaman
-$start = isset($_GET['start']) ? $_GET['start'] : 0; // Offset data berdasarkan halaman
-$search = isset($_GET['search']['value']) ? $_GET['search']['value'] : ''; // Pencarian
-
-// Query untuk mengambil data dengan pagination dan pencarian
-$query = "SELECT n.*, o.nama_operator 
-          FROM nomor n
-          LEFT JOIN operator o ON n.id_operator = o.id_operator
-          WHERE n.nomor LIKE '%$search%' OR o.nama_operator LIKE '%$search%'
-          LIMIT $start, $limit"; 
-
-$data = mysqli_query($koneksi, $query);
-
-// Query untuk menghitung total data (untuk pagination)
-$totalQuery = "SELECT COUNT(*) as total FROM nomor";
-$totalDataResult = mysqli_query($koneksi, $totalQuery);
-$totalData = mysqli_fetch_assoc($totalDataResult)['total'];
-
-// Ambil data dari query
-$results = [];
-while ($d = mysqli_fetch_array($data)) {
-    $results[] = [
-        'no' => $d['id_nomor'], 
-        'kode' => $d['kode'],
-        'nama_operator' => $d['nama_operator'] ?? 'Tidak Diketahui',
-        'nomor' => $d['nomor'],
-        'harga' => $d['harga'],
-        'tipe' => $d['tipe'],
-        'action' => '<a href="nomor-edit.php?id='.$d['id_nomor'].'" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a>
-                    <form action="nomor.php" method="POST" id="delete-form-'.$d['id_nomor'].'" style="display: inline;">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id_nomor" value="'.$d['id_nomor'].'">
-                    <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="'.$d['id_nomor'].'">
-                    <i class="fas fa-trash"></i> Delete</button></form>'
-    ];
-}
-
-
-
+include '../koneksi.php';
+$no = 1;
+$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -175,70 +136,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
-                <table id="example1" class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Kode</th>
-            <th>Operator</th>
-            <th>Nomor</th>
-            <th>Harga</th>
-            <th>Tipe</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php 
-        $no = 1;
-        foreach ($results as $d) : ?>
-            <tr>
-                <td><?= $no++ ?></td>
-                <td><?= $d['kode'] ?></td>
-                <td><?= $d['nama_operator'] ?></td>
-                <td><?= $d['nomor'] ?></td>
-                <td><?= $d['harga'] ?> </td>
-                <td><?= $d['tipe'] ?> </td>
-                <td>
-                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
-                        <i class="fas fa-pencil-alt"></i> Edit
-                    </a>
-                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
-                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-
-<!-- Pagination Controls -->
-<div id="pagination-controls">
-    <?php 
-    $totalPages = ceil($totalData / $limit);
-    $currentPage = ceil(($start / $limit) + 1);
-
-    // Previous Button
-    if ($currentPage > 1) {
-        echo '<a href="?start=' . (($currentPage - 2) * $limit) . '">&laquo; Previous</a>';
-    }
-
-    // Page Numbers
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $startOffset = ($i - 1) * $limit;
-        echo '<a href="?start=' . $startOffset . '">' . $i . '</a>';
-    }
-
-    // Next Button
-    if ($currentPage < $totalPages) {
-        echo '<a href="?start=' . ($currentPage * $limit) . '">Next &raquo;</a>';
-    }
-    ?>
-</div>
-
+                    <table id="example1" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Operator</th>
+                                <th>Nomor</th>
+                                <th>Harga</th>
+                                <th>Tipe</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php while($d = mysqli_fetch_array($data)) : ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $d['kode'] ?></td>
+                                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
+                                <td><?= $d['nomor'] ?></td>
+                                <td><?= $d['harga'] ?> </td>
+                                <td><?= $d['tipe'] ?> </td>
+                                <td>
+                                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
+                                        <i class="fas fa-pencil-alt"></i> Edit
+                                    </a>
+                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
+                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php endwhile;?>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- Tab for inserting data manually or via CSV -->
