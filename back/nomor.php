@@ -172,15 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-                        <?php 
-                        // Ambil nilai pencarian jika ada
-                        $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-                        // Query untuk mengambil data dengan filter pencarian
-                        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
-                        $result = mysqli_query($conn, $query);
-
-                         $no = $offset + 1;
+                         <?php $no = $offset + 1;
                          while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
