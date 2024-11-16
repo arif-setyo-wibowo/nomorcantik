@@ -31,23 +31,28 @@ $operatorData = mysqli_fetch_all(mysqli_query($koneksi, 'SELECT * FROM operator 
 function formatHarga($nilai)
 {
     if ($nilai >= 100000000) {
-        // If value is 100 million or more, display in "M" format with one decimal place
+        // For values in millions or more, display in "M" format with 1 decimal place
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000000) {
-        // If value is in millions, display in "M" format with one decimal place
+        // For values in millions, display in "M" format with 1 decimal place
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
         // For values in thousands
-        // Check if the value ends with two zeroes (like 1000, 2000, etc.)
+        
+        // If the number has exactly 3 trailing zeros (e.g., 1000, 10000), show with no decimal
         if ($nilai % 1000 == 0) {
-            // If it's an exact thousand, round to 0 decimal places
-            return number_format($nilai / 1000, 0, ',', '.') . ' jt';
-        } else {
-            // Otherwise, show with 1 decimal place (e.g., 4500 becomes 4.5 jt)
-            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
+            return number_format($nilai / 1000, 0, ',', '.') . ' Jt'; // No decimal
         }
+        
+        // If the number has exactly 2 trailing zeros (e.g., 4500, 15000), show with 1 decimal
+        if ($nilai % 100 == 0) {
+            return number_format($nilai / 1000, 1, ',', '.') . ' Jt'; // 1 decimal
+        }
+
+        // For all other numbers, show with 3 decimals
+        return number_format($nilai / 1000, 3, ',', '.') . ' Jt'; // 3 decimals
     } else {
-        // For values less than 1000, just display the value
+        // For values less than 1000, display the number as is
         return number_format($nilai, 0, ',', '.');
     }
 }
