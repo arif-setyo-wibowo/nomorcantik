@@ -10,21 +10,8 @@ if (!isset($_SESSION['admin'])) {
 
 
 include '../koneksi.php';
-$no=1;
-$limit = 10; // Jumlah data per halaman
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
-
-// Total data
-$total_data = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM nomor"))['total'];
-$total_pages = ceil($total_data / $limit);
-
-// Query untuk data nomor dengan paginasi
-$data = mysqli_query($koneksi, "SELECT n.*, o.nama_operator 
-                                FROM nomor n 
-                                LEFT JOIN operator o ON n.id_operator = o.id_operator 
-                                LIMIT $limit OFFSET $offset");
-
+$no = 1;
+$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -162,15 +149,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-                        <?php $no = $offset + 1; ?>
                         <?php while($d = mysqli_fetch_array($data)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $d['kode'] ?></td>
                                 <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
                                 <td><?= $d['nomor'] ?></td>
-                                <td><?= $d['harga'] ?></td>
-                                <td><?= $d['tipe'] ?></td>
+                                <td><?= $d['harga'] ?> </td>
+                                <td><?= $d['tipe'] ?> </td>
                                 <td>
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
@@ -184,12 +170,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </form>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                            <?php endwhile;?>
                         </tbody>
                     </table>
-
-                    
-
                 </div>
 
                 <!-- Tab for inserting data manually or via CSV -->
