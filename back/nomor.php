@@ -149,106 +149,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
-                    <!-- Form Pencarian -->
-                    <form method="GET" class="mb-3">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Cari Nomor" value="<?= $_GET['search'] ?? '' ?>">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-search"></i> Cari
-                            </button>
-                        </div>
+    <!-- Form Pencarian dan Menampilkan Data -->
+    <form method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Cari Nomor" value="<?= $_GET['search'] ?? '' ?>">
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search"></i> Cari
+            </button>
+        </div>
+    </form>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode</th>
+                <th>Operator</th>
+                <th>Nomor</th>
+                <th>Harga</th>
+                <th>Tipe</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php 
+        // Ambil nilai pencarian jika ada
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+        // Query untuk mengambil data dengan filter pencarian
+        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
+        $result = mysqli_query($conn, $query);
+        
+        $no = $offset + 1;
+        while($d = mysqli_fetch_array($result)) : ?>
+            <tr>
+                <td><?= $no++ ?></td>
+                <td><?= $d['kode'] ?></td>
+                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
+                <td><?= $d['nomor'] ?></td>
+                <td><?= $d['harga'] ?></td>
+                <td><?= $d['tipe'] ?></td>
+                <td>
+                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
+                        <i class="fas fa-pencil-alt"></i> Edit
+                    </a>
+                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
+                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </form>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+        </tbody>
+    </table>
 
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Kode</th>
-                                <th>Operator</th>
-                                <th>Nomor</th>
-                                <th>Harga</th>
-                                <th>Tipe</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php 
-                        // Ambil nilai pencarian jika ada
-                        $search = isset($_GET['search']) ? $_GET['search'] : '';
+    <!-- Pagination (di bagian bawah tabel) -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- Tombol First -->
+            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=1&search=<?= $search ?>" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
 
-                        // Update query SQL untuk mencari nomor
-                        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
-                        $result = mysqli_query($conn, $query);
-                        
-                        $no = $offset + 1;
-                        while($d = mysqli_fetch_array($result)) : ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $d['kode'] ?></td>
-                                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
-                                <td><?= $d['nomor'] ?></td>
-                                <td><?= $d['harga'] ?></td>
-                                <td><?= $d['tipe'] ?></td>
-                                <td>
-                                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
-                                        <i class="fas fa-pencil-alt"></i> Edit
-                                    </a>
-                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                        </tbody>
-                    </table>
+            <!-- Tombol Previous -->
+            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
 
-                    <!-- Pagination (di bagian bawah tabel) -->
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <!-- Tombol First -->
-                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=1&search=<?= $search ?>" aria-label="First">
-                                    <span aria-hidden="true">&laquo;&laquo;</span>
-                                </a>
-                            </li>
+            <!-- Pagination Numbers -->
+            <?php 
+            $start_page = max(1, $page - 2);
+            $end_page = min($total_pages, $page + 2);
+            for ($i = $start_page; $i <= $end_page; $i++): ?>
+                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
 
-                            <!-- Tombol Previous -->
-                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
+            <!-- Tombol Next -->
+            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
 
-                            <!-- Pagination Numbers -->
-                            <?php 
-                            $start_page = max(1, $page - 2);
-                            $end_page = min($total_pages, $page + 2);
-                            for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
-                                </li>
-                            <?php endfor; ?>
+            <!-- Tombol Last -->
+            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= $total_pages ?>&search=<?= $search ?>" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-                            <!-- Tombol Next -->
-                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-
-                            <!-- Tombol Last -->
-                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $total_pages ?>&search=<?= $search ?>" aria-label="Last">
-                                    <span aria-hidden="true">&raquo;&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
 
 
                 <!-- Tab for inserting data manually or via CSV -->
