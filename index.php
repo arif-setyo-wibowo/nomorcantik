@@ -38,19 +38,22 @@ function formatHarga($nilai)
         // If value is in millions, display in "M" format with one decimal place
         return number_format($nilai / 1000000, 1, ',', '.') . ' M';
     } elseif ($nilai >= 1000) {
-        // If value is in thousands, round to the nearest 1000 for values like 2800 and 2000
+        // For values in thousands
+        $roundedValue = $nilai / 1000;
+        
+        // If the value is a clean multiple of 1000, display without decimals
         if ($nilai % 1000 == 0) {
-            // If the number is exactly divisible by 1000, display it in "jt" format
-            return number_format($nilai / 1000, 0, ',', '.') . ' jt';
+            return number_format($roundedValue, 0, ',', '.') . ' jt';
         } else {
-            // Otherwise, round to one decimal place
-            return number_format($nilai / 1000, 1, ',', '.') . ' jt';
+            // Otherwise, show the full value without rounding (i.e., keep decimals for numbers like 2888)
+            return number_format($roundedValue, 3, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
