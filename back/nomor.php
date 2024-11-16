@@ -10,8 +10,21 @@ if (!isset($_SESSION['admin'])) {
 
 
 include '../koneksi.php';
-$no = 1;
-$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
+$no=1;
+$limit = 10; // Jumlah data per halaman
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+// Total data
+$total_data = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM nomor"))['total'];
+$total_pages = ceil($total_data / $limit);
+
+// Query untuk data nomor dengan paginasi
+$data = mysqli_query($koneksi, "SELECT n.*, o.nama_operator 
+                                FROM nomor n 
+                                LEFT JOIN operator o ON n.id_operator = o.id_operator 
+                                LIMIT $limit OFFSET $offset");
+
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -136,7 +149,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
-                    <table id="example1" class="table table-striped table-bordered">
+                    <!-- Form Pencarian -->
+                    <form method="GET" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Cari Nomor" value="<?= $_GET['search'] ?? '' ?>">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i> Cari
+                            </button>
+                        </div>
+                    </form>
+
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -149,14 +172,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-                        <?php while($d = mysqli_fetch_array($data)) : ?>
+                        <?php 
+                        // Ambil nilai pencarian jika ada
+                        $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+                        // Update query SQL untuk mencari nomor
+                        $query = "SELECT * FROM nomor WHERE nomor LIKE '%$search%' LIMIT $offset, $limit";
+                        $result = mysqli_query($conn, $query);
+                        
+                        $no = $offset + 1;
+                        while($d = mysqli_fetch_array($result)) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $d['kode'] ?></td>
                                 <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
                                 <td><?= $d['nomor'] ?></td>
-                                <td><?= $d['harga'] ?> </td>
-                                <td><?= $d['tipe'] ?> </td>
+                                <td><?= $d['harga'] ?></td>
+                                <td><?= $d['tipe'] ?></td>
                                 <td>
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
@@ -170,10 +202,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </form>
                                 </td>
                             </tr>
-                            <?php endwhile;?>
+                        <?php endwhile; ?>
                         </tbody>
                     </table>
+
+                    <!-- Pagination (di bagian bawah tabel) -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Tombol First -->
+                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=1&search=<?= $search ?>" aria-label="First">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Tombol Previous -->
+                            <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Pagination Numbers -->
+                            <?php 
+                            $start_page = max(1, $page - 2);
+                            $end_page = min($total_pages, $page + 2);
+                            for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Tombol Next -->
+                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Tombol Last -->
+                            <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $total_pages ?>&search=<?= $search ?>" aria-label="Last">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
+
 
                 <!-- Tab for inserting data manually or via CSV -->
                 <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
