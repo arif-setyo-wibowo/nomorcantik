@@ -43,9 +43,10 @@ function formatHarga($nilai)
 
         // If the value is exactly divisible by 1000, display with one decimal place
         if ($nilai % 1000 == 0) {
+            // Show with 1 decimal point for exact multiples of 1000
             return number_format($roundedValue, 1, ',', '.') . ' jt';
         } else {
-            // If not, show with 3 decimal places
+            // Show with 3 decimal places for non-exact multiples of 1000
             return number_format($roundedValue, 3, ',', '.') . ' jt';
         }
     } else {
@@ -53,6 +54,7 @@ function formatHarga($nilai)
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
