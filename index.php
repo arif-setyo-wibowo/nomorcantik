@@ -40,19 +40,20 @@ function formatHarga($nilai)
     } elseif ($nilai >= 1000) {
         // For values in thousands
         $roundedValue = $nilai / 1000;
-        
+
         // If the value is a clean multiple of 1000, display without decimals
         if ($nilai % 1000 == 0) {
             return number_format($roundedValue, 0, ',', '.') . ' jt';
         } else {
-            // Otherwise, show the full value without rounding (i.e., keep decimals for numbers like 2888)
-            return number_format($roundedValue, 3, ',', '.') . ' jt';
+            // Otherwise, round to one decimal place for better readability
+            return number_format($roundedValue, 1, ',', '.') . ' jt';
         }
     } else {
         // For values less than 1000, just display the value
         return number_format($nilai, 0, ',', '.');
     }
 }
+
 
 
 
