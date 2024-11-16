@@ -10,8 +10,11 @@ if (!isset($_SESSION['admin'])) {
 
 
 include '../koneksi.php';
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
 $no=1;
-$limit = 10; // Jumlah data per halaman
+$limit = 50; // Jumlah data per halaman
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
@@ -149,7 +152,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
+                    <form method="GET" action="nomor.php" class="mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="Cari berdasarkan Nomor, Kode, atau Operator" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                            <button class="btn btn-primary" type="submit">Cari</button>
+                        </div>
+                    </form>
+                    <?php 
+                    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+                    // Modifikasi query untuk pencarian
+                    $whereClause = '';
+                    if ($search !== '') {
+                        $search = mysqli_real_escape_string($koneksi, $search);
+                        $whereClause = "WHERE n.nomor LIKE '%$search%' 
+                                        OR n.kode LIKE '%$search%' 
+                                        OR o.nama_operator LIKE '%$search%'";
+                    }
 
+                    // Data dengan filter pencarian
+                    $data_query = "SELECT n.*, o.nama_operator 
+                                FROM nomor n 
+                                LEFT JOIN operator o ON n.id_operator = o.id_operator 
+                                $whereClause 
+                                LIMIT $limit OFFSET $offset";
+                    $data = mysqli_query($koneksi, $data_query);
+                    ?>
                     <table id="example1" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -163,16 +190,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </tr>
                         </thead>
                         <tbody>
-
-                         <?php $no = $offset + 1;
-                         while($d = mysqli_fetch_array($data)) : ?>
+                            <?php 
+                            $no = $offset + 1; 
+                            while ($d = mysqli_fetch_array($data)) : 
+                            ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= $d['kode'] ?></td>
-                                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
-                                <td><?= $d['nomor'] ?></td>
-                                <td><?= $d['harga'] ?></td>
-                                <td><?= $d['tipe'] ?></td>
+                                <td><?= htmlspecialchars($d['kode']) ?></td>
+                                <td><?= htmlspecialchars($d['nama_operator'] ?? 'Tidak Diketahui') ?></td>
+                                <td><?= htmlspecialchars($d['nomor']) ?></td>
+                                <td><?= htmlspecialchars($d['harga']) ?></td>
+                                <td><?= htmlspecialchars($d['tipe']) ?></td>
                                 <td>
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
@@ -186,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </form>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                            <?php endwhile; ?>
                         </tbody>
                     </table>
 
@@ -194,48 +222,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <ul class="pagination justify-content-center">
                             <!-- Tombol First -->
                             <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=1" aria-label="First">
-                                    <span aria-hidden="true">&laquo;&laquo;</span>
-                                </a>
+                                <a class="page-link" href="?page=1" aria-label="First">&laquo;&laquo;</a>
                             </li>
 
                             <!-- Tombol Previous -->
                             <li class="page-item <?= $page == 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
+                                <a class="page-link" href="?page=<?= $page - 1 ?>" aria-label="Previous">&laquo;</a>
                             </li>
 
                             <!-- Pagination Numbers -->
-                            <?php 
-                            // Menentukan halaman sekitar yang ditampilkan
+                            <?php
                             $start_page = max(1, $page - 2);
                             $end_page = min($total_pages, $page + 2);
-
-                            // Menampilkan halaman
-                            for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                                </li>
+                            for ($i = $start_page; $i <= $end_page; $i++) : 
+                            ?>
+                            <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
                             <?php endfor; ?>
 
                             <!-- Tombol Next -->
                             <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
+                                <a class="page-link" href="?page=<?= $page + 1 ?>" aria-label="Next">&raquo;</a>
                             </li>
 
                             <!-- Tombol Last -->
                             <li class="page-item <?= $page == $total_pages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $total_pages ?>" aria-label="Last">
-                                    <span aria-hidden="true">&raquo;&raquo;</span>
-                                </a>
+                                <a class="page-link" href="?page=<?= $total_pages ?>" aria-label="Last">&raquo;&raquo;</a>
                             </li>
                         </ul>
                     </nav>
-
-
                 </div>
 
                 <!-- Tab for inserting data manually or via CSV -->
