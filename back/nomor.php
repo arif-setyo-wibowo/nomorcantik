@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         processing: true,
         serverSide: true,
         ajax: {
-            url: 'path_to_your_php_script.php', // Ganti dengan path PHP backend
+            url: 'back/nomor.php', // Ganti dengan path PHP backend
             type: 'GET',
         },
         responsive: true,
