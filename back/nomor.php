@@ -11,7 +11,18 @@ if (!isset($_SESSION['admin'])) {
 
 include '../koneksi.php';
 $no = 1;
-$data =  mysqli_query($koneksi, 'SELECT n.*, o.nama_operator FROM nomor n LEFT JOIN operator o ON n.id_operator = o.id_operator');
+$limit = 10; // Menampilkan 10 data per halaman
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+// Query dengan LIMIT dan OFFSET
+$data = mysqli_query($koneksi, "
+    SELECT n.id_nomor, n.kode, n.nomor, n.harga, n.tipe, o.nama_operator
+    FROM nomor n 
+    LEFT JOIN operator o ON n.id_operator = o.id_operator
+    LIMIT $limit OFFSET $offset
+");
+
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
