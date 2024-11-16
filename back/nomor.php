@@ -9,25 +9,55 @@ if (!isset($_SESSION['admin'])) {
 }
 
 
-include '../koneksi.php';
-include '../koneksi.php';
+include('koneksi.php');
 
 // Ambil parameter untuk pagination
-$limit = 10; // Menampilkan 10 data per halaman
+$limit = isset($_GET['length']) ? $_GET['length'] : 10; // Menampilkan 10 data per halaman
 $start = isset($_GET['start']) ? $_GET['start'] : 0; // Offset data berdasarkan halaman
+$search = isset($_GET['search']['value']) ? $_GET['search']['value'] : ''; // Pencarian
 
-// Query untuk mengambil data dengan pagination
+// Query untuk mengambil data dengan pagination dan pencarian
 $query = "SELECT n.*, o.nama_operator 
           FROM nomor n
           LEFT JOIN operator o ON n.id_operator = o.id_operator
+          WHERE n.nomor LIKE '%$search%' OR o.nama_operator LIKE '%$search%'
           LIMIT $start, $limit"; 
 
 $data = mysqli_query($koneksi, $query);
 
-// Query untuk mengambil total data (untuk pagination)
+// Query untuk menghitung total data (untuk pagination)
 $totalQuery = "SELECT COUNT(*) as total FROM nomor";
 $totalDataResult = mysqli_query($koneksi, $totalQuery);
 $totalData = mysqli_fetch_assoc($totalDataResult)['total'];
+
+// Ambil data dari query dan format untuk DataTables
+$results = [];
+while ($d = mysqli_fetch_array($data)) {
+    $results[] = [
+        'no' => $d['id_nomor'], 
+        'kode' => $d['kode'],
+        'nama_operator' => $d['nama_operator'] ?? 'Tidak Diketahui',
+        'nomor' => $d['nomor'],
+        'harga' => $d['harga'],
+        'tipe' => $d['tipe'],
+        'action' => '<a href="nomor-edit.php?id='.$d['id_nomor'].'" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a>
+                    <form action="nomor.php" method="POST" id="delete-form-'.$d['id_nomor'].'" style="display: inline;">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id_nomor" value="'.$d['id_nomor'].'">
+                    <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="'.$d['id_nomor'].'">
+                    <i class="fas fa-trash"></i> Delete</button></form>'
+    ];
+}
+
+// Format the response for DataTables
+$response = [
+    'draw' => isset($_GET['draw']) ? $_GET['draw'] : 1,
+    'recordsTotal' => $totalData,
+    'recordsFiltered' => $totalData,
+    'data' => $results
+];
+
+echo json_encode($response);
 
 $dataOperator = mysqli_query($koneksi, 'SELECT * FROM operator');
 
@@ -153,44 +183,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="tab-content p-0">
                 <!-- Tab for displaying data in a table -->
                 <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
-                    <table id="example1" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Kode</th>
-                                <th>Operator</th>
-                                <th>Nomor</th>
-                                <th>Harga</th>
-                                <th>Tipe</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php while($d = mysqli_fetch_array($data)) : ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $d['kode'] ?></td>
-                                <td><?= $d['nama_operator'] ?? 'Tidak Diketahui' ?></td>
-                                <td><?= $d['nomor'] ?></td>
-                                <td><?= $d['harga'] ?> </td>
-                                <td><?= $d['tipe'] ?> </td>
-                                <td>
-                                    <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
-                                        <i class="fas fa-pencil-alt"></i> Edit
-                                    </a>
-                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php endwhile;?>
-                        </tbody>
-                    </table>
-                    <div id="pagination"></div>
+                <table id="example1" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode</th>
+                            <th>Operator</th>
+                            <th>Nomor</th>
+                            <th>Harga</th>
+                            <th>Tipe</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 </div>
 
                 <!-- Tab for inserting data manually or via CSV -->
@@ -249,6 +255,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- / Content -->
 <script>
+    $(document).ready(function() {
+    $("#example1").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: 'path_to_your_php_script.php', // Ganti dengan path PHP backend
+            type: 'GET',
+        },
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+        buttons: [
+            {
+                extend: 'collection',
+                className: 'btn btn-label-primary dropdown-toggle me-2 waves-effect waves-light',
+                text: '<i class="mdi mdi-export-variant me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+                buttons: [
+                    { extend: 'print', text: '<i class="mdi mdi-printer-outline me-1"></i>Print', className: 'dropdown-item' },
+                    { extend: 'pdf', text: '<i class="mdi mdi-file-pdf-box me-1"></i>Pdf', className: 'dropdown-item' },
+                    { extend: 'excel', text: '<i class="mdi mdi-file-excel-outline me-1"></i>Excel', className: 'dropdown-item' },
+                    { extend: 'copy', text: '<i class="mdi mdi-content-copy me-1"></i>Copy', className: 'dropdown-item' }
+                ]
+            }
+        ],
+        displayLength: 10,
+        lengthMenu: [10, 25, 50, 100]
+    });
+});
+
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
