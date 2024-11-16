@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin'])) {
 
 include '../koneksi.php';
 $no=1;
-$limit = 25; // Jumlah data per halaman
+$limit = 10; // Jumlah data per halaman
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
