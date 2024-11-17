@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <form action="promo.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>"
+                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>"
                                         style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
