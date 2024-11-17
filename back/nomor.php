@@ -205,10 +205,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <a href="nomor-edit.php?id=<?= $d['id_nomor'] ?>" class="btn btn-info btn-sm">
                                         <i class="fas fa-pencil-alt"></i> Edit
                                     </a>
-                                    <form action="nomor.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>" style="display: inline;">
+                                    <form action="promo.php" method="POST" id="delete-form-<?= $d['id_nomor'] ?>"
+                                        style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id_nomor" value="<?= $d['id_nomor'] ?>">
-                                        <button type="button" class="btn btn-danger btn-sm confirm-text" data-form-id="<?= $d['id_nomor'] ?>">
+                                        <button type="button" class="btn btn-danger btn-sm confirm-text"
+                                            data-form-id="<?= $d['id_nomor'] ?>">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
@@ -308,13 +310,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- / Content -->
 <script>
-$(document).ready(function() {
-    $('#example1').DataTable({
-        searching: false,  // Disable the search feature
-    });
-});
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {
