@@ -416,13 +416,7 @@ function formatHarga($nilai)
                             $dataNomor = mysqli_query($koneksi, $query);
                             $totalNomorHarga = mysqli_num_rows($dataNomor);
                             $checked = isset($_GET['ByPrice']) && $_GET['ByPrice'] === (string) $value ? 'checked' : '';
-                            echo "
-                                                                                                                                <div class='custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3'>
-                                                                                                                                    <input type='checkbox' class='custom-control-input' id='$id' name='ByPrice' value='$value' $checked onclick='submitPriceForm(this)'>
-                                                                                                                                    <label class='custom-control-label' for='$id'>$label</label>
-                                                                                                                                    <span class='badge border font-weight-normal'>$totalNomorHarga</span>
-                                                                                                                                </div>
-                                                                                                                                ";
+                            echo "                                                                                                  ";
                         }
                         
                         foreach ($priceRanges as $value => $details) {
@@ -564,7 +558,7 @@ function formatHarga($nilai)
                                     <div class="cell">
                                         <a href="detail.php?id_pro=<?= $nomor['id_promo'] ?>"
                                             style="text-decoration:none;">
-                                            <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                            <h5 class="text-danger m-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                         </a>
                                     </div>
                                     <div class="cell">
@@ -660,7 +654,7 @@ function formatHarga($nilai)
                                         <a href="detail.php?id_no=<?= $nomor['id_nomor'] ?>"
                                             style="text-decoration:none;"
                                             title="<?= formatHarga($nomor['harga_promo'] ?? $nomor['harga']) ?>">
-                                            <h5 class="text-danger m-0"><?= htmlspecialchars($nomor['nomor']) ?></h5>
+                                            <h5 class="text-danger m-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($nomor['nomor']) ?></h5>
                                         </a>
                                     </div>
                                     <div class="cell">
