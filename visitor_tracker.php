@@ -6,8 +6,8 @@ session_start();
 
 $host = 'localhost';
 $dbname = 'u339386215_pedagangnomor';
-$username = 'Pedagangnomor_itboy123';
-$password = 'u339386215_pedagangnomor';
+$username = 'u339386215_pedagangnomor';
+$password = 'Pedagangnomor_itboy123';
 
 $connection = new mysqli($host, $username, $password, $dbname);
 
