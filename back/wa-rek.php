@@ -99,11 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     </ul>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped table-bordered">
+                    <table id="example1" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Wa</th>
+                                <th>Tampilan</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -112,6 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                             <tr>
                                 <td><?php echo $no++; ?></td>
                                 <td><?php echo $d['wa']; ?></td>
+                                <td><div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox"
+                                            id="flexSwitchCheckDefault-<?= $d['id_wa'] ?>" style="width:57%"
+                                            data-id-wa="<?= $d['id_wa'] ?>"
+                                            <?= $d['status'] == 1 ? 'checked' : '' ?>>
+                                        <label class="form-check-label"
+                                            for="flexSwitchCheckDefault-<?= $d['id_wa'] ?>">Tampil</label>
+                                    </div>
+                                </td>
                                 <td>
                                     <a href="wa-edit.php?id_wa=<?php echo $d['id_wa']; ?>" class="btn btn-info btn-sm">
                                         Edit
@@ -209,8 +219,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- / Content -->
 <script>
+     $(document).ready(function() {
+     $('.form-check-input').on('change', function() {
+        var id_wa = $(this).data('id-wa');
+        var status = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: 'wa-update-status.php',
+                method: 'POST',
+                data: {
+                    id_wa: id_wa,
+                    status: status
+                },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        console.log('Session msg set successfully.');
+                        window.location.href =
+                        'wa-rek.php';
+                    } else {
+                        console.log('Error occurred.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (event.target && event.target.classList.contains('confirm-text')) {

@@ -187,12 +187,26 @@ function formatHarga($nilai)
     <!-- Breadcrumb Start -->
     <div class="container-fluid mt-4">
         <div class="row mx-xl-5 bg-light">
-            <div class="col-6 ">
+            <div class="col-3 ">
                 <nav class="breadcrumb bg-light mb-0">
                     <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
                         <button class="btn btn-secondary">Halaman Utama</button>
                     </a>
                 </nav>
+            </div>
+            <div class="col-3">
+                <div class="breadcrumb-container d-flex align-items-center bg-light">
+                    <nav class="breadcrumb bg-light mb-0 me-3">
+                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                            <button class="btn btn-secondary"id="pengunjung">Pengunjung : 0</span></button>
+                        </a>
+                    </nav>
+                    <nav class="breadcrumb bg-light mb-0">
+                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                            <button class="btn btn-secondary"id="total-pengunjung">Total Pengunjung: 0</span></button>
+                        </a>
+                    </nav>
+                </div>
             </div>
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
@@ -447,7 +461,7 @@ function formatHarga($nilai)
                 
                 $stmt->close();
                 ?>
-                <?php for ($i = 0; $i < 2; $i++): ?>
+                <?php for ($i = 0; $i < 6; $i++): ?>
                 <?php if (isset($wa[$i])): ?>
                 <p class="mb-0">
                     <a
@@ -537,6 +551,23 @@ function formatHarga($nilai)
 
     <!-- Template Javascript -->
     <script src="assets/js/main.js"></script>
+    <script>
+        function updateVisitorCounts() {
+            fetch('visitor_tracker.php')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('pengunjung').textContent = `Pengunjung: ${data.active}`;
+                    document.getElementById('total-pengunjung').textContent = `Total Pengunjung: ${data.total}`;
+                })
+                .catch(error => console.error('Error fetching visitor data:', error));
+            }
+
+            // Update the visitor count every 30 seconds
+            setInterval(updateVisitorCounts, 30000);
+
+            // Initial load
+            updateVisitorCounts();
+    </script>
 </body>
 
 </html>

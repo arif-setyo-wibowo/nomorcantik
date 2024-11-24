@@ -129,6 +129,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                             <div>Kontak dan Rekening</div>
                         </a>
                     </li>
+                    <li class="menu-item <?php echo ($current_page == 'informasi.php') ? 'active' : ''; ?>">
+                        <a href="informasi.php" class="menu-link ">
+                            <i class="menu-icon tf-icons mdi mdi-clipboard-account" ></i>
+                            <div>Informasi</div>
+                        </a>
+                    </li>
                     <li class="menu-item <?php echo ($current_page == 'user-admin.php') ? 'active' : ''; ?>">
                         <a href="user-admin.php" class="menu-link ">
                             <i class="menu-icon tf-icons mdi mdi-clipboard-account" ></i>

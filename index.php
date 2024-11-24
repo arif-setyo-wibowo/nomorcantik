@@ -63,13 +63,6 @@ function formatHarga($nilai)
 
 
 
-
-
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -274,12 +267,26 @@ function formatHarga($nilai)
     <!-- Breadcrumb Start -->
     <div class="container-fluid mt-4">
         <div class="row mx-xl-5 bg-light">
-            <div class="col-6 ">
+            <div class="col-3 ">
                 <nav class="breadcrumb bg-light mb-0">
                     <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
                         <button class="btn btn-secondary">Halaman Utama</button>
                     </a>
                 </nav>
+            </div>
+            <div class="col-3">
+                <div class="breadcrumb-container d-flex align-items-center bg-light">
+                    <nav class="breadcrumb bg-light mb-0 me-3">
+                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                            <button class="btn btn-secondary"id="pengunjung">Pengunjung : 0</span></button>
+                        </a>
+                    </nav>
+                    <nav class="breadcrumb bg-light mb-0">
+                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                            <button class="btn btn-secondary"id="total-pengunjung">Total Pengunjung: 0</span></button>
+                        </a>
+                    </nav>
+                </div>
             </div>
             <div class="col-6 ">
                 <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
@@ -666,52 +673,69 @@ function formatHarga($nilai)
                     <?php endforeach; ?>
                 </div>
             </div>
+            
             <!-- Shop Product End -->
+            <?php
+                $stmt = $koneksi->prepare('SELECT * FROM informasi where status = 1');
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                $informasi = [];
+                while ($row = $result->fetch_assoc()) {
+                    $informasi[] = $row;
+                }
+                
+                $stmt->close();
+                ?>
+                <?php for ($i = 0; $i < 1; $i++): ?>
+                    <?php if (isset($informasi[$i])): ?>
+                        <div class="col-12 col-md-12 col-lg-3 ">
+                            <h5 class="section-title position-relative text-uppercase mb-3">
+                                <span class="bg-secondary pr-3">Informasi</span>
+                            </h5>
+                            <div class="bg-light p-4 mb-30">
+                                <p>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi
+                                    sebagian orang. </p>
+                                <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan
+                                    beberapa nomor itu:
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li>Spesial</li>
+                                    <li>Antik</li>
+                                    <li>Langka</li>
+                                    <li>Unik</li>
+                                    <li>Tanda</li>
+                                </ul>
+                                <p class="mt-2">Semoga Anda menemukan nomor yang sesuai dengan kebutuhan dan kebahagiaan Anda.
+                                </p>
+                                <p class="text-center">🙏 Terima Kasih 🙏</p>
+                            </div>
 
-            <div class="col-12 col-md-12 col-lg-3 ">
-                <h5 class="section-title position-relative text-uppercase mb-3">
-                    <span class="bg-secondary pr-3">Informasi</span>
-                </h5>
-                <div class="bg-light p-4 mb-30">
-                    <p>Mendapatkan nomor yang terbaik merupakan sebuah kepuasan batin dan kebahagiaan tersendiri bagi
-                        sebagian orang. </p>
-                    <p>Rangkaian kombinasi nomor yang tersedia hanya ada SATU saja di dunia. Sehingga bisa menjadikan
-                        beberapa nomor itu:
-                    </p>
-                    <ul class="list-unstyled">
-                        <li>Spesial</li>
-                        <li>Antik</li>
-                        <li>Langka</li>
-                        <li>Unik</li>
-                        <li>Tanda</li>
-                    </ul>
-                    <p class="mt-2">Semoga Anda menemukan nomor yang sesuai dengan kebutuhan dan kebahagiaan Anda.
-                    </p>
-                    <p class="text-center">🙏 Terima Kasih 🙏</p>
-                </div>
-
-                <h5 class="section-title position-relative text-uppercase mb-3">
-                    <span class="bg-secondary pr-3">Nomor Rekening</span>
-                </h5>
-                <div class="bg-light p-4 mb-30">
-                    <?php if (mysqli_num_rows($rekening) > 0): ?>
-                    <ul class="list-unstyled">
-                        <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
-                        <li class="mb-2 text-center">
-                            <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
-                            <?= htmlspecialchars($row['nomor_rekening']) ?><br>
-                            <?php if (!empty($row['logo_rekening'])): ?>
-                            <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo"
-                                style="max-width: 100px;" class="my-3" />
-                            <?php endif; ?>
-                        </li>
-                        <?php endwhile; ?>
-                    </ul>
-                    <?php else: ?>
-                    <p>Tidak ada informasi rekening tersedia.</p>
+                            <h5 class="section-title position-relative text-uppercase mb-3">
+                                <span class="bg-secondary pr-3">Nomor Rekening</span>
+                            </h5>
+                            <div class="bg-light p-4 mb-30">
+                                <?php if (mysqli_num_rows($rekening) > 0): ?>
+                                <ul class="list-unstyled">
+                                    <?php while ($row = mysqli_fetch_assoc($rekening)): ?>
+                                    <li class="mb-2 text-center">
+                                        <strong><?= htmlspecialchars($row['nama_rekening']) ?></strong><br>
+                                        <?= htmlspecialchars($row['nomor_rekening']) ?><br>
+                                        <?php if (!empty($row['logo_rekening'])): ?>
+                                        <img src="./assets/uploads/<?= htmlspecialchars($row['logo_rekening']) ?>" alt="Logo"
+                                            style="max-width: 100px;" class="my-3" />
+                                        <?php endif; ?>
+                                    </li>
+                                    <?php endwhile; ?>
+                                </ul>
+                                <?php else: ?>
+                                <p>Tidak ada informasi rekening tersedia.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                
                     <?php endif; ?>
-                </div>
-            </div>
+                <?php endfor; ?>
         </div>
     </div>
     <!-- Shop End -->
@@ -725,7 +749,7 @@ function formatHarga($nilai)
                 <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
                 <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
                 <?php
-                $stmt = $koneksi->prepare('SELECT * FROM wa');
+                $stmt = $koneksi->prepare('SELECT * FROM wa where status = 1');
                 $stmt->execute();
                 $result = $stmt->get_result();
                 
@@ -736,7 +760,7 @@ function formatHarga($nilai)
                 
                 $stmt->close();
                 ?>
-                <?php for ($i = 0; $i < 2; $i++): ?>
+                <?php for ($i = 0; $i < 6; $i++): ?>
                 <?php if (isset($wa[$i])): ?>
                 <p class="mb-0">
                     <a
@@ -869,6 +893,24 @@ function formatHarga($nilai)
             actionUrl += new URLSearchParams(operatorFormData).toString();
             window.location.href = actionUrl;
         }
+    </script>
+
+    <script>
+        function updateVisitorCounts() {
+            fetch('visitor_tracker.php')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('pengunjung').textContent = `Pengunjung: ${data.active}`;
+                    document.getElementById('total-pengunjung').textContent = `Total Pengunjung: ${data.total}`;
+                })
+                .catch(error => console.error('Error fetching visitor data:', error));
+            }
+
+            // Update the visitor count every 30 seconds
+            setInterval(updateVisitorCounts, 30000);
+
+            // Initial load
+            updateVisitorCounts();
     </script>
 
     <script>
