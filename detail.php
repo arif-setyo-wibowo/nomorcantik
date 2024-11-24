@@ -396,7 +396,7 @@ function formatHarga($nilai)
 
                         <?php
                         // Ambil semua data dari tabel wa
-                        $stmt = $koneksi->prepare('SELECT * FROM wa');
+                        $stmt = $koneksi->prepare('SELECT * FROM wa where status =1');
                         $stmt->execute();
                         $result = $stmt->get_result();
                         
@@ -413,9 +413,9 @@ function formatHarga($nilai)
                                 (<?= formatHarga($nomor['harga']) ?>)</h4>
                             <p><strong>Cek Ketersediaan Nomor</strong></p>
                             <div class="row">
+                            <?php for ($i = 0; $i < 6; $i++): ?>
                                 <div class="col-md-6">
                                     <ul class="list-group list-group-flush">
-                                        <?php for ($i = 0; $i < 2; $i++): ?>
                                         <?php if (isset($wa[$i])): ?>
                                         <li class="list-group-item px-0">
                                             <a href="https://api.whatsapp.com/send?phone=<?= htmlspecialchars($wa[$i]['wa']) ?>&amp;text=Halo,%20apakah%20Nomor%20<?= urlencode($nomor['nomor']) ?>%20<?= urlencode($nomor['kode']) ?>%20harga%20<?= formatHarga($nomor['harga']) ?>%20Tersedia?"
@@ -426,9 +426,9 @@ function formatHarga($nilai)
                                             </a>
                                         </li>
                                         <?php endif; ?>
-                                        <?php endfor; ?>
                                     </ul>
                                 </div>
+                                <?php endfor; ?>
                             </div>
                         </div>
                     </div>
@@ -450,7 +450,7 @@ function formatHarga($nilai)
                 <p class="mb-4">Menyediakan Nomor Terbaik untuk Anda.</p>
                 <p class="mb-2"><i class="fa fa-envelope text-white mr-3"></i>pedagangnomor@gmail.com</p>
                 <?php
-                $stmt = $koneksi->prepare('SELECT * FROM wa');
+                $stmt = $koneksi->prepare('SELECT * FROM wa where status = 1');
                 $stmt->execute();
                 $result = $stmt->get_result();
                 
