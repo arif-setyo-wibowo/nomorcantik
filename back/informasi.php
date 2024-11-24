@@ -26,26 +26,54 @@ $data = mysqli_query($koneksi, 'SELECT * FROM informasi');
                 <div class="card-header p-0">
                     <!-- Success & Error Messages -->
                     <?php if (isset($_SESSION['msg'])): ?>
-                    <script>
-                        Swal.fire({
-                            title: 'Success!',
-                            text: '<?php echo $_SESSION['msg']; ?>',
-                            icon: 'success',
-                            confirmButtonClass: 'btn btn-primary'
-                        });
-                    </script>
-                    <?php unset($_SESSION['msg']); endif; ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: '<?php echo $_SESSION['msg']; ?>',
+                        icon: 'success',
+                        customClass: {
+                            confirmButton: 'btn btn-primary waves-effect waves-light'
+                        },
+                        buttonsStyling: false
+                    });
+                });
+            </script>
+            <?php unset($_SESSION['msg']); endif; ?>
 
-                    <?php if (isset($_SESSION['error'])): ?>
-                    <script>
-                        Swal.fire({
-                            title: 'Error!',
-                            text: '<?php echo $_SESSION['error']; ?>',
-                            icon: 'error',
-                            confirmButtonClass: 'btn btn-primary'
-                        });
-                    </script>
-                    <?php unset($_SESSION['error']); endif; ?>
+            <!-- Error Alert -->
+            <?php if (isset($_SESSION['error'])): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: '<?php echo $_SESSION['error']; ?>',
+                        icon: 'error',
+                        customClass: {
+                            confirmButton: 'btn btn-primary waves-effect waves-light'
+                        },
+                        buttonsStyling: false
+                    });
+                });
+            </script>
+            <?php unset($_SESSION['error']); endif; ?>
+
+            <!-- Validation Errors Alert -->
+            <?php if (!empty($errors)): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        html: '<?php echo implode('<br>', $errors); ?>',
+                        icon: 'error',
+                        customClass: {
+                            confirmButton: 'btn btn-primary waves-effect waves-light'
+                        },
+                        buttonsStyling: false
+                    });
+                });
+            </script>
+            <?php endif; ?>
 
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
