@@ -267,7 +267,7 @@ function formatHarga($nilai)
     <!-- Breadcrumb Start -->
     <div class="container-fluid mt-4">
         <div class="row mx-xl-5 bg-light">
-        <div class="col  col-md-6 col-lg-3 ">
+        <div class="col  col-md-6 col-lg-2 ">
             <nav class="breadcrumb bg-light mb-0">
                 <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
                     <button class="btn btn-secondary">Halaman Utama</button>
@@ -275,7 +275,7 @@ function formatHarga($nilai)
             </nav>
         </div>
 
-        <div class="col  col-md-6 col-lg-3">
+        <div class="col  col-md-6 col-lg-4">
             <div class="breadcrumb-container d-flex align-items-center bg-light">
                 <nav class="breadcrumb bg-light mb-0 ">
                     <a class="breadcrumb-item text-dark" style="text-decoration:none;">
