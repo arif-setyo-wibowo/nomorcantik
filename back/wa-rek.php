@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <td><?php echo $d['wa']; ?></td>
                                 <td><div class="form-check form-switch mb-2">
                                         <input class="form-check-input" type="checkbox"
-                                            id="flexSwitchCheckDefault-<?= $d['id_wa'] ?>" style="width:57%"
+                                            id="flexSwitchCheckDefault-<?= $d['id_wa'] ?>" style="width:87%"
                                             data-id-wa="<?= $d['id_wa'] ?>"
                                             <?= $d['status'] == 1 ? 'checked' : '' ?>>
                                         <label class="form-check-label"
