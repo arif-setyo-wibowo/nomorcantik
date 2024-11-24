@@ -675,6 +675,8 @@ function formatHarga($nilai)
             </div>
             
             <!-- Shop Product End -->
+                        
+            <div class="col-12 col-md-12 col-lg-3 ">
             <?php
                 $stmt = $koneksi->prepare('SELECT * FROM informasi where status = 1');
                 $stmt->execute();
@@ -689,7 +691,6 @@ function formatHarga($nilai)
                 ?>
                 <?php for ($i = 0; $i < 1; $i++): ?>
                     <?php if (isset($informasi[$i])): ?>
-                        <div class="col-12 col-md-12 col-lg-3 ">
                             <h5 class="section-title position-relative text-uppercase mb-3">
                                 <span class="bg-secondary pr-3">Informasi</span>
                             </h5>
