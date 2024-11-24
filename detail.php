@@ -187,68 +187,70 @@ function formatHarga($nilai)
     <!-- Breadcrumb Start -->
     <div class="container-fluid mt-4">
         <div class="row mx-xl-5 bg-light">
-            <div class="col-3 ">
+        <div class="col  col-md-6 col-lg-3 ">
+            <nav class="breadcrumb bg-light mb-0">
+                <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
+                    <button class="btn btn-secondary">Halaman Utama</button>
+                </a>
+            </nav>
+        </div>
+
+        <div class="col  col-md-6 col-lg-3">
+            <div class="breadcrumb-container d-flex align-items-center bg-light">
+                <nav class="breadcrumb bg-light mb-0 ">
+                    <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                        <button class="btn btn-secondary" id="pengunjung">Pengunjung : 0</button>
+                    </a>
+                </nav>
                 <nav class="breadcrumb bg-light mb-0">
-                    <a class="breadcrumb-item text-dark" style="text-decoration:none;" href="<?= $baseUrl ?>">
-                        <button class="btn btn-secondary">Halaman Utama</button>
+                    <a class="breadcrumb-item text-dark" style="text-decoration:none;">
+                        <button class="btn btn-secondary" id="total-pengunjung">Total Pengunjung: 0</button>
                     </a>
                 </nav>
             </div>
-            <div class="col-3">
-                <div class="breadcrumb-container d-flex align-items-center bg-light">
-                    <nav class="breadcrumb bg-light mb-0 me-3">
-                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
-                            <button class="btn btn-secondary"id="pengunjung">Pengunjung : 0</span></button>
-                        </a>
-                    </nav>
-                    <nav class="breadcrumb bg-light mb-0">
-                        <a class="breadcrumb-item text-dark" style="text-decoration:none;">
-                            <button class="btn btn-secondary"id="total-pengunjung">Total Pengunjung: 0</span></button>
-                        </a>
-                    </nav>
-                </div>
-            </div>
-            <div class="col-6 ">
-                <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
-                    <form method="GET" action="index.php">
-                        <div class="input-group">
-                            <select class="custom-select" id="search-category" style="max-width: 200px;"
-                                name="ByOperator">
-                                <option value="all"
-                                    <?= !isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all' ? 'selected' : '' ?>>
-                                    Semua Operator</option>
-                                <?php foreach ($operatorData as $operator): ?>
+        </div>
+
+        <div class="col col-md-6 d-none d-md-block">
+            <nav class="breadcrumb bg-light mb-0 d-none d-lg-block">
+                <form method="GET">
+                    <div class="input-group">
+                        <select class="custom-select" id="search-category" style="max-width: 200px;" name="ByOperator">
+                            <option value="all" <?= !isset($_GET['ByOperator']) || $_GET['ByOperator'] === 'all' ? 'selected' : '' ?>>
+                                Semua Operator
+                            </option>
+                            <?php foreach ($operatorData as $operator): ?>
                                 <option value="<?= $operator['id_operator'] ?>"
-                                    <?= isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
+                                        <?= isset($_GET['ByOperator']) && $_GET['ByOperator'] == $operator['id_operator'] ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($operator['nama_operator']) ?>
                                 </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php endforeach; ?>
+                        </select>
 
-                            <!-- Dropdown untuk posisi -->
-                            <select class="custom-select" id="position-select" style="max-width:150px;" name="position">
-                                <option value="all"
-                                    <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
-                                    Semua Posisi</option>
-                                <option value="tengah"
-                                    <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
-                                    Tengah</option>
-                                <option value="belakang"
-                                    <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
-                                    Belakang</option>
-                            </select>
+                        <!-- Dropdown untuk posisi -->
+                        <select class="custom-select" id="position-select" style="max-width:150px;" name="position">
+                            <option value="all" <?= !isset($_GET['position']) || $_GET['position'] === 'all' ? 'selected' : '' ?>>
+                                Semua Posisi
+                            </option>
+                            <option value="tengah" <?= isset($_GET['position']) && $_GET['position'] === 'tengah' ? 'selected' : '' ?>>
+                                Tengah
+                            </option>
+                            <option value="belakang" <?= isset($_GET['position']) && $_GET['position'] === 'belakang' ? 'selected' : '' ?>>
+                                Belakang
+                            </option>
+                        </select>
 
-                            <input type="number" name="nomor" class="form-control" placeholder="Cari Nomor" required
-                                value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
-                            <div class="input-group-append">
-                                <button class="input-group-text bg-transparent text-primary" type="submit">
-                                    <span><i class="fa fa-search"></i></span>
-                                </button>
-                            </div>
+                        <input type="number" name="nomor" class="form-control" placeholder="Cari Nomor" required
+                            value="<?= isset($_GET['nomor']) ? htmlspecialchars($_GET['nomor']) : '' ?>">
+                        <div class="input-group-append">
+                            <button class="input-group-text bg-transparent text-primary" type="submit">
+                                <span><i class="fa fa-search"></i></span>
+                            </button>
                         </div>
-                    </form>
-                </nav>
-            </div>
+                    </div>
+                </form>
+            </nav>
+        </div>
+
         </div>
     </div>
 
