@@ -91,7 +91,7 @@ $data = mysqli_query($koneksi, 'SELECT * FROM informasi');
                                 <th>No</th>
                                 <th>Informasi</th>
                                 <th>Tampilan</th>
-                                <th>Action</th>
+                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -108,11 +108,11 @@ $data = mysqli_query($koneksi, 'SELECT * FROM informasi');
                                             for="flexSwitchCheckDefault-<?= $d['id_informasi'] ?>">Tampil</label>
                                     </div>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <a href="informasi-edit.php?id_informasi=<?php echo $d['id_informasi']; ?>" class="btn btn-info btn-sm">
                                         Edit
                                     </a>
-                                </td>
+                                </td> -->
                             </tr>
                             <?php endwhile; ?>
                         </tbody>
